@@ -1,0 +1,30 @@
+= 로그인
+:toc:
+
+== 가입된 회원이라면 로그인 성공
+
+=== 요청
+
+include::{snippets}/member/login/200/http-request.adoc[]
+
+include::{snippets}/member/login/200/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member/login/200/http-response.adoc[]
+
+include::{snippets}/member/login/200/response-fields.adoc[]
+
+== 가입되지 않은 회원이라면 로그인 실패
+
+=== 요청
+
+include::{snippets}/member/login/400/http-request.adoc[]
+
+include::{snippets}/member/login/400/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member/login/400/http-response.adoc[]
+
+include::{snippets}/member/login/400/response-fields.adoc[]

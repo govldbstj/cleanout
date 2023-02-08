@@ -1,6 +1,7 @@
 package com.backend.util;
 
 import com.backend.member.domain.Member;
+import com.backend.member.domain.MemberSession;
 import com.backend.member.dto.request.MemberSignup;
 import com.backend.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;

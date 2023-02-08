@@ -41,13 +41,18 @@ public class ControllerTest {
                 .apply(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint()))
+                        .withResponseDefaults(prettyPrint())
+                        .and()
+                        .uris()
+                        .withScheme("http")
+                        .withHost("43.200.115.73")
+                        .withPort(8080))
                 .build();
     }
 
     protected Member saveMemberInRepository() {
         Member member = Member.builder()
-                .email("yhwjd99@gmail.com")
+                .email("xxx@gmail.com")
                 .password("1234")
                 .username("회원 이름")
                 .address("경기도 수원시 영통구")
@@ -56,4 +61,5 @@ public class ControllerTest {
 
         return memberRepository.save(member);
     }
+
 }

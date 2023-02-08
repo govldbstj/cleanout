@@ -24,3 +24,5 @@ include::{snippets}/member/signup/400/request-fields.adoc[]
 === 응답
 
 include::{snippets}/member/signup/400/http-response.adoc[]
+
+include::{snippets}/member/signup/400/response-fields.adoc[]
