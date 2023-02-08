@@ -2,10 +2,13 @@ package com.backend.member.service;
 
 import com.backend.member.domain.Member;
 import com.backend.member.dto.request.MemberSignup;
+import com.backend.member.exception.MemberDuplicationException;
 import com.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -21,6 +24,10 @@ public class MemberService {
     }
 
     public void validateDuplication(MemberSignup memberSignup) {
-        memberRepository.validateDuplication(memberSignup.getUsername());
+        Optional<Member> byUsername = memberRepository.findByUsername(memberSignup.getUsername());
+        Optional<Member> byEmail = memberRepository.findByEmail(memberSignup.getEmail());
+        if (byUsername.isPresent() || byEmail.isPresent()) {
+            throw new MemberDuplicationException();
+        }
     }
 }

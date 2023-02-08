@@ -2,9 +2,15 @@ package com.backend.member.repository;
 
 import com.backend.member.domain.Member;
 
+import java.util.Optional;
+
 public interface MemberRepository {
 
-    void save(Member member);
+    Member save(Member member);
 
-    void validateDuplication(String username);
+    Optional<Member> findByUsername(String username);
+
+    Optional<Member> findByEmail(String email);
+
+    long count();
 }
