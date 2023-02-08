@@ -1,5 +1,6 @@
 package com.backend.member.domain;
 
+import com.backend.member.dto.request.MemberSignup;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,5 +35,15 @@ public class Member {
         this.username = username;
         this.address = address;
         this.phoneNumber = phoneNumber;
+    }
+
+    public static Member getFromMemberSignup(MemberSignup memberSignup) {
+        return Member.builder()
+                .email(memberSignup.getEmail())
+                .password(memberSignup.getPassword())
+                .username(memberSignup.getUsername())
+                .address(memberSignup.getAddress())
+                .phoneNumber(memberSignup.getPhoneNumber())
+                .build();
     }
 }
