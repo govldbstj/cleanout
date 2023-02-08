@@ -12,5 +12,9 @@ public interface MemberRepository {
 
     Optional<Member> findByEmail(String email);
 
+    Member getByEmailAndPassword(String email, String password);
+
+    Member getById(Long id);
+
     long count();
 }

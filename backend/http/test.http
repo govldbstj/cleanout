@@ -1,0 +1,22 @@
+### 회원 가입
+
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+    "username": "회원 이름",
+    "email": "xxx@gmail.com",
+    "password": "1234",
+    "address": "경기도 수원시 영통구",
+    "phoneNumber": "010-0000-0000"
+}
+
+### 로그인
+
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "xxx@gmail.com",
+  "password": "1234"
+}

@@ -1,7 +1,7 @@
 package com.backend.member.repository;
 
 import com.backend.member.domain.Member;
-import com.backend.member.exception.MemberDuplicationException;
+import com.backend.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +27,18 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public Optional<Member> findByEmail(String email) {
         return memberJpaRepository.findByEmail(email);
+    }
+
+    @Override
+    public Member getByEmailAndPassword(String email, String password) {
+        return memberJpaRepository.findByEmailAndPassword(email, password)
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Override
+    public Member getById(Long id) {
+        return memberJpaRepository.findById(id)
+                .orElseThrow(MemberNotFoundException::new);
     }
 
     @Override

@@ -39,9 +39,9 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("member/signup/200",
                         requestFields(
+                                fieldWithPath("username").description("회원 이름"),
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호"),
-                                fieldWithPath("username").description("회원 이름"),
                                 fieldWithPath("address").description("주소"),
                                 fieldWithPath("phoneNumber").description("전화 번호"))
                         ));
@@ -70,9 +70,9 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("member/signup/400",
                                 requestFields(
+                                        fieldWithPath("username").description("회원 이름"),
                                         fieldWithPath("email").description("이메일"),
                                         fieldWithPath("password").description("비밀 번호"),
-                                        fieldWithPath("username").description("회원 이름"),
                                         fieldWithPath("address").description("주소"),
                                         fieldWithPath("phoneNumber").description("전화 번호"))
                                 ));

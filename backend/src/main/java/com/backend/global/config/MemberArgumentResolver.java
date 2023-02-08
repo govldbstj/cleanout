@@ -1,7 +1,10 @@
 package com.backend.global.config;
 
+import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
 import com.backend.member.exception.MemberUnauthorizedException;
+import com.backend.member.repository.MemberJpaRepository;
+import com.backend.member.repository.MemberRepository;
 import com.backend.util.annotation.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -15,6 +18,9 @@ import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final MemberRepository memberRepository;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasMemberSessionType = parameter.getParameterType().equals(MemberSession.class);
@@ -33,7 +39,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         }
 
         MemberSession memberSession = (MemberSession) session.getAttribute("memberSession");
-
+        Member member = memberRepository.getById(memberSession.getId());
         return memberSession;
     }
 }
