@@ -33,7 +33,7 @@ public class WasteService {
     public void postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
         Member member = memberJpaRepository.findById(memberIdx).orElseThrow(MemberNotFoundException::new);
         UUID uuid = UUID.randomUUID();
-        String imageFileName = uuid + "_" + file.getName();
+        String imageFileName = uuid + "_" + file.getOriginalFilename();
         // 이미지를 서버 파일에 저장하는 과정
 //        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
 //        Files.write(imageFilePath, file.getBytes());

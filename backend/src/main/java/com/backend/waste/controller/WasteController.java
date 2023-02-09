@@ -19,7 +19,7 @@ public class WasteController {
     private final WasteService wasteService;
 
     @PostMapping("/waste-management/image")
-    public ResponseEntity<Void> getWasteImage(@RequestParam("imageFile") MultipartFile file,
+    public ResponseEntity<Void> getWasteImage(@RequestParam("image") MultipartFile file,
                                               @Login MemberSession memberSession) throws IOException {
         wasteService.postWasteImage(memberSession.getId(), file);
         return ResponseEntity.ok().build();
