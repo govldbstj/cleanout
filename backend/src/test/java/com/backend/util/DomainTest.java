@@ -7,7 +7,7 @@ public class DomainTest {
     protected MemberSession getMemberSession() {
         MemberSession memberSession = MemberSession.builder()
                 .id(1L)
-                .username("회원 이름")
+                .nickname("닉네임")
                 .email("xxx@gmail.com")
                 .password("1234")
                 .address("경기도 수원시 영통구")

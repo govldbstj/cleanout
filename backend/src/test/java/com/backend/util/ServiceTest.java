@@ -17,7 +17,7 @@ public class ServiceTest {
         Member member = Member.builder()
                 .email("yhwjd99@gmail.com")
                 .password("1234")
-                .username("회원 이름")
+                .nickname("닉네며")
                 .address("경기도 수원시 영통구")
                 .phoneNumber("010-0000-0000")
                 .build();
