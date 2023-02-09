@@ -1,5 +1,6 @@
 package com.backend.member.dto.response;
 
+import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,16 @@ public class MemberResponse {
         this.password = password;
         this.address = address;
         this.phoneNumber = phoneNumber;
+    }
+
+    public static MemberResponse getFromMember(Member member) {
+        return MemberResponse.builder()
+                .nickname(member.getNickname())
+                .email(member.getEmail())
+                .password(member.getPassword())
+                .address(member.getAddress())
+                .phoneNumber(member.getPhoneNumber())
+                .build();
     }
 
     public static MemberResponse getFromMemberSession(MemberSession memberSession) {

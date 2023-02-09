@@ -38,6 +38,15 @@ public class KakaoService {
     @Value("${kakao.redirectUri}")
     private String redirectUri;
 
+    @Value("${kakao.signupUrl}")
+    private String kakaoSignupUrl;
+
+    @Value("${kakao.loginUrl}")
+    private String kakaoLoginUrl;
+
+    @Value("${kakao.logoutUrl}")
+    private String kakaoLogoutUrl;
+
     @Transactional
     public void requestSignup(HashMap<String, Object> userInfo) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
@@ -49,7 +58,7 @@ public class KakaoService {
         String kakaoSignupJson = objectMapper.writeValueAsString(kakaoSignup);
 
         HttpEntity<String> request = new HttpEntity<String>(kakaoSignupJson, headers);
-        restTemplate.postForObject("http://localhost:8080/signup", request, String.class);
+        restTemplate.postForObject(kakaoSignupUrl, request, String.class);
     }
 
     public void requestLogin(HashMap<String, Object> userInfo) throws JsonProcessingException {
@@ -63,9 +72,8 @@ public class KakaoService {
 
         HttpEntity<String> request = new HttpEntity<String>(kakaoLoginJson, headers);
 
-        restTemplate.postForObject("http://localhost:8080/kakao/login", request, String.class);
+        restTemplate.postForObject(kakaoLoginUrl, request, String.class);
     }
-
 
     public String getAccessToken(String authorize_code) {
         String accessToken = EMPTY;

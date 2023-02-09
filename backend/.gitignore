@@ -17,6 +17,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+application.yml
 !**/src/main/resources/
 !**/src/test/resources/
 ### IntelliJ IDEA ###

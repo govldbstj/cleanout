@@ -1,10 +1,12 @@
 package com.backend.member.service;
 
 import com.backend.kakao.dto.KakaoLogin;
+import com.backend.kakao.dto.KakaoSignup;
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.dto.request.MemberSignup;
+import com.backend.member.dto.request.MemberUpdate;
 import com.backend.member.exception.MemberDuplicationException;
 import com.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,12 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    @Transactional
+    public void kakaoSignup(KakaoSignup kakaoSignup) {
+        Member member = Member.getFromKakaoSignup(kakaoSignup);
+        memberRepository.save(member);
+    }
+
     public void validateDuplication(MemberSignup memberSignup) {
         Optional<Member> byNickname = memberRepository.findByNickname(memberSignup.getNickname());
         Optional<Member> byEmail = memberRepository.findByEmail(memberSignup.getEmail());
@@ -46,8 +54,15 @@ public class MemberService {
         memberSession.makeSession(httpServletRequest);
     }
 
-    public Member getByKakaoLogin(KakaoLogin kakaoLogin) {
-        return memberRepository.getByNicknameAndEmail(kakaoLogin.getNickname(), kakaoLogin.getEmail());
+    @Transactional
+    public Member update(MemberSession memberSession, MemberUpdate memberUpdate) {
+        Member member = memberRepository.getById(memberSession.getId());
+        member.update(memberUpdate);
+        return member;
+    }
+
+    public void logout(MemberSession memberSession, HttpServletRequest httpServletRequest) {
+        memberSession.invalidateSession(httpServletRequest);
     }
 
     public boolean needToSignup(HashMap<String, Object> userInfo) {
@@ -58,5 +73,9 @@ public class MemberService {
             return false;
         }
         return true;
+    }
+
+    public Member getByKakaoLogin(KakaoLogin kakaoLogin) {
+        return memberRepository.getByNicknameAndEmail(kakaoLogin.getNickname(), kakaoLogin.getEmail());
     }
 }

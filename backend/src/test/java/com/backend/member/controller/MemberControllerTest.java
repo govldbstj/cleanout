@@ -1,14 +1,18 @@
 package com.backend.member.controller;
 
+import com.backend.member.domain.Member;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.dto.request.MemberSignup;
+import com.backend.member.dto.request.MemberUpdate;
 import com.backend.util.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -74,8 +78,8 @@ class MemberControllerTest extends ControllerTest {
                                 fieldWithPath("address").description("주소"),
                                 fieldWithPath("phoneNumber").description("전화 번호")),
                         responseFields(
-                                fieldWithPath("statusCode").description("400"),
-                                fieldWithPath("message").description("이미 존재하는 회원입니다")
+                                fieldWithPath("statusCode").description("에러 코드"),
+                                fieldWithPath("message").description("에러 메세지")
                         )
                 ));
     }
@@ -131,8 +135,95 @@ class MemberControllerTest extends ControllerTest {
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호")),
                         responseFields(
-                                fieldWithPath("statusCode").description("400"),
-                                fieldWithPath("message").description("회원 정보가 일치하지 않습니다"))
+                                fieldWithPath("statusCode").description("에러 코드"),
+                                fieldWithPath("message").description("에러 메세지"))
                 ));
+    }
+
+    @Test
+    @DisplayName("회원정보 수정에 성공합니다")
+    void update200() throws Exception {
+        // given
+        Member member = saveMemberInRepository();
+        MockHttpSession session = loginMemberSession(member);
+
+        MemberUpdate memberUpdate = MemberUpdate.builder()
+                .nickname("수정 닉네임")
+                .email("update@gmail.com")
+                .password("update1234")
+                .address("경기도 서울시 강남구")
+                .phoneNumber("010-1234-5678")
+                .build();
+
+        String memberUpdateJson = objectMapper.writeValueAsString(memberUpdate);
+
+        // expected
+        mockMvc.perform(patch("/member")
+                        .session(session)
+                        .contentType(APPLICATION_JSON)
+                        .content(memberUpdateJson))
+                .andExpect(status().isOk())
+                .andDo(document("member/update/200",
+                        requestFields(
+                                fieldWithPath("nickname").description("수정 닉네임"),
+                                fieldWithPath("email").description("수정 이메일"),
+                                fieldWithPath("password").description("수정 비밀 번호"),
+                                fieldWithPath("address").description("수정 주소"),
+                                fieldWithPath("phoneNumber").description("수정 전화 번호")),
+                        responseFields(
+                                fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("password").description("비밀 번호"),
+                                fieldWithPath("address").description("주소"),
+                                fieldWithPath("phoneNumber").description("전화 번호"))
+                ));
+    }
+
+    @Test
+    @DisplayName("로그인하지 않으면 회원정보 수정에 실패합니다")
+    void update400() throws Exception {
+        // given
+        Member member = saveMemberInRepository();
+
+        MemberUpdate memberUpdate = MemberUpdate.builder()
+                .nickname("수정 닉네임")
+                .email("update@gmail.com")
+                .password("update1234")
+                .address("경기도 서울시 강남구")
+                .phoneNumber("010-1234-5678")
+                .build();
+
+        String memberUpdateJson = objectMapper.writeValueAsString(memberUpdate);
+
+        // expected
+        mockMvc.perform(patch("/member")
+                        .contentType(APPLICATION_JSON)
+                        .content(memberUpdateJson))
+                .andExpect(status().isUnauthorized())
+                .andDo(document("member/update/401",
+                        requestFields(
+                                fieldWithPath("nickname").description("수정 닉네임"),
+                                fieldWithPath("email").description("수정 이메일"),
+                                fieldWithPath("password").description("수정 비밀 번호"),
+                                fieldWithPath("address").description("수정 주소"),
+                                fieldWithPath("phoneNumber").description("수정 전화 번호")),
+                        responseFields(
+                                fieldWithPath("statusCode").description("에러 코드"),
+                                fieldWithPath("message").description("에러 메세지"))
+                ));
+    }
+
+    @Test
+    @DisplayName("회원 로그아웃을 진행하며 세션이 만료됩니다")
+    void logout() throws Exception {
+        // given
+        Member member = saveMemberInRepository();
+        MockHttpSession session = loginMemberSession(member);
+
+        // expected
+        mockMvc.perform(post("/logout")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andDo(document("member/logout/200"));
     }
 }

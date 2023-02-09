@@ -1,12 +1,14 @@
 package com.backend.kakao.controller;
 
 import com.backend.kakao.dto.KakaoLogin;
+import com.backend.kakao.dto.KakaoSignup;
 import com.backend.kakao.service.KakaoService;
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
 import com.backend.member.service.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,11 +32,18 @@ public class KakaoController {
         kakaoService.requestLogin(userInfo);
     }
 
+    @PostMapping("/kakao/signup")
+    public ResponseEntity<Void> kakaoSignup(@RequestBody KakaoSignup kakaoSignup) {
+        memberService.kakaoSignup(kakaoSignup);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/kakao/login")
-    public void kakaoLogin(@RequestBody KakaoLogin kakaoLogin,
+    public ResponseEntity<Void> kakaoLogin(@RequestBody KakaoLogin kakaoLogin,
                            HttpServletRequest httpServletRequest) {
         Member member = memberService.getByKakaoLogin(kakaoLogin);
         MemberSession memberSession = MemberSession.getFromMember(member);
         memberService.makeSessionForMemberSession(memberSession, httpServletRequest);
+        return ResponseEntity.ok().build();
     }
 }
