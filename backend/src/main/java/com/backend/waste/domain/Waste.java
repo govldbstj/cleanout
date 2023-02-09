@@ -30,7 +30,7 @@ public class Waste {
     private Member member;
 
     @Column(name = "img_name")
-    private String imgName;
+    private String imageName;
 
     private int price;
     @Column(name = "waste_name")
@@ -50,7 +50,7 @@ public class Waste {
     @Builder
     public Waste(Member member, String imgName, LocalDateTime localDateTime, boolean isCollected) {
         this.member = member;
-        this.imgName = imgName;
+        this.imageName = imgName;
         this.enrolledDate = localDateTime;
         this.isCollected = isCollected;
     }
@@ -62,5 +62,10 @@ public class Waste {
                 .localDateTime(LocalDateTime.now())
                 .isCollected(false)
                 .build();
+    }
+
+    public void update(String wasteName, int price) {
+        this.name = wasteName;
+        this.price = price;
     }
 }
