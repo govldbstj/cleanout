@@ -27,15 +27,16 @@ public class WasteService {
     private final WasteJpaRepository wasteJpaRepository;
     private final MemberJpaRepository memberJpaRepository;
 
-    @Value("${spring.file.path}")
-    private String uploadFolder;
+//    @Value("${spring.file.path}")
+//    private String uploadFolder;
 
     public void postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
         Member member = memberJpaRepository.findById(memberIdx).orElseThrow(MemberNotFoundException::new);
         UUID uuid = UUID.randomUUID();
         String imageFileName = uuid + "_" + file.getName();
-        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
-        Files.write(imageFilePath, file.getBytes());
+        // 이미지를 서버 파일에 저장하는 과정
+//        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
+//        Files.write(imageFilePath, file.getBytes());
         Waste waste = Waste.getWasteFromPostImage(member, file.getName());
         wasteJpaRepository.save(waste);
     }

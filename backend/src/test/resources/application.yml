@@ -20,9 +20,6 @@ spring:
     jdbc:
       initialize-schema: always
 
-  file:
-    path: C:\Users\Administrator\Pictures\mssp\waste
-
 logging:
   level:
     org.hibernate.SQL: debug
