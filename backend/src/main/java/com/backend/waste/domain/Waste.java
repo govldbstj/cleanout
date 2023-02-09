@@ -1,14 +1,14 @@
 package com.backend.waste.domain;
 
 import com.backend.member.domain.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Address;
 
 import javax.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -47,5 +47,20 @@ public class Waste {
     @JoinColumn(name = "collector_id")
     private Collector collector;
 
+    @Builder
+    public Waste(Member member, String imgName, LocalDateTime localDateTime, boolean isCollected) {
+        this.member = member;
+        this.imgName = imgName;
+        this.enrolledDate = localDateTime;
+        this.isCollected = isCollected;
+    }
 
+    public static Waste getWasteFromPostImage(Member member, String imageName) {
+        return Waste.builder()
+                .member(member)
+                .imgName(imageName)
+                .localDateTime(LocalDateTime.now())
+                .isCollected(false)
+                .build();
+    }
 }

@@ -1,4 +1,9 @@
 package com.backend.waste.repository;
 
-public interface WasteJpaRepository {
+import com.backend.waste.domain.Waste;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface WasteJpaRepository extends JpaRepository<Waste, Long> {
+
+
 }
