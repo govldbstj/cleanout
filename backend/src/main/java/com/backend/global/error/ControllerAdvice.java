@@ -39,4 +39,14 @@ public class ControllerAdvice {
 
         return ResponseEntity.status(BAD_REQUEST).body(errorResponse);
     }
+
+    @ExceptionHandler(NotMatchException.class)
+    public ResponseEntity<ErrorResponse> notMatchException(NotMatchException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .statusCode(e.getStatusCode())
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(BAD_REQUEST).body(errorResponse);
+    }
 }

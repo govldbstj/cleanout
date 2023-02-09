@@ -28,7 +28,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<MemberResponse> login(@RequestBody MemberLogin memberLogin,
-                      HttpServletRequest httpServletRequest) {
+                                                HttpServletRequest httpServletRequest) {
         MemberSession memberSession = memberService.getMemberSession(memberLogin);
         memberService.makeSessionForMemberSession(memberSession, httpServletRequest);
         MemberResponse memberResponse = MemberResponse.getFromMemberSession(memberSession);

@@ -1,12 +1,10 @@
 package com.backend.member.controller;
 
-import com.backend.member.domain.Member;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.dto.request.MemberSignup;
 import com.backend.util.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -127,14 +125,14 @@ class MemberControllerTest extends ControllerTest {
         mockMvc.perform(post("/login")
                         .contentType(APPLICATION_JSON)
                         .content(memberLoginJson))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andDo(document("member/login/400",
                         requestFields(
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호")),
                         responseFields(
-                                fieldWithPath("statusCode").description("404"),
-                                fieldWithPath("message").description("회원을 찾을 수 없습니다"))
+                                fieldWithPath("statusCode").description("400"),
+                                fieldWithPath("message").description("회원 정보가 일치하지 않습니다"))
                 ));
     }
 }

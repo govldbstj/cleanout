@@ -619,16 +619,16 @@ Host: 43.200.115.73:8080
 <h3 id="_응답_2">응답</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 77
+Content-Length: 86
 
 {
-  "statusCode" : "404",
-  "message" : "회원을 찾을 수 없습니다"
+  "statusCode" : "400",
+  "message" : "회원 정보가 일치하지 않습니다"
 }</code></pre>
 </div>
 </div>
@@ -649,12 +649,12 @@ Content-Length: 77
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">404</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원을 찾을 수 없습니다</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 정보가 일치하지 않습니다</p></td>
 </tr>
 </tbody>
 </table>
@@ -665,7 +665,7 @@ Content-Length: 77
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-08 14:27:43 +0900
+Last updated 2023-02-08 14:34:04 +0900
 </div>
 </div>
 </body>
