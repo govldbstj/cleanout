@@ -15,13 +15,26 @@ public class ServiceTest {
 
     protected Member saveMemberInRepository() {
         Member member = Member.builder()
-                .email("yhwjd99@gmail.com")
+                .email("xxx@gmail.com")
                 .password("1234")
-                .username("회원 이름")
+                .nickname("닉네임")
                 .address("경기도 수원시 영통구")
                 .phoneNumber("010-0000-0000")
                 .build();
 
         return memberRepository.save(member);
+    }
+
+    protected MemberSession getMemberSessionUtil() {
+        MemberSession memberSession = MemberSession.builder()
+                .id(1L)
+                .nickname("닉네임")
+                .email("xxx@gmail.com")
+                .password("1234")
+                .address("경기도 수원시 영통구")
+                .phoneNumber("010-0000-0000")
+                .build();
+
+        return memberSession;
     }
 }

@@ -4,7 +4,7 @@ POST http://localhost:8080/signup
 Content-Type: application/json
 
 {
-    "username": "회원 이름",
+    "nickname": "닉네임",
     "email": "xxx@gmail.com",
     "password": "1234",
     "address": "경기도 수원시 영통구",
@@ -20,3 +20,20 @@ Content-Type: application/json
   "email": "xxx@gmail.com",
   "password": "1234"
 }
+
+### 회원 수정
+
+PATCH http://localhost:8080/member
+Content-Type: application/json
+
+{
+  "nickname": "수정 닉네임",
+  "email": "xxx@gmail.com",
+  "password": "수정 1234",
+  "address": "경기도 수원시 영통구",
+  "phoneNumber": "010-0000-0000"
+}
+
+### 로그아웃
+
+POST http://localhost:8080/logout

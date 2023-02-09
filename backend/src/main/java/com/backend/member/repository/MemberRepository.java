@@ -8,9 +8,13 @@ public interface MemberRepository {
 
     Member save(Member member);
 
-    Optional<Member> findByUsername(String username);
+    Optional<Member> findByNickname(String nickname);
 
     Optional<Member> findByEmail(String email);
+
+    Optional<Member> findByNicknameAndEmail(String nickname, String email);
+
+    Member getByNicknameAndEmail(String nickname, String email);
 
     Member getByEmailAndPassword(String email, String password);
 

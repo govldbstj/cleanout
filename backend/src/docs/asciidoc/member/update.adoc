@@ -1,0 +1,30 @@
+= 회원 정보 수정
+:toc:
+
+== 회원 정보 수정 성공
+
+=== 요청
+
+include::{snippets}/member/update/200/http-request.adoc[]
+
+include::{snippets}/member/update/200/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member/update/200/http-response.adoc[]
+
+include::{snippets}/member/update/200/response-fields.adoc[]
+
+== 로그인하지 않으면 회원 정보 수정을 할 수 없습니다
+
+=== 요청
+
+include::{snippets}/member/update/401/http-request.adoc[]
+
+include::{snippets}/member/update/401/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member/update/401/http-response.adoc[]
+
+include::{snippets}/member/update/401/response-fields.adoc[]

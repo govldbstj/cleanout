@@ -1,8 +1,10 @@
 package com.backend.member.domain;
 
+import com.backend.kakao.dto.KakaoSignup;
 import com.backend.member.dto.request.MemberSignup;
 import com.backend.waste.domain.Waste;
-import lombok.AccessLevel;
+import com.backend.member.dto.request.MemberUpdate;
+import com.backend.util.enumerated.SignupType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +14,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.EnumType.*;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
+import static org.apache.logging.log4j.util.Strings.EMPTY;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -27,7 +31,7 @@ public class Member {
 
     private String email;
     private String password;
-    private String username;
+    private String nickname;
     private String address;
 
     private String phoneNumber;
@@ -35,22 +39,47 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Waste> wastes = new ArrayList<>();
 
+    @Enumerated(STRING)
+    private SignupType signupType;
+
     @Builder
-    public Member(String email, String password, String username, String address, String phoneNumber) {
+    public Member(String email, String password, String nickname,
+                  String address, String phoneNumber, SignupType signupType) {
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.nickname = nickname;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.signupType = signupType;
     }
 
     public static Member getFromMemberSignup(MemberSignup memberSignup) {
         return Member.builder()
                 .email(memberSignup.getEmail())
                 .password(memberSignup.getPassword())
-                .username(memberSignup.getUsername())
+                .nickname(memberSignup.getNickname())
                 .address(memberSignup.getAddress())
                 .phoneNumber(memberSignup.getPhoneNumber())
+                .signupType(SignupType.NORMAL)
                 .build();
+    }
+
+    public static Member getFromKakaoSignup(KakaoSignup kakaoSignup) {
+        return Member.builder()
+                .email(kakaoSignup.getEmail())
+                .password(EMPTY)
+                .nickname(kakaoSignup.getNickname())
+                .address(EMPTY)
+                .phoneNumber(EMPTY)
+                .signupType(SignupType.KAKAO)
+                .build();
+    }
+
+    public void update(MemberUpdate memberUpdate) {
+        this.email = memberUpdate.getEmail();
+        this.password = memberUpdate.getPassword();
+        this.nickname = memberUpdate.getNickname();
+        this.address = memberUpdate.getAddress();
+        this.phoneNumber = memberUpdate.getPhoneNumber();
     }
 }

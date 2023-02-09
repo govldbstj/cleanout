@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<title>로그인</title>
+<title>회원 정보 수정</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,20 +438,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>로그인</h1>
+<h1>회원 정보 수정</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_가입된_회원이라면_로그인_성공">가입된 회원이라면 로그인 성공</a>
+<li><a href="#_회원_정보_수정_성공">회원 정보 수정 성공</a>
 <ul class="sectlevel2">
 <li><a href="#_요청">요청</a></li>
 <li><a href="#_응답">응답</a></li>
 </ul>
 </li>
-<li><a href="#_가입되지_않은_회원이라면_로그인_실패">가입되지 않은 회원이라면 로그인 실패</a>
+<li><a href="#_로그인하지_않으면_회원_정보_수정을_할_수_없습니다">로그인하지 않으면 회원 정보 수정을 할 수 없습니다</a>
 <ul class="sectlevel2">
 <li><a href="#_요청_2">요청</a></li>
 <li><a href="#_응답_2">응답</a></li>
@@ -462,20 +462,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_가입된_회원이라면_로그인_성공">가입된 회원이라면 로그인 성공</h2>
+<h2 id="_회원_정보_수정_성공">회원 정보 수정 성공</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_요청">요청</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /login HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /member HTTP/1.1
 Content-Type: application/json
-Content-Length: 54
+Content-Length: 180
 Host: 43.200.115.73:8080
 
 {
-  "email" : "xxx@gmail.com",
-  "password" : "1234"
+  "nickname" : "수정 닉네임",
+  "email" : "update@gmail.com",
+  "password" : "update1234",
+  "address" : "경기도 서울시 강남구",
+  "phoneNumber" : "010-1234-5678"
 }</code></pre>
 </div>
 </div>
@@ -494,14 +497,29 @@ Host: 43.200.115.73:8080
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 닉네임</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 이메일</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">비밀 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 비밀 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneNumber</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 전화 번호</p></td>
 </tr>
 </tbody>
 </table>
@@ -515,14 +533,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 164
+Content-Length: 180
 
 {
-  "nickname" : "닉네임",
-  "email" : "xxx@gmail.com",
-  "password" : "1234",
-  "address" : "경기도 수원시 영통구",
-  "phoneNumber" : "010-0000-0000"
+  "nickname" : "수정 닉네임",
+  "email" : "update@gmail.com",
+  "password" : "update1234",
+  "address" : "경기도 서울시 강남구",
+  "phoneNumber" : "010-1234-5678"
 }</code></pre>
 </div>
 </div>
@@ -571,20 +589,23 @@ Content-Length: 164
 </div>
 </div>
 <div class="sect1">
-<h2 id="_가입되지_않은_회원이라면_로그인_실패">가입되지 않은 회원이라면 로그인 실패</h2>
+<h2 id="_로그인하지_않으면_회원_정보_수정을_할_수_없습니다">로그인하지 않으면 회원 정보 수정을 할 수 없습니다</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_요청_2">요청</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /login HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /member HTTP/1.1
 Content-Type: application/json
-Content-Length: 54
+Content-Length: 180
 Host: 43.200.115.73:8080
 
 {
-  "email" : "xxx@gmail.com",
-  "password" : "1234"
+  "nickname" : "수정 닉네임",
+  "email" : "update@gmail.com",
+  "password" : "update1234",
+  "address" : "경기도 서울시 강남구",
+  "phoneNumber" : "010-1234-5678"
 }</code></pre>
 </div>
 </div>
@@ -603,14 +624,29 @@ Host: 43.200.115.73:8080
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 닉네임</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 이메일</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">비밀 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 비밀 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneNumber</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정 전화 번호</p></td>
 </tr>
 </tbody>
 </table>
@@ -619,16 +655,16 @@ Host: 43.200.115.73:8080
 <h3 id="_응답_2">응답</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 401 Unauthorized
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 86
+Content-Length: 76
 
 {
-  "statusCode" : "400",
-  "message" : "회원 정보가 일치하지 않습니다"
+  "statusCode" : "401",
+  "message" : "로그인 후 이용해주세요"
 }</code></pre>
 </div>
 </div>
@@ -665,7 +701,7 @@ Content-Length: 86
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-08 14:34:04 +0900
+Last updated 2023-02-09 18:21:52 +0900
 </div>
 </div>
 </body>

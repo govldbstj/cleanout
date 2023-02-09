@@ -2,6 +2,7 @@ package com.backend.member.repository;
 
 import com.backend.member.domain.Member;
 import com.backend.member.exception.MemberNotFoundException;
+import com.backend.member.exception.MemberNotMatchException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -20,8 +21,8 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByUsername(String username) {
-        return memberJpaRepository.findByUsername(username);
+    public Optional<Member> findByNickname(String username) {
+        return memberJpaRepository.findByNickname(username);
     }
 
     @Override
@@ -30,15 +31,26 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByNicknameAndEmail(String nickname, String email) {
+        return memberJpaRepository.findByNicknameAndEmail(nickname, email);
+    }
+
+    @Override
+    public Member getByNicknameAndEmail(String nickname, String email) {
+        return memberJpaRepository.findByNicknameAndEmail(nickname, email)
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Override
     public Member getByEmailAndPassword(String email, String password) {
         return memberJpaRepository.findByEmailAndPassword(email, password)
-                .orElseThrow(MemberNotFoundException::new);
+                .orElseThrow(MemberNotMatchException::new);
     }
 
     @Override
     public Member getById(Long id) {
         return memberJpaRepository.findById(id)
-                .orElseThrow(MemberNotFoundException::new);
+                .orElseThrow(MemberNotMatchException::new);
     }
 
     @Override

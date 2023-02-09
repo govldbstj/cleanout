@@ -24,6 +24,17 @@ logging:
   level:
     org.hibernate.SQL: debug
 
+kakao:
+  request:
+    url:
+      token: https://kauth.kakao.com/oauth/token
+      userInfo: https://kapi.kakao.com/v2/user/me
+  clientId : 39b1629ce319fa9f89c3b9f947d92255
+  redirectUri : http://localhost:8080/oauth
+  signupUrl: http://localhost:8080/kakao/signup
+  loginUrl: http://localhost:8080/kakao/login
+  logoutUrl: https://kapi.kakao.com/v1/user/logout
+
 
 
 
