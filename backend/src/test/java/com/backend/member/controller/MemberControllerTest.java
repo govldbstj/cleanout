@@ -23,7 +23,7 @@ class MemberControllerTest extends ControllerTest {
         MemberSignup memberSignup = MemberSignup.builder()
                 .email("xxx@gmail.com")
                 .password("1234")
-                .username("회원 이름")
+                .nickname("닉네임")
                 .address("경기도 수원시 영통구")
                 .phoneNumber("010-0000-0000")
                 .build();
@@ -37,7 +37,7 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("member/signup/200",
                         requestFields(
-                                fieldWithPath("username").description("회원 이름"),
+                                fieldWithPath("nickname").description("닉네임"),
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호"),
                                 fieldWithPath("address").description("주소"),
@@ -54,7 +54,7 @@ class MemberControllerTest extends ControllerTest {
         MemberSignup memberSignup = MemberSignup.builder()
                 .email("xxx@gmail.com")
                 .password("1234")
-                .username("회원 이름")
+                .nickname("닉네임")
                 .address("경기도 수원시 영통구")
                 .phoneNumber("010-0000-0000")
                 .build();
@@ -68,7 +68,7 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("member/signup/400",
                         requestFields(
-                                fieldWithPath("username").description("회원 이름"),
+                                fieldWithPath("nickname").description("닉네임"),
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호"),
                                 fieldWithPath("address").description("주소"),
@@ -102,7 +102,7 @@ class MemberControllerTest extends ControllerTest {
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호")),
                         responseFields(
-                                fieldWithPath("username").description("회원 이름"),
+                                fieldWithPath("nickname").description("닉네임"),
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호"),
                                 fieldWithPath("address").description("주소"),

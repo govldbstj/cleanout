@@ -1,5 +1,6 @@
 package com.backend.util;
 
+import com.backend.kakao.service.KakaoService;
 import com.backend.member.domain.Member;
 import com.backend.member.repository.MemberRepository;
 import com.backend.member.service.MemberService;
@@ -54,7 +55,7 @@ public class ControllerTest {
         Member member = Member.builder()
                 .email("xxx@gmail.com")
                 .password("1234")
-                .username("회원 이름")
+                .nickname("닉네임")
                 .address("경기도 수원시 영통구")
                 .phoneNumber("010-0000-0000")
                 .build();

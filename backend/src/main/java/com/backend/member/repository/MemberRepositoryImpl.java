@@ -21,13 +21,24 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByUsername(String username) {
-        return memberJpaRepository.findByUsername(username);
+    public Optional<Member> findByNickname(String username) {
+        return memberJpaRepository.findByNickname(username);
     }
 
     @Override
     public Optional<Member> findByEmail(String email) {
         return memberJpaRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<Member> findByNicknameAndEmail(String nickname, String email) {
+        return memberJpaRepository.findByNicknameAndEmail(nickname, email);
+    }
+
+    @Override
+    public Member getByNicknameAndEmail(String nickname, String email) {
+        return memberJpaRepository.findByNicknameAndEmail(nickname, email)
+                .orElseThrow(MemberNotFoundException::new);
     }
 
     @Override

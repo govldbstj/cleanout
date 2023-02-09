@@ -1,5 +1,6 @@
 package com.backend.member.domain;
 
+import com.backend.kakao.dto.KakaoLogin;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
 public class MemberSession implements Serializable {
 
     private Long id;
-    private String username;
+    private String nickname;
 
     private String email;
     private String password;
@@ -20,10 +21,10 @@ public class MemberSession implements Serializable {
     private String phoneNumber;
 
     @Builder
-    public MemberSession(Long id, String email, String password, String username,
+    public MemberSession(Long id, String email, String password, String nickname,
                          String address, String phoneNumber) {
         this.id = id;
-        this.username = username;
+        this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.address = address;
@@ -33,7 +34,7 @@ public class MemberSession implements Serializable {
     public static MemberSession getFromMember(Member member) {
         return MemberSession.builder()
                 .id(member.getId())
-                .username(member.getUsername())
+                .nickname(member.getNickname())
                 .email(member.getEmail())
                 .password(member.getPassword())
                 .address(member.getAddress())
