@@ -4,11 +4,11 @@ POST http://localhost:8080/signup
 Content-Type: application/json
 
 {
-    "nickname": "닉네임",
-    "email": "xxx@gmail.com",
-    "password": "1234",
-    "address": "경기도 수원시 영통구",
-    "phoneNumber": "010-0000-0000"
+  "nickname": "닉네임",
+  "email": "xxx@gmail.com",
+  "password": "1234",
+  "address": "경기도 수원시 영통구",
+  "phoneNumber": "010-0000-0000"
 }
 
 ### 로그인
@@ -57,9 +57,9 @@ PATCH http://localhost:8080/waste-management/waste
 Content-Type: application/json
 
 {
-  "imageName" : "wasteImage1.png",
+  "imageName": "wasteImage1.png",
   "wasteName": "냉장고 - 300L이상",
-  "price" : 6000
+  "price": 6000
 }
 
 
@@ -71,3 +71,14 @@ GET http://localhost:8080/waste-management/waste
 ### 폐기물 상세조회
 
 GET http://localhost:8080/waste-management/waste/1
+
+
+### 수거자 생성
+
+POST http://localhost:8080/collector-management
+Content-Type: application/json
+
+{
+  "collectorName": "수거자1",
+  "phoneNumber": "010-1111-1111"
+}

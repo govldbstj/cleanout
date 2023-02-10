@@ -1,7 +1,7 @@
 package com.backend.waste.domain;
 
+import com.backend.collector.domain.Collector;
 import com.backend.member.domain.Member;
-import com.backend.waste.dto.response.GetWasteBrief;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;

@@ -1,5 +1,8 @@
-package com.backend.waste.domain;
+package com.backend.collector.domain;
 
+import com.backend.collector.dto.request.PostCollector;
+import com.backend.waste.domain.Waste;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +30,10 @@ public class Collector {
 
     @OneToMany(mappedBy = "collector")
     private List<Waste> wastes = new ArrayList<>();
+
+    @Builder
+    public Collector(String name, String phoneNumber) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
 }
