@@ -68,4 +68,9 @@ public class Waste {
         this.name = wasteName;
         this.price = price;
     }
+
+    public void matchCollector(Collector collector, LocalDateTime date) {
+        this.collector = collector;
+        this.collectedDate = date;
+    }
 }
