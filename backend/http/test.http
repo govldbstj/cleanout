@@ -90,5 +90,5 @@ POST http://localhost:8080/collector-management/1/1
 Content-Type: application/json
 
 {
-  "date" : "2023-02-20 19:54:21"
+  "atTime" : "2023-02-20 19:54:21"
 }
