@@ -2,14 +2,17 @@ package com.backend.member.domain;
 
 import com.backend.kakao.dto.KakaoSignup;
 import com.backend.member.dto.request.MemberSignup;
+import com.backend.waste.domain.Waste;
 import com.backend.member.dto.request.MemberUpdate;
 import com.backend.util.enumerated.SignupType;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.EnumType.*;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -32,6 +35,9 @@ public class Member {
     private String address;
 
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "member")
+    private List<Waste> wastes = new ArrayList<>();
 
     @Enumerated(STRING)
     private SignupType signupType;

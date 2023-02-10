@@ -37,3 +37,35 @@ Content-Type: application/json
 ### 로그아웃
 
 POST http://localhost:8080/logout
+
+
+### 폐기물 이미지 업로드
+
+POST http://localhost:8080/waste-management/image
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="wasteImage1.png"
+
+< C:\Users\Administrator\Pictures\mssp\waste\wasteImage1.PNG
+--WebAppBoundary--
+
+
+### 폐기물 라벨, 가격 입력
+
+PATCH http://localhost:8080/waste-management/waste
+Content-Type: application/json
+
+{
+  "imageName" : "wasteImage1.png",
+  "wasteName": "냉장고 - 300L이상",
+  "price" : 6000
+}
+
+
+### 폐기물 리스트
+
+GET http://localhost:8080/waste-management/waste
+
+
+### 폐기물 상세조회
