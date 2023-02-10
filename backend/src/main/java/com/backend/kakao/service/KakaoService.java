@@ -1,5 +1,6 @@
 package com.backend.kakao.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +31,6 @@ public class KakaoService {
     @Value("${kakao.redirectUri}")
     private String redirectUri;
 
-    @Value("${kakao.signupUrl}")
-    private String kakaoSignupUrl;
-
-    @Value("${kakao.loginUrl}")
-    private String kakaoLoginUrl;
-
-    @Value("${kakao.logoutUrl}")
-    private String kakaoLogoutUrl;
-
     public String getAccessToken(String authorizeCode) {
         String accessToken = EMPTY;
 
@@ -51,15 +43,19 @@ public class KakaoService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {});
-            accessToken = jsonMap.get("access_token").toString();
+            accessToken = getString(accessToken, result);
 
             br.close();
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return accessToken;
+    }
+
+    private static String getString(String accessToken, String result) throws JsonProcessingException {
+        Map<String, Object> jsonMap = getStringObjectMap(result);
+        accessToken = jsonMap.get("access_token").toString();
         return accessToken;
     }
 
@@ -98,17 +94,8 @@ public class KakaoService {
             }
 
             try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {
-                });
-
-                Map<String, Object> properties = (Map<String, Object>) jsonMap.get("properties");
-                Map<String, Object> kakao_account = (Map<String, Object>) jsonMap.get("kakao_account");
-
-                String nickname = properties.get("nickname").toString();
-                String email = kakao_account.get("email").toString();
-                userInfo.put("nickname", nickname);
-                userInfo.put("email", email);
+                Map<String, Object> jsonMap = getStringObjectMap(result);
+                putUserInfo(userInfo, jsonMap);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -118,6 +105,22 @@ public class KakaoService {
             e.printStackTrace();
         }
         return userInfo;
+    }
+
+    private static Map<String, Object> getStringObjectMap(String result) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = objectMapper.readValue(result, new TypeReference<Map<String, Object>>() {});
+        return jsonMap;
+    }
+
+    private static void putUserInfo(HashMap<String, Object> userInfo, Map<String, Object> jsonMap) {
+        Map<String, Object> properties = (Map<String, Object>) jsonMap.get("properties");
+        Map<String, Object> kakao_account = (Map<String, Object>) jsonMap.get("kakao_account");
+
+        String nickname = properties.get("nickname").toString();
+        String email = kakao_account.get("email").toString();
+        userInfo.put("nickname", nickname);
+        userInfo.put("email", email);
     }
 
     private BufferedReader getBufferedReader(String access_Token) throws IOException {
