@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 
@@ -55,26 +56,33 @@ public class WasteService {
         Member member = memberJpaRepository.findById(id).orElseThrow(MemberNotFoundException::new);
         List<Waste> wastes = wasteJpaRepository.findAllByMemberOrderByEnrolledDateDesc(member);
 
-        System.out.println(wastes.size() + "개");
         List<GetWasteBrief> result = new ArrayList<GetWasteBrief>();
         for (Waste waste : wastes) {
-            StringBuilder sb = new StringBuilder();
+            String status = "";
             if (waste.isCollected())
-                sb.append("수거 완료");
-            else if (waste.getCollector() == null){
-                sb.append("등록 완료");
-            }
-            else {
-                LocalDateTime now = LocalDateTime.now();
-                if (ChronoUnit.DAYS.between(now, waste.getCollectedDate()) == 0)
-                    sb.append(ChronoUnit.DAYS.between(waste.getCollectedDate(), now)).append("일 ");
-                if (ChronoUnit.HOURS.between(now, waste.getCollectedDate()) == 0) {
-                    sb.append(ChronoUnit.HOURS.between(now, waste.getCollectedDate())).append("시간 ");
-                    sb.append(ChronoUnit.MINUTES.between(now, waste.getCollectedDate())).append("분 후 수거");
-                }
-            }
-            result.add(new GetWasteBrief(waste.getId(), waste.getName(), waste.getEnrolledDate(), sb.toString()));
+                status = "수거 완료";
+            else if (waste.getCollector() == null)
+                status = "등록 완료";
+            else
+                status = getTimeGap(waste.getCollectedDate());
+            result.add(new GetWasteBrief(waste.getId(), waste.getName(), waste.getEnrolledDate(), status));
         }
         return result;
+    }
+
+    String getTimeGap(LocalDateTime time) {
+        LocalDateTime now = LocalDateTime.now();
+        StringBuilder sb = new StringBuilder();
+        if(ChronoUnit.YEARS.between(now,time)!=0)
+            sb.append(ChronoUnit.YEARS.between(now,time)).append("년 ");
+        if (ChronoUnit.MONTHS.between(now, time) != 0)
+            sb.append(ChronoUnit.MONTHS.between(now,time)).append("달 ");
+        if (ChronoUnit.DAYS.between(now, time) != 0)
+            sb.append(ChronoUnit.DAYS.between(now, time)).append("일 ");
+        if (ChronoUnit.HOURS.between(now, time) != 0)
+            sb.append(ChronoUnit.HOURS.between(now, time)).append("시간 ");
+
+        sb.append(ChronoUnit.MINUTES.between(now, time)).append("분 후 수거");
+        return sb.toString();
     }
 }
