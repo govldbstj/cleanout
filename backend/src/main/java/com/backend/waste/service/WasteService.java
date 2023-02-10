@@ -7,6 +7,8 @@ import com.backend.member.repository.MemberJpaRepository;
 import com.backend.waste.domain.Waste;
 import com.backend.waste.dto.request.PatchWaste;
 import com.backend.waste.dto.response.GetWasteBrief;
+import com.backend.waste.dto.response.GetWasteDetail;
+import com.backend.waste.exception.WasteNotFoundException;
 import com.backend.waste.repository.WasteJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,31 +60,44 @@ public class WasteService {
 
         List<GetWasteBrief> result = new ArrayList<GetWasteBrief>();
         for (Waste waste : wastes) {
-            String status = "";
-            if (waste.isCollected())
-                status = "수거 완료";
-            else if (waste.getCollector() == null)
-                status = "등록 완료";
-            else
-                status = getTimeGap(waste.getCollectedDate());
-            result.add(new GetWasteBrief(waste.getId(), waste.getName(), waste.getEnrolledDate(), status));
+            result.add(new GetWasteBrief(waste.getId(), waste.getName(), waste.getEnrolledDate(), getTimeGap(waste)));
         }
         return result;
     }
 
-    String getTimeGap(LocalDateTime time) {
-        LocalDateTime now = LocalDateTime.now();
+    String getTimeGap(Waste waste) {
         StringBuilder sb = new StringBuilder();
-        if(ChronoUnit.YEARS.between(now,time)!=0)
-            sb.append(ChronoUnit.YEARS.between(now,time)).append("년 ");
-        if (ChronoUnit.MONTHS.between(now, time) != 0)
-            sb.append(ChronoUnit.MONTHS.between(now,time)).append("달 ");
-        if (ChronoUnit.DAYS.between(now, time) != 0)
-            sb.append(ChronoUnit.DAYS.between(now, time)).append("일 ");
-        if (ChronoUnit.HOURS.between(now, time) != 0)
-            sb.append(ChronoUnit.HOURS.between(now, time)).append("시간 ");
+        if (waste.isCollected())
+            sb.append("수거 완료");
+        else if (waste.getCollector() == null)
+            sb.append("등록 완료");
+        else{
+            LocalDateTime now = LocalDateTime.now();
+            if(ChronoUnit.YEARS.between(now,waste.getCollectedDate())!=0)
+                sb.append(ChronoUnit.YEARS.between(now,waste.getCollectedDate())).append("년 ");
+            if (ChronoUnit.MONTHS.between(now, waste.getCollectedDate()) != 0)
+                sb.append(ChronoUnit.MONTHS.between(now,waste.getCollectedDate())).append("달 ");
+            if (ChronoUnit.DAYS.between(now, waste.getCollectedDate()) != 0)
+                sb.append(ChronoUnit.DAYS.between(now, waste.getCollectedDate())).append("일 ");
+            if (ChronoUnit.HOURS.between(now, waste.getCollectedDate()) != 0)
+                sb.append(ChronoUnit.HOURS.between(now, waste.getCollectedDate())).append("시간 ");
 
-        sb.append(ChronoUnit.MINUTES.between(now, time)).append("분 후 수거");
+            sb.append(ChronoUnit.MINUTES.between(now, waste.getCollectedDate())).append("분 후 수거");
+        }
+
         return sb.toString();
+    }
+
+    public GetWasteDetail getWaste(Long userIdx, Long wasteIdx) {
+        Member member = memberJpaRepository.findById(userIdx).orElseThrow(MemberNotFoundException::new);
+        Waste waste = wasteJpaRepository.findById(wasteIdx).orElseThrow(WasteNotFoundException::new);
+
+        return new GetWasteDetail(
+                member.getNickname(),
+                member.getAddress(),
+                waste.getName(),
+                waste.getPrice(),
+                getTimeGap(waste)
+        );
     }
 }
