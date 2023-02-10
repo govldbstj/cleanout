@@ -4,6 +4,7 @@ import com.backend.member.domain.MemberSession;
 import com.backend.util.annotation.Login;
 import com.backend.waste.dto.request.PatchWaste;
 import com.backend.waste.dto.response.GetWasteBrief;
+import com.backend.waste.dto.response.GetWasteDetail;
 import com.backend.waste.service.WasteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class WasteController {
 
     @PostMapping("/image")
     public ResponseEntity<Void> postWasteImage(@RequestParam("image") MultipartFile file,
-                                              @Login MemberSession memberSession) throws IOException {
+                                               @Login MemberSession memberSession) throws IOException {
         wasteService.postWasteImage(memberSession.getId(), file);
         return ResponseEntity.ok().build();
     }
@@ -37,5 +38,11 @@ public class WasteController {
     public ResponseEntity<List<GetWasteBrief>> getWasteList(@Login MemberSession memberSession) {
         List<GetWasteBrief> getWasteBriefs = wasteService.getWasteList(memberSession.getId());
         return ResponseEntity.ok(getWasteBriefs);
+    }
+
+    @GetMapping("/waste/{wasteIdx}")
+    public ResponseEntity<GetWasteDetail> getWaste(@Login MemberSession memberSession, @PathVariable("wasteIdx") Long wasteIdx) {
+        GetWasteDetail getWasteDetail = wasteService.getWaste(memberSession.getId(), wasteIdx);
+        return ResponseEntity.ok(getWasteDetail);
     }
 }

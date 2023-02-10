@@ -69,3 +69,5 @@ GET http://localhost:8080/waste-management/waste
 
 
 ### 폐기물 상세조회
+
+GET http://localhost:8080/waste-management/waste/1
