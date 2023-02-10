@@ -36,12 +36,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    @Transactional
-    public void kakaoSignup(KakaoSignup kakaoSignup) {
-        Member member = Member.getFromKakaoSignup(kakaoSignup);
-        memberRepository.save(member);
-    }
-
     public void validateDuplication(MemberSignup memberSignup) {
         Optional<Member> byNickname = memberRepository.findByNickname(memberSignup.getNickname());
         Optional<Member> byEmail = memberRepository.findByEmail(memberSignup.getEmail());
@@ -74,7 +68,7 @@ public class MemberService {
             headers.set("Authorization", "Bearer " + memberSession.getAccessToken());
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(
+            restTemplate.exchange(
                     "https://kapi.kakao.com/v1/user/logout",
                     HttpMethod.POST,
                     entity,
@@ -92,9 +86,5 @@ public class MemberService {
             return false;
         }
         return true;
-    }
-
-    public Member getByKakaoLogin(KakaoLogin kakaoLogin) {
-        return memberRepository.getByNicknameAndEmail(kakaoLogin.getNickname(), kakaoLogin.getEmail());
     }
 }

@@ -1,6 +1,7 @@
 package com.backend.member.service;
 
 import com.backend.kakao.dto.KakaoLogin;
+import com.backend.kakao.service.KakaoService;
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
 import com.backend.member.dto.request.MemberLogin;
@@ -29,6 +30,9 @@ class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private KakaoService kakaoService;
 
     @Test
     @DisplayName("입력한 정보로 회원가입이 진행됩니다")
@@ -192,7 +196,7 @@ class MemberServiceTest extends ServiceTest {
                 .email("xxx@gmail.com")
                 .build();
         // when
-        Member getByKaKaoLogin = memberService.getByKakaoLogin(kakaoLogin);
+        Member getByKaKaoLogin = kakaoService.getByKakaoLogin(kakaoLogin);
 
         // then
         assertThat(getByKaKaoLogin.getNickname()).isEqualTo("닉네임");

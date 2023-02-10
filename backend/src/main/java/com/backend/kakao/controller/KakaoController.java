@@ -33,12 +33,8 @@ public class KakaoController {
 
         String accessToken = kakaoService.getAccessToken(code);
         HashMap<String, Object> userInfo = kakaoService.getUserInfo(accessToken);
-        if (memberService.needToSignup(userInfo) == true) {
-            KakaoSignup kakaoSignup = KakaoSignup.getFromUserInfo(userInfo, accessToken);
-            memberService.kakaoSignup(kakaoSignup);
-        }
-        KakaoLogin kakaoLogin = KakaoLogin.getFromUserInfo(userInfo);
-        Member member = memberService.getByKakaoLogin(kakaoLogin);
+        kakaoService.checkNeedToSignup(accessToken, userInfo);
+        Member member = kakaoService.updateAccessToken(accessToken, userInfo);
         MemberSession memberSession = MemberSession.getFromMember(member);
         memberService.makeSessionForMemberSession(memberSession, httpServletRequest);
     }

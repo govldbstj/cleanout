@@ -1,11 +1,17 @@
 package com.backend.kakao.service;
 
+import com.backend.kakao.dto.KakaoLogin;
+import com.backend.kakao.dto.KakaoSignup;
+import com.backend.member.domain.Member;
+import com.backend.member.repository.MemberRepository;
+import com.backend.member.service.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -30,6 +36,34 @@ public class KakaoService {
 
     @Value("${kakao.redirectUri}")
     private String redirectUri;
+
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
+
+    @Transactional
+    public void kakaoSignup(KakaoSignup kakaoSignup) {
+        Member member = Member.getFromKakaoSignup(kakaoSignup);
+        memberRepository.save(member);
+    }
+
+    public Member getByKakaoLogin(KakaoLogin kakaoLogin) {
+        return memberRepository.getByNicknameAndEmail(kakaoLogin.getNickname(), kakaoLogin.getEmail());
+    }
+
+    @Transactional
+    public Member updateAccessToken(String accessToken, HashMap<String, Object> userInfo) {
+        KakaoLogin kakaoLogin = KakaoLogin.getFromUserInfo(userInfo);
+        Member member = this.getByKakaoLogin(kakaoLogin);
+        member.updateAccessToken(accessToken);
+        return member;
+    }
+
+    public void checkNeedToSignup(String accessToken, HashMap<String, Object> userInfo) {
+        if (memberService.needToSignup(userInfo) == true) {
+            KakaoSignup kakaoSignup = KakaoSignup.getFromUserInfo(userInfo, accessToken);
+            this.kakaoSignup(kakaoSignup);
+        }
+    }
 
     public String getAccessToken(String authorizeCode) {
         String accessToken = EMPTY;
@@ -85,26 +119,30 @@ public class KakaoService {
         HashMap<String, Object> userInfo = new HashMap<String, Object>();
 
         try {
-            BufferedReader br = getBufferedReader(accessToken);
-            String line = EMPTY;
-            String result = EMPTY;
-
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-
-            try {
-                Map<String, Object> jsonMap = getStringObjectMap(result);
-                putUserInfo(userInfo, jsonMap);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            checkReadLine(accessToken, userInfo);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return userInfo;
+    }
+
+    private void checkReadLine(String accessToken, HashMap<String, Object> userInfo) throws IOException {
+        BufferedReader br = getBufferedReader(accessToken);
+        String line = EMPTY;
+        String result = EMPTY;
+
+        while ((line = br.readLine()) != null) {
+            result += line;
+        }
+
+        try {
+            Map<String, Object> jsonMap = getStringObjectMap(result);
+            putUserInfo(userInfo, jsonMap);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static Map<String, Object> getStringObjectMap(String result) throws JsonProcessingException {

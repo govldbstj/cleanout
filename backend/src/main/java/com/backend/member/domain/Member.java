@@ -87,4 +87,8 @@ public class Member {
         this.address = memberUpdate.getAddress();
         this.phoneNumber = memberUpdate.getPhoneNumber();
     }
+
+    public void updateAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }
