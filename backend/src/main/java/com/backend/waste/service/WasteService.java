@@ -70,18 +70,30 @@ public class WasteService {
             sb.append("수거 완료");
         else if (waste.getCollector() == null)
             sb.append("등록 완료");
-        else{
+        else {
             LocalDateTime now = LocalDateTime.now();
-            if(ChronoUnit.YEARS.between(now,waste.getCollectedDate())!=0)
-                sb.append(ChronoUnit.YEARS.between(now,waste.getCollectedDate())).append("년 ");
-            if (ChronoUnit.MONTHS.between(now, waste.getCollectedDate()) != 0)
-                sb.append(ChronoUnit.MONTHS.between(now,waste.getCollectedDate())).append("달 ");
-            if (ChronoUnit.DAYS.between(now, waste.getCollectedDate()) != 0)
-                sb.append(ChronoUnit.DAYS.between(now, waste.getCollectedDate())).append("일 ");
-            if (ChronoUnit.HOURS.between(now, waste.getCollectedDate()) != 0)
-                sb.append(ChronoUnit.HOURS.between(now, waste.getCollectedDate())).append("시간 ");
-
-            sb.append(ChronoUnit.MINUTES.between(now, waste.getCollectedDate())).append("분 후 수거");
+            LocalDateTime time = waste.getCollectedDate();
+            if (ChronoUnit.YEARS.between(now, time) != 0) {
+                long yearGap = ChronoUnit.YEARS.between(now, time);
+                sb.append(yearGap).append("년 ");
+                time = time.minusYears(yearGap);
+            }
+            if (ChronoUnit.MONTHS.between(now, time) != 0) {
+                long monthGap = ChronoUnit.MONTHS.between(now, time);
+                sb.append(monthGap).append("달 ");
+                time = time.minusMonths(monthGap);
+            }
+            if (ChronoUnit.DAYS.between(now, time) != 0){
+                long dayGap = ChronoUnit.DAYS.between(now, time);
+                sb.append(dayGap).append("일 ");
+                time = time.minusDays(dayGap);
+            }
+            if (ChronoUnit.HOURS.between(now, time) != 0){
+                long hourGap = ChronoUnit.HOURS.between(now, time);
+                sb.append(hourGap).append("시간 ");
+                time = time.minusHours(hourGap);
+            }
+            sb.append(ChronoUnit.MINUTES.between(now, time)).append("분 후 수거");
         }
 
         return sb.toString();
