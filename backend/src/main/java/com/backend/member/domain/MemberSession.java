@@ -1,11 +1,9 @@
 package com.backend.member.domain;
 
-import com.backend.kakao.dto.KakaoLogin;
 import com.backend.util.enumerated.SignupType;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,9 +25,11 @@ public class MemberSession implements Serializable {
     @Enumerated(STRING)
     private SignupType signupType;
 
+    private String accessToken;
+
     @Builder
-    public MemberSession(Long id, String email, String password, String nickname,
-                         String address, String phoneNumber, SignupType signupType) {
+    public MemberSession(Long id, String email, String password, String nickname, String address,
+                         String phoneNumber, SignupType signupType, String accessToken) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -37,6 +37,7 @@ public class MemberSession implements Serializable {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.signupType = signupType;
+        this.accessToken = accessToken;
     }
 
     public static MemberSession getFromMember(Member member) {
@@ -48,6 +49,7 @@ public class MemberSession implements Serializable {
                 .address(member.getAddress())
                 .phoneNumber(member.getPhoneNumber())
                 .signupType(member.getSignupType())
+                .accessToken(member.getAccessToken())
                 .build();
     }
 
