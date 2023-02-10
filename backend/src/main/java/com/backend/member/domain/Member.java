@@ -42,15 +42,18 @@ public class Member {
     @Enumerated(STRING)
     private SignupType signupType;
 
+    private String accessToken;
+
     @Builder
-    public Member(String email, String password, String nickname,
-                  String address, String phoneNumber, SignupType signupType) {
+    public Member(String email, String password, String nickname, String address,
+                  String phoneNumber, SignupType signupType, String accessToken) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.signupType = signupType;
+        this.accessToken = accessToken;
     }
 
     public static Member getFromMemberSignup(MemberSignup memberSignup) {
@@ -61,6 +64,7 @@ public class Member {
                 .address(memberSignup.getAddress())
                 .phoneNumber(memberSignup.getPhoneNumber())
                 .signupType(SignupType.NORMAL)
+                .accessToken(EMPTY)
                 .build();
     }
 
@@ -72,6 +76,7 @@ public class Member {
                 .address(EMPTY)
                 .phoneNumber(EMPTY)
                 .signupType(SignupType.KAKAO)
+                .accessToken(kakaoSignup.getAccessToken())
                 .build();
     }
 

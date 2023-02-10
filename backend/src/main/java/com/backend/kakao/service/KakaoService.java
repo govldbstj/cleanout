@@ -1,17 +1,10 @@
 package com.backend.kakao.service;
 
-import com.backend.kakao.dto.KakaoLogin;
-import com.backend.kakao.dto.KakaoSignup;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -20,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.apache.logging.log4j.util.Strings.EMPTY;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @RequiredArgsConstructor
 @Service
@@ -47,40 +39,12 @@ public class KakaoService {
     @Value("${kakao.logoutUrl}")
     private String kakaoLogoutUrl;
 
-    @Transactional
-    public void requestSignup(HashMap<String, Object> userInfo) throws JsonProcessingException {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(APPLICATION_JSON);
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        KakaoSignup kakaoSignup = KakaoSignup.getFromUserInfo(userInfo);
-        String kakaoSignupJson = objectMapper.writeValueAsString(kakaoSignup);
-
-        HttpEntity<String> request = new HttpEntity<String>(kakaoSignupJson, headers);
-        restTemplate.postForObject(kakaoSignupUrl, request, String.class);
-    }
-
-    public void requestLogin(HashMap<String, Object> userInfo) throws JsonProcessingException {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(APPLICATION_JSON);
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        KakaoLogin kakaoLogin = KakaoLogin.getFromUserInfo(userInfo);
-        String kakaoLoginJson = objectMapper.writeValueAsString(kakaoLogin);
-
-        HttpEntity<String> request = new HttpEntity<String>(kakaoLoginJson, headers);
-
-        restTemplate.postForObject(kakaoLoginUrl, request, String.class);
-    }
-
-    public String getAccessToken(String authorize_code) {
+    public String getAccessToken(String authorizeCode) {
         String accessToken = EMPTY;
 
         try {
             HttpURLConnection conn = getHttpURLConnection();
-            BufferedWriter bw = getBufferedWriter(authorize_code, conn);
+            BufferedWriter bw = getBufferedWriter(authorizeCode, conn);
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = EMPTY;
             String result = EMPTY;
@@ -99,7 +63,7 @@ public class KakaoService {
         return accessToken;
     }
 
-    private BufferedWriter getBufferedWriter(String authorize_code, HttpURLConnection conn) throws IOException {
+    private BufferedWriter getBufferedWriter(String authorizeCode, HttpURLConnection conn) throws IOException {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
         StringBuilder sb = new StringBuilder();
         sb.append("grant_type=authorization_code");
@@ -107,7 +71,7 @@ public class KakaoService {
         sb.append("&client_id=" + clientId);
         sb.append("&redirect_uri=" + redirectUri);
 
-        sb.append("&code=" + authorize_code);
+        sb.append("&code=" + authorizeCode);
         bw.write(sb.toString());
         bw.flush();
         return bw;
@@ -121,11 +85,11 @@ public class KakaoService {
         return conn;
     }
 
-    public HashMap<String, Object> getUserInfo(String access_Token) {
+    public HashMap<String, Object> getUserInfo(String accessToken) {
         HashMap<String, Object> userInfo = new HashMap<String, Object>();
 
         try {
-            BufferedReader br = getBufferedReader(access_Token);
+            BufferedReader br = getBufferedReader(accessToken);
             String line = EMPTY;
             String result = EMPTY;
 

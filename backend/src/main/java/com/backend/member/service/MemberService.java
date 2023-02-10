@@ -9,9 +9,15 @@ import com.backend.member.dto.request.MemberSignup;
 import com.backend.member.dto.request.MemberUpdate;
 import com.backend.member.exception.MemberDuplicationException;
 import com.backend.member.repository.MemberRepository;
+import com.backend.util.enumerated.SignupType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -62,6 +68,19 @@ public class MemberService {
     }
 
     public void logout(MemberSession memberSession, HttpServletRequest httpServletRequest) {
+        if (memberSession.getSignupType() == SignupType.KAKAO) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + memberSession.getAccessToken());
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "https://kapi.kakao.com/v1/user/logout",
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+        }
         memberSession.invalidateSession(httpServletRequest);
     }
 

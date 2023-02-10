@@ -10,10 +10,7 @@ import com.backend.member.service.MemberService;
 import com.backend.util.annotation.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,7 +38,7 @@ public class MemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@Login MemberSession memberSession,
-                                       HttpServletRequest httpServletRequest) {
+                                       HttpServletRequest httpServletRequest) {;
         memberService.logout(memberSession, httpServletRequest);
         return ResponseEntity.ok().build();
     }
