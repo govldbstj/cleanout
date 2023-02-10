@@ -61,3 +61,8 @@ Content-Type: application/json
   "wasteName": "냉장고 - 300L이상",
   "price" : 6000
 }
+
+
+### 폐기물 리스트
+
+GET http://localhost:8080/waste-management/waste

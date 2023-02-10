@@ -1,6 +1,7 @@
 package com.backend.waste.domain;
 
 import com.backend.member.domain.Member;
+import com.backend.waste.dto.response.GetWasteBrief;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
