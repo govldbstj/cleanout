@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class MatchCollector {
-    private String date;
+    private String atTime;
 }

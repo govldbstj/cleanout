@@ -24,7 +24,7 @@ public class CollectorController {
     public ResponseEntity<Void> matchCollector(@PathVariable("wasteIdx") Long wasteIdx,
                                                @PathVariable("collectorIdx") Long collectorIdx,
                                                @RequestBody MatchCollector matchCollector){
-        collectorService.matchCollector(wasteIdx, collectorIdx, matchCollector.getDate());
+        collectorService.matchCollector(wasteIdx, collectorIdx, matchCollector.getAtTime());
         return ResponseEntity.ok().build();
     }
 }

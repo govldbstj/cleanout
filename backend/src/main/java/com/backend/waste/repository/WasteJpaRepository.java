@@ -6,10 +6,11 @@ import com.backend.waste.dto.response.GetWasteBrief;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WasteJpaRepository extends JpaRepository<Waste, Long> {
 
-    Waste findByImageName(String imageName);
+    Optional<Waste> findByImageName(String imageName);
 
     List<Waste> findAllByMemberOrderByEnrolledDateDesc(Member member);
 }
