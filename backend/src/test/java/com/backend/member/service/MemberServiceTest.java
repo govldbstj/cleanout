@@ -149,9 +149,9 @@ class MemberServiceTest extends ServiceTest {
         // then
         assertThat(member.getNickname()).isEqualTo("수정 닉네임");
         assertThat(member.getEmail()).isEqualTo("update@gmail.com");
-        assertThat(member.getPassword()).isEqualTo("update1234");
         assertThat(member.getAddress()).isEqualTo("경기도 서울시 강남구");
         assertThat(member.getPhoneNumber()).isEqualTo("010-1234-5678");
+        assertThat(passwordEncoder.matches("update1234", member.getPassword())).isTrue();
     }
 
     @Test

@@ -6,12 +6,17 @@ import com.backend.member.dto.request.MemberSignup;
 import com.backend.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
 public class ServiceTest {
 
     @Autowired
     protected MemberRepository memberRepository;
+
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
 
     protected Member saveMemberInRepository() {
         Member member = Member.builder()

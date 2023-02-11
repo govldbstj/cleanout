@@ -1,7 +1,7 @@
 = 일반 로그인
 :toc:
 
-== 가입된 회원이라면 로그인 성공
+== 가입된 회원이라면 로그인 성공 - 200
 
 === 요청
 
@@ -15,7 +15,7 @@ include::{snippets}/member/login/200/http-response.adoc[]
 
 include::{snippets}/member/login/200/response-fields.adoc[]
 
-== 가입되지 않은 회원이라면 로그인 실패
+== 가입된 회원이지만 비밀번호가 일치하지 않으면 로그인 실패 - 400
 
 === 요청
 
@@ -28,3 +28,17 @@ include::{snippets}/member/login/400/request-fields.adoc[]
 include::{snippets}/member/login/400/http-response.adoc[]
 
 include::{snippets}/member/login/400/response-fields.adoc[]
+
+== 가입된 이메일이 아니라면 로그인에 실패합니다 - 404
+
+=== 요청
+
+include::{snippets}/member/login/404/http-request.adoc[]
+
+include::{snippets}/member/login/404/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member/login/404/http-response.adoc[]
+
+include::{snippets}/member/login/404/response-fields.adoc[]

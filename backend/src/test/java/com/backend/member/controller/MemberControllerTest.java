@@ -115,12 +115,13 @@ class MemberControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("가입되지 않은 회원이라면 로그인에 실패합니다")
+    @DisplayName("가입된 이메일이지만 비밀번호가 일치하지 않으면 예외가 발생합니다")
     void login400() throws Exception {
         // given
+        saveMemberInRepository();
         MemberLogin memberLogin = MemberLogin.builder()
                 .email("xxx@gmail.com")
-                .password("1234")
+                .password("3769392739")
                 .build();
 
         String memberLoginJson = objectMapper.writeValueAsString(memberLogin);
@@ -131,6 +132,32 @@ class MemberControllerTest extends ControllerTest {
                         .content(memberLoginJson))
                 .andExpect(status().isBadRequest())
                 .andDo(document("member/login/400",
+                        requestFields(
+                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("password").description("비밀 번호")),
+                        responseFields(
+                                fieldWithPath("statusCode").description("에러 코드"),
+                                fieldWithPath("message").description("에러 메세지"))
+                ));
+    }
+
+    @Test
+    @DisplayName("가입된 이메일이 아니라면 예외가 발생합니다")
+    void login404() throws Exception {
+        // given
+        MemberLogin memberLogin = MemberLogin.builder()
+                .email("가입되지 않은 이메일@gmail.com")
+                .password("1234")
+                .build();
+
+        String memberLoginJson = objectMapper.writeValueAsString(memberLogin);
+
+        // expected
+        mockMvc.perform(post("/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(memberLoginJson))
+                .andExpect(status().isNotFound())
+                .andDo(document("member/login/404",
                         requestFields(
                                 fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀 번호")),
@@ -181,7 +208,7 @@ class MemberControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("로그인하지 않으면 회원정보 수정에 실패합니다")
-    void update400() throws Exception {
+    void update401() throws Exception {
         // given
         Member member = saveMemberInRepository();
 

@@ -18,6 +18,8 @@ public interface MemberRepository {
 
     Member getByEmailAndPassword(String email, String password);
 
+    Member getByEmail(String email);
+
     Member getById(Long id);
 
     long count();

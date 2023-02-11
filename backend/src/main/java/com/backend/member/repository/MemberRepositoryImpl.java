@@ -48,6 +48,12 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Member getByEmail(String email) {
+        return memberJpaRepository.findByEmail(email)
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Override
     public Member getById(Long id) {
         return memberJpaRepository.findById(id)
                 .orElseThrow(MemberNotMatchException::new);

@@ -1,7 +1,7 @@
 = 회원 정보 수정
 :toc:
 
-== 회원 정보 수정 성공
+== 회원 정보 수정 성공 - 200
 
 === 요청
 
@@ -15,7 +15,7 @@ include::{snippets}/member/update/200/http-response.adoc[]
 
 include::{snippets}/member/update/200/response-fields.adoc[]
 
-== 로그인하지 않으면 회원 정보 수정을 할 수 없습니다
+== 로그인하지 않으면 회원 정보 수정을 할 수 없습니다 - 401
 
 === 요청
 
