@@ -78,7 +78,6 @@ public class KakaoService {
                 result += line;
             }
             accessToken = getString(accessToken, result);
-
             br.close();
             bw.close();
         } catch (IOException e) {
@@ -97,10 +96,8 @@ public class KakaoService {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
         StringBuilder sb = new StringBuilder();
         sb.append("grant_type=authorization_code");
-
         sb.append("&client_id=" + clientId);
         sb.append("&redirect_uri=" + redirectUri);
-
         sb.append("&code=" + authorizeCode);
         bw.write(sb.toString());
         bw.flush();
@@ -117,10 +114,8 @@ public class KakaoService {
 
     public HashMap<String, Object> getUserInfo(String accessToken) {
         HashMap<String, Object> userInfo = new HashMap<String, Object>();
-
         try {
             checkReadLine(accessToken, userInfo);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,15 +126,12 @@ public class KakaoService {
         BufferedReader br = getBufferedReader(accessToken);
         String line = EMPTY;
         String result = EMPTY;
-
         while ((line = br.readLine()) != null) {
             result += line;
         }
-
         try {
             Map<String, Object> jsonMap = getStringObjectMap(result);
             putUserInfo(userInfo, jsonMap);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

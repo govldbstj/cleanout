@@ -2,6 +2,7 @@ package com.backend.member.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 public class MemberSignup {

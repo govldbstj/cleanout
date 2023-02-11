@@ -1,20 +1,10 @@
 package com.backend.kakao.controller;
 
-import com.backend.kakao.dto.KakaoLogin;
-import com.backend.kakao.dto.KakaoSignup;
 import com.backend.kakao.service.KakaoService;
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
-import com.backend.member.dto.request.MemberUpdate;
-import com.backend.member.repository.MemberRepository;
 import com.backend.member.service.MemberService;
-import com.backend.util.annotation.Login;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

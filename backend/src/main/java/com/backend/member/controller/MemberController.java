@@ -30,6 +30,7 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<MemberResponse> login(@RequestBody MemberLogin memberLogin,
                                                 HttpServletRequest httpServletRequest) {
+        memberService.validateMatch(memberLogin);
         MemberSession memberSession = memberService.getMemberSession(memberLogin);
         memberService.makeSessionForMemberSession(memberSession, httpServletRequest);
         MemberResponse memberResponse = MemberResponse.getFromMemberSession(memberSession);

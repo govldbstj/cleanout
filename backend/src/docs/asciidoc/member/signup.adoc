@@ -1,7 +1,7 @@
 = 일반 회원가입
 :toc:
 
-== 회원가입 성공
+== 회원가입 성공 - 200
 
 === 요청
 
@@ -13,7 +13,7 @@ include::{snippets}/member/signup/200/request-fields.adoc[]
 
 include::{snippets}/member/signup/200/http-response.adoc[]
 
-== 이미 존재하는 회원, 회원가입 실패
+== 이미 존재하는 회원, 회원가입 실패 - 400
 
 === 요청
 

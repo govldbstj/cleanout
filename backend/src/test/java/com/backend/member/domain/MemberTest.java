@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.*;
 
 public class MemberTest extends DomainTest {
 
+
     @Test
     @DisplayName("memberSession의 고유한 세션을 생성합니다")
     void makeSession() {
@@ -41,14 +42,14 @@ public class MemberTest extends DomainTest {
                 .phoneNumber("010-1234-5678")
                 .build();
         // when
-        member.update(memberUpdate);
+        member.update(memberUpdate, passwordEncoder);
 
         // then
         assertThat(member.getNickname()).isEqualTo("수정 닉네임");
         assertThat(member.getEmail()).isEqualTo("update@gmail.com");
-        assertThat(member.getPassword()).isEqualTo("update1234");
         assertThat(member.getAddress()).isEqualTo("경기도 서울시 강남구");
         assertThat(member.getPhoneNumber()).isEqualTo("010-1234-5678");
+        assertThat(passwordEncoder.matches("update1234", member.getPassword())).isTrue();
     }
 
     @Test

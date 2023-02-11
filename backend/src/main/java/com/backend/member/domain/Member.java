@@ -8,6 +8,7 @@ import com.backend.util.enumerated.SignupType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -71,18 +72,18 @@ public class Member {
     public static Member getFromKakaoSignup(KakaoSignup kakaoSignup) {
         return Member.builder()
                 .email(kakaoSignup.getEmail())
-                .password(EMPTY)
                 .nickname(kakaoSignup.getNickname())
+                .accessToken(kakaoSignup.getAccessToken())
+                .password(EMPTY)
                 .address(EMPTY)
                 .phoneNumber(EMPTY)
                 .signupType(SignupType.KAKAO)
-                .accessToken(kakaoSignup.getAccessToken())
                 .build();
     }
 
-    public void update(MemberUpdate memberUpdate) {
+    public void update(MemberUpdate memberUpdate, PasswordEncoder passwordEncoder) {
         this.email = memberUpdate.getEmail();
-        this.password = memberUpdate.getPassword();
+        this.password = passwordEncoder.encode(memberUpdate.getPassword());
         this.nickname = memberUpdate.getNickname();
         this.address = memberUpdate.getAddress();
         this.phoneNumber = memberUpdate.getPhoneNumber();
@@ -90,5 +91,9 @@ public class Member {
 
     public void updateAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
     }
 }

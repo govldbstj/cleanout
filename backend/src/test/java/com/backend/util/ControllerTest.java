@@ -14,6 +14,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -42,6 +44,9 @@ public class ControllerTest {
     @Autowired
     protected MemberService memberService;
 
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -60,7 +65,7 @@ public class ControllerTest {
     protected Member saveMemberInRepository() {
         Member member = Member.builder()
                 .email("xxx@gmail.com")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .nickname("닉네임")
                 .address("경기도 수원시 영통구")
                 .phoneNumber("010-0000-0000")
@@ -72,7 +77,7 @@ public class ControllerTest {
     protected MockHttpSession loginMemberSession(Member member) throws Exception {
         MemberLogin memberLogin = MemberLogin.builder()
                 .email(member.getEmail())
-                .password(member.getPassword())
+                .password("1234")
                 .build();
 
         String loginJson = objectMapper.writeValueAsString(memberLogin);
