@@ -72,8 +72,8 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("member/signup/400",
                         requestFields(
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("nickname").description("존재하는 닉네임이거나"),
+                                fieldWithPath("email").description("존재하는 이메일이다"),
                                 fieldWithPath("password").description("비밀 번호"),
                                 fieldWithPath("address").description("주소"),
                                 fieldWithPath("phoneNumber").description("전화 번호")),
@@ -134,7 +134,7 @@ class MemberControllerTest extends ControllerTest {
                 .andDo(document("member/login/400",
                         requestFields(
                                 fieldWithPath("email").description("이메일"),
-                                fieldWithPath("password").description("비밀 번호")),
+                                fieldWithPath("password").description("일치하지 않는 비밀 번호")),
                         responseFields(
                                 fieldWithPath("statusCode").description("에러 코드"),
                                 fieldWithPath("message").description("에러 메세지"))
@@ -159,7 +159,7 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(document("member/login/404",
                         requestFields(
-                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("email").description("가입되지 않은 이메일"),
                                 fieldWithPath("password").description("비밀 번호")),
                         responseFields(
                                 fieldWithPath("statusCode").description("에러 코드"),

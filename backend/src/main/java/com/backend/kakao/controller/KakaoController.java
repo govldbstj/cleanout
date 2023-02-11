@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 
 @RequiredArgsConstructor
@@ -19,10 +20,10 @@ public class KakaoController {
 
     @GetMapping("/oauth")
     public void kakaoOauth(@RequestParam String code,
-                           HttpServletRequest httpServletRequest) {
+                           HttpServletRequest httpServletRequest) throws IOException {
 
         String accessToken = kakaoService.getAccessToken(code);
-        HashMap<String, Object> userInfo = kakaoService.getUserInfo(accessToken);
+        HashMap<String, Object> userInfo = kakaoService.getUserInfoFromAccessToken(accessToken);
         kakaoService.checkNeedToSignup(accessToken, userInfo);
         Member member = kakaoService.updateAccessToken(accessToken, userInfo);
         MemberSession memberSession = MemberSession.getFromMember(member);
