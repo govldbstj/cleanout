@@ -55,7 +55,7 @@ public class Waste {
         this.isCollected = isCollected;
     }
 
-    public static Waste getWasteFromPostImage(Member member, String imageName) {
+    public static Waste createWaste(Member member, String imageName) {
         return Waste.builder()
                 .member(member)
                 .imgName(imageName)

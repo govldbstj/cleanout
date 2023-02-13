@@ -20,6 +20,10 @@ spring:
     jdbc:
       initialize-schema: always
 
+  # 서버에 사진이 저장됨, 경로
+  file:
+    path: C:\Users\Administrator\Documents\pt
+
 logging:
   level:
     org.hibernate.SQL: debug

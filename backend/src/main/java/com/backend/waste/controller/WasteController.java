@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class WasteController {
     }
 
     @GetMapping("/waste/{wasteIdx}")
-    public ResponseEntity<GetWasteDetail> getWaste(@Login MemberSession memberSession, @PathVariable("wasteIdx") Long wasteIdx) {
+    public ResponseEntity<GetWasteDetail> getWaste(@Login MemberSession memberSession, @PathVariable("wasteIdx") Long wasteIdx) throws IOException {
         GetWasteDetail getWasteDetail = wasteService.getWaste(memberSession.getId(), wasteIdx);
         return ResponseEntity.ok(getWasteDetail);
     }

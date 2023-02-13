@@ -9,13 +9,17 @@ import com.backend.waste.dto.response.GetWasteBrief;
 import com.backend.waste.dto.response.GetWasteDetail;
 import com.backend.waste.repository.WasteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -32,18 +36,18 @@ public class WasteService {
     private final WasteRepository wasteRepository;
 
 
-//    @Value("${spring.file.path}")
-//    private String uploadFolder;
+    @Value("${spring.file.path}")
+    private String uploadFolder;
 
     @Transactional
     public void postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
         Member member = memberRepository.getById(memberIdx);
         UUID uuid = UUID.randomUUID();
         String imageFileName = uuid + "_" + file.getOriginalFilename();
-        // 이미지를 서버 파일에 저장하는 과정
-//        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
-//        Files.write(imageFilePath, file.getBytes());
-        Waste waste = Waste.getWasteFromPostImage(member, file.getOriginalFilename());
+
+        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
+        Files.write(imageFilePath, file.getBytes());
+        Waste waste = Waste.createWaste(member, imageFileName);
         wasteRepository.save(waste);
     }
 
@@ -84,12 +88,12 @@ public class WasteService {
                 sb.append(monthGap).append("달 ");
                 time = time.minusMonths(monthGap);
             }
-            if (ChronoUnit.DAYS.between(now, time) != 0){
+            if (ChronoUnit.DAYS.between(now, time) != 0) {
                 long dayGap = ChronoUnit.DAYS.between(now, time);
                 sb.append(dayGap).append("일 ");
                 time = time.minusDays(dayGap);
             }
-            if (ChronoUnit.HOURS.between(now, time) != 0){
+            if (ChronoUnit.HOURS.between(now, time) != 0) {
                 long hourGap = ChronoUnit.HOURS.between(now, time);
                 sb.append(hourGap).append("시간 ");
                 time = time.minusHours(hourGap);
@@ -100,16 +104,25 @@ public class WasteService {
         return sb.toString();
     }
 
-    public GetWasteDetail getWaste(Long userIdx, Long wasteIdx) {
+    public GetWasteDetail getWaste(Long userIdx, Long wasteIdx) throws IOException {
         Member member = memberRepository.getById(userIdx);
         Waste waste = wasteRepository.getById(wasteIdx);
+
+        byte[] imageByteArray = null;
+
+        if (waste.getImageName() != null) {
+            InputStream imageStream = new FileInputStream((uploadFolder + "/" + waste.getImageName()));
+            imageByteArray = imageStream.readAllBytes();
+            imageStream.close();
+        }
 
         return new GetWasteDetail(
                 member.getNickname(),
                 member.getAddress(),
                 waste.getName(),
                 waste.getPrice(),
-                getTimeGap(waste)
+                getTimeGap(waste),
+                imageByteArray
         );
     }
 }
