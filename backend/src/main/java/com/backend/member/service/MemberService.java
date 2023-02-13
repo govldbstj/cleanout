@@ -46,6 +46,14 @@ public class MemberService {
         }
     }
 
+    public void validateDuplication(MemberUpdate memberUpdate) {
+        Optional<Member> byNickname = memberRepository.findByNickname(memberUpdate.getNickname());
+        Optional<Member> byEmail = memberRepository.findByEmail(memberUpdate.getEmail());
+        if (byNickname.isPresent() || byEmail.isPresent()) {
+            throw new MemberDuplicationException();
+        }
+    }
+
     public MemberSession getMemberSession(MemberLogin memberLogin) {
         Member member = memberRepository.getByEmail(memberLogin.getEmail());
         MemberSession memberSession = MemberSession.getFromMember(member);

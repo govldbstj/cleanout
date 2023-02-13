@@ -81,7 +81,7 @@ class KakaoServiceTest extends ServiceTest {
     @DisplayName("인가 코드가 잘못되었다면 예외가 발생합니다")
     void getAccessToken400() {
         // given
-        String authorizeCode = "test";
+        String authorizeCode = "잘못된 인가코드";
 
         // expected
         Assertions.assertThrows(IOException.class,

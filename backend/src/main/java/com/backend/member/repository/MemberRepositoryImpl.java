@@ -42,12 +42,6 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Member getByEmailAndPassword(String email, String password) {
-        return memberJpaRepository.findByEmailAndPassword(email, password)
-                .orElseThrow(MemberNotMatchException::new);
-    }
-
-    @Override
     public Member getByEmail(String email) {
         return memberJpaRepository.findByEmail(email)
                 .orElseThrow(MemberNotFoundException::new);
