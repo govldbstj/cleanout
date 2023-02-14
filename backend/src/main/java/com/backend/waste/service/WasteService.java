@@ -124,25 +124,30 @@ public class WasteService {
         return sb.toString();
     }
 
-//    public GetWasteDetail getWaste(Long userIdx, Long wasteIdx) throws IOException {
-//        Member member = memberRepository.getById(userIdx);
-//        Waste waste = wasteRepository.getById(wasteIdx);
-//
-//        byte[] imageByteArray = null;
-//
-//        if (waste.getImageName() != null) {
-//            InputStream imageStream = new FileInputStream((uploadFolder + "/" + waste.getImageName()));
-//            imageByteArray = imageStream.readAllBytes();
-//            imageStream.close();
-//        }
-//
-//        return new GetWasteDetail(
-//                member.getNickname(),
-//                member.getAddress(),
-//                waste.getName(),
-//                waste.getPrice(),
-//                getTimeGap(waste),
-//                imageByteArray
-//        );
-//    }
+    public GetWasteDetail getWaste(Long userIdx, Long wasteIdx) throws IOException {
+        Member member = memberRepository.getById(userIdx);
+        Waste waste = wasteRepository.getById(wasteIdx);
+
+        List<WasteImage> images = imageRepository.getImagesByWaste(waste);
+
+        List<byte[]> imageByteArrays = new ArrayList<>();
+
+        for (WasteImage image : images) {
+            byte[] imageByteArray = null;
+            InputStream imageStream = new FileInputStream((uploadFolder + "/" + image.getImageName()));
+            imageByteArray = imageStream.readAllBytes();
+            imageStream.close();
+
+            imageByteArrays.add(imageByteArray);
+        }
+
+        return new GetWasteDetail(
+                member.getNickname(),
+                member.getAddress(),
+                waste.getName(),
+                waste.getPrice(),
+                getTimeGap(waste),
+                imageByteArrays
+        );
+    }
 }

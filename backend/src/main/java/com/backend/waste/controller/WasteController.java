@@ -46,9 +46,9 @@ public class WasteController {
         return ResponseEntity.ok(getWasteBriefs);
     }
 
-//    @GetMapping("/waste/{wasteIdx}")
-//    public ResponseEntity<GetWasteDetail> getWaste(@Login MemberSession memberSession, @PathVariable("wasteIdx") Long wasteIdx) throws IOException {
-//        GetWasteDetail getWasteDetail = wasteService.getWaste(memberSession.getId(), wasteIdx);
-//        return ResponseEntity.ok(getWasteDetail);
-//    }
+    @GetMapping("/waste/{wasteIdx}")
+    public ResponseEntity<GetWasteDetail> getWaste(@Login MemberSession memberSession, @PathVariable("wasteIdx") Long wasteIdx) throws IOException {
+        GetWasteDetail getWasteDetail = wasteService.getWaste(memberSession.getId(), wasteIdx);
+        return ResponseEntity.ok(getWasteDetail);
+    }
 }
