@@ -526,7 +526,7 @@ Content-Length: 220
 {
   "nickname" : "닉네임",
   "email" : "xxx@gmail.com",
-  "password" : "$2a$10$Y49XmDsL9nNI./hXdarvw.rgc2fLkT1S421ETmzurmQp21PkfV6xa",
+  "password" : "$2a$10$xwAOg1x.Gk5FPuYsUT9OVePV7WNowtm5t4vwpxswSSvqb.7AgPxVe",
   "address" : "경기도 수원시 영통구",
   "phoneNumber" : "010-0000-0000"
 }</code></pre>
@@ -616,7 +616,7 @@ Host: 43.200.115.73:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">비밀 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">일치하지 않는 비밀 번호</p></td>
 </tr>
 </tbody>
 </table>
@@ -676,11 +676,11 @@ Content-Length: 86
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /login HTTP/1.1
 Content-Type: application/json
-Content-Length: 54
+Content-Length: 80
 Host: 43.200.115.73:8080
 
 {
-  "email" : "xxx@gmail.com",
+  "email" : "가입되지 않은 이메일@gmail.com",
   "password" : "1234"
 }</code></pre>
 </div>
@@ -702,7 +702,7 @@ Host: 43.200.115.73:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입되지 않은 이메일</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
@@ -762,7 +762,7 @@ Content-Length: 77
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-10 22:47:47 +0900
+Last updated 2023-02-11 13:45:10 +0900
 </div>
 </div>
 </body>

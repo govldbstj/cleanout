@@ -72,8 +72,8 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("member/signup/400",
                         requestFields(
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("nickname").description("존재하는 닉네임이거나"),
+                                fieldWithPath("email").description("존재하는 이메일이다"),
                                 fieldWithPath("password").description("비밀 번호"),
                                 fieldWithPath("address").description("주소"),
                                 fieldWithPath("phoneNumber").description("전화 번호")),
@@ -134,7 +134,7 @@ class MemberControllerTest extends ControllerTest {
                 .andDo(document("member/login/400",
                         requestFields(
                                 fieldWithPath("email").description("이메일"),
-                                fieldWithPath("password").description("비밀 번호")),
+                                fieldWithPath("password").description("일치하지 않는 비밀 번호")),
                         responseFields(
                                 fieldWithPath("statusCode").description("에러 코드"),
                                 fieldWithPath("message").description("에러 메세지"))
@@ -159,7 +159,7 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(document("member/login/404",
                         requestFields(
-                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("email").description("가입되지 않은 이메일"),
                                 fieldWithPath("password").description("비밀 번호")),
                         responseFields(
                                 fieldWithPath("statusCode").description("에러 코드"),
@@ -203,6 +203,42 @@ class MemberControllerTest extends ControllerTest {
                                 fieldWithPath("password").description("비밀 번호"),
                                 fieldWithPath("address").description("주소"),
                                 fieldWithPath("phoneNumber").description("전화 번호"))
+                ));
+    }
+
+    @Test
+    @DisplayName("이미 존재하는 닉네임이나 이메일로 수정하실 수 없습니다")
+    void update400() throws Exception {
+        // given
+        Member member = saveMemberInRepository();
+        MockHttpSession session = loginMemberSession(member);
+
+        MemberUpdate memberUpdate = MemberUpdate.builder()
+                .nickname("닉네임")
+                .email("xxx@gmail.com")
+                .password("update1234")
+                .address("경기도 서울시 강남구")
+                .phoneNumber("010-1234-5678")
+                .build();
+
+        String memberUpdateJson = objectMapper.writeValueAsString(memberUpdate);
+
+        // expected
+        mockMvc.perform(patch("/member")
+                        .session(session)
+                        .contentType(APPLICATION_JSON)
+                        .content(memberUpdateJson))
+                .andExpect(status().isBadRequest())
+                .andDo(document("member/update/400",
+                        requestFields(
+                                fieldWithPath("nickname").description("이미 존재하는 닉네임이거나"),
+                                fieldWithPath("email").description("이미 존재하는 이메일이다"),
+                                fieldWithPath("password").description("수정 비밀 번호"),
+                                fieldWithPath("address").description("수정 주소"),
+                                fieldWithPath("phoneNumber").description("수정 전화 번호")),
+                        responseFields(
+                                fieldWithPath("statusCode").description("에러 코드"),
+                                fieldWithPath("message").description("에러 메세지"))
                 ));
     }
 

@@ -2,6 +2,7 @@ package com.backend.member.domain;
 
 import com.backend.kakao.dto.KakaoSignup;
 import com.backend.member.dto.request.MemberSignup;
+import com.backend.util.BaseTimeEntity;
 import com.backend.waste.domain.Waste;
 import com.backend.member.dto.request.MemberUpdate;
 import com.backend.util.enumerated.SignupType;
@@ -23,7 +24,7 @@ import static org.apache.logging.log4j.util.Strings.EMPTY;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

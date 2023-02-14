@@ -16,8 +16,6 @@ public interface MemberRepository {
 
     Member getByNicknameAndEmail(String nickname, String email);
 
-    Member getByEmailAndPassword(String email, String password);
-
     Member getByEmail(String email);
 
     Member getById(Long id);

@@ -47,6 +47,7 @@ public class MemberController {
     @PatchMapping("/member")
     public ResponseEntity<MemberResponse> update(@Login MemberSession memberSession,
                                                  @RequestBody MemberUpdate memberUpdate) {
+        memberService.validateDuplication(memberUpdate);
         Member member = memberService.update(memberSession, memberUpdate);
         MemberResponse memberResponse = MemberResponse.getFromMember(member);
         return ResponseEntity.ok(memberResponse);
