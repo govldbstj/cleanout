@@ -42,4 +42,9 @@ public class WasteRepositoryImpl implements WasteRepository {
     public Waste getById(Long wasteIdx) {
         return wasteJpaRepository.findById(wasteIdx).orElseThrow(WasteNotFoundException::new);
     }
+
+    @Override
+    public long count() {
+        return wasteJpaRepository.count();
+    }
 }

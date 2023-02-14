@@ -40,7 +40,7 @@ public class WasteService {
     private String uploadFolder;
 
     @Transactional
-    public void postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
+    public Waste postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
         Member member = memberRepository.getById(memberIdx);
         UUID uuid = UUID.randomUUID();
         String imageFileName = uuid + "_" + file.getOriginalFilename();
@@ -49,6 +49,7 @@ public class WasteService {
         Files.write(imageFilePath, file.getBytes());
         Waste waste = Waste.createWaste(member, imageFileName);
         wasteRepository.save(waste);
+        return waste;
     }
 
     @Transactional

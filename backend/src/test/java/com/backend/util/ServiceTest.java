@@ -4,6 +4,7 @@ import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
 import com.backend.member.dto.request.MemberSignup;
 import com.backend.member.repository.MemberRepository;
+import com.backend.waste.repository.WasteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -12,6 +13,9 @@ public class ServiceTest {
 
     @Autowired
     protected MemberRepository memberRepository;
+
+    @Autowired
+    protected WasteRepository wasteRepository;
 
     protected Member saveMemberInRepository() {
         Member member = Member.builder()

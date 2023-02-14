@@ -4,21 +4,29 @@ import com.backend.member.domain.Member;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.repository.MemberRepository;
 import com.backend.member.service.MemberService;
+import com.backend.waste.domain.Waste;
+import com.backend.waste.repository.WasteRepository;
+import com.backend.waste.service.WasteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -41,6 +49,12 @@ public class ControllerTest {
 
     @Autowired
     protected MemberService memberService;
+
+    @Autowired
+    protected WasteRepository wasteRepository;
+
+    @Autowired
+    protected WasteService wasteService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -83,6 +97,11 @@ public class ControllerTest {
                 .andReturn().getRequest();
 
         HttpSession session = request.getSession();
-        return (MockHttpSession)session;
+        return (MockHttpSession) session;
+    }
+
+    protected Waste saveWaste(Member member) throws IOException {
+        MultipartFile imageFile = new MockMultipartFile("image","waste1.PNG", MediaType.IMAGE_PNG_VALUE,"<<wasteImage>>".getBytes());
+        return wasteService.postWasteImage(member.getId(),imageFile);
     }
 }

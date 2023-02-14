@@ -19,4 +19,6 @@ public interface WasteRepository {
     List<Waste> getWasteList(Member member);
 
     Waste getById(Long wasteIdx);
+
+    long count();
 }
