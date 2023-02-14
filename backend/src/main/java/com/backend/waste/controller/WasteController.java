@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,15 +21,21 @@ public class WasteController {
 
     private final WasteService wasteService;
 
-    @PostMapping("/image")
-    public ResponseEntity<Void> postWasteImage(@RequestParam("image") MultipartFile file,
-                                               @Login MemberSession memberSession) throws IOException {
-        wasteService.postWasteImage(memberSession.getId(), file);
+//    @PostMapping("/image")
+//    public ResponseEntity<Void> postWasteImage(@RequestParam("image") MultipartFile file,
+//                                               @Login MemberSession memberSession) throws IOException {
+//        wasteService.postWasteImage(memberSession.getId(), file);
+//        return ResponseEntity.ok().build();
+//    }
+
+    @PostMapping("/file")
+    public ResponseEntity<Void> postWasteimages(@RequestParam(value = "image") List<MultipartFile> files, @Login MemberSession memberSession) throws IOException {
+        wasteService.createWaste(memberSession.getId(),files);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/waste")
-    public ResponseEntity<Void> insertModel(@RequestBody PatchWaste patchWaste) {
+    public ResponseEntity<Void> updateWaste(@RequestBody PatchWaste patchWaste) {
         wasteService.updateWaste(patchWaste);
         return ResponseEntity.ok().build();
     }
@@ -41,9 +46,9 @@ public class WasteController {
         return ResponseEntity.ok(getWasteBriefs);
     }
 
-    @GetMapping("/waste/{wasteIdx}")
-    public ResponseEntity<GetWasteDetail> getWaste(@Login MemberSession memberSession, @PathVariable("wasteIdx") Long wasteIdx) throws IOException {
-        GetWasteDetail getWasteDetail = wasteService.getWaste(memberSession.getId(), wasteIdx);
-        return ResponseEntity.ok(getWasteDetail);
-    }
+//    @GetMapping("/waste/{wasteIdx}")
+//    public ResponseEntity<GetWasteDetail> getWaste(@Login MemberSession memberSession, @PathVariable("wasteIdx") Long wasteIdx) throws IOException {
+//        GetWasteDetail getWasteDetail = wasteService.getWaste(memberSession.getId(), wasteIdx);
+//        return ResponseEntity.ok(getWasteDetail);
+//    }
 }

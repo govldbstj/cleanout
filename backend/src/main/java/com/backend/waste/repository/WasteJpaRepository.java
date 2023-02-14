@@ -10,7 +10,5 @@ import java.util.Optional;
 
 public interface WasteJpaRepository extends JpaRepository<Waste, Long> {
 
-    Optional<Waste> findByImageName(String imageName);
-
     List<Waste> findAllByMemberOrderByEnrolledDateDesc(Member member);
 }

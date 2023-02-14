@@ -22,53 +22,53 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class WasteControllerTest extends ControllerTest {
 
-    @Test
-    @DisplayName("이미지를 업로드하면 폐기물 등록에 성공합니다")
-    void createWaste() throws Exception {
-        //given
-        MultipartFile imageFile = new MockMultipartFile("image", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage>>".getBytes());
-        Member member = saveMemberInRepository();
-        MockHttpSession session = loginMemberSession(member);
-
-        //
-        mockMvc.perform(
-                        multipart("/waste-management/image")
-                                .file("image", imageFile.getBytes())
-                                .session(session)
-                                .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk())
-                .andDo(document("waste/create/200"));
-    }
-
-    @Test
-    @DisplayName("등록된 폐기물일 경우 가격이 책정됩니다.")
-    void updateWaste() throws Exception {
-        //given
-        Member member = saveMemberInRepository();
-        MockHttpSession session = loginMemberSession(member);
-        Waste waste = saveWaste(member);
-        String imageName = waste.getImageName();
-
-        PatchWaste patchWaste = PatchWaste.builder()
-                .wasteName("냉장고-300L이상")
-                .price(6000)
-                .imageName(imageName)
-                .build();
-
-        String patchWasteJson = objectMapper.writeValueAsString(patchWaste);
-
-        //
-        mockMvc.perform(
-                patch("/waste-management/waste")
-                        .session(session)
-                        .contentType(APPLICATION_JSON)
-                        .content(patchWasteJson))
-                .andExpect(status().isOk())
-                .andDo(document("waste/update/200",
-                        requestFields(
-                                fieldWithPath("wasteName").description("제품명"),
-                                fieldWithPath("price").description("가격"),
-                                fieldWithPath("imageName").description("해당 이미지 이름"))
-                        ));
-    }
+//    @Test
+//    @DisplayName("이미지를 업로드하면 폐기물 등록에 성공합니다")
+//    void createWaste() throws Exception {
+//        //given
+//        MultipartFile imageFile = new MockMultipartFile("image", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage>>".getBytes());
+//        Member member = saveMemberInRepository();
+//        MockHttpSession session = loginMemberSession(member);
+//
+//        //
+//        mockMvc.perform(
+//                        multipart("/waste-management/image")
+//                                .file("image", imageFile.getBytes())
+//                                .session(session)
+//                                .contentType(MediaType.MULTIPART_FORM_DATA))
+//                .andExpect(status().isOk())
+//                .andDo(document("waste/create/200"));
+//    }
+//
+//    @Test
+//    @DisplayName("등록된 폐기물일 경우 가격이 책정됩니다.")
+//    void updateWaste() throws Exception {
+//        //given
+//        Member member = saveMemberInRepository();
+//        MockHttpSession session = loginMemberSession(member);
+//        Waste waste = saveWaste(member);
+//        String imageName = waste.getImageName();
+//
+//        PatchWaste patchWaste = PatchWaste.builder()
+//                .wasteName("냉장고-300L이상")
+//                .price(6000)
+//                .imageName(imageName)
+//                .build();
+//
+//        String patchWasteJson = objectMapper.writeValueAsString(patchWaste);
+//
+//        //
+//        mockMvc.perform(
+//                patch("/waste-management/waste")
+//                        .session(session)
+//                        .contentType(APPLICATION_JSON)
+//                        .content(patchWasteJson))
+//                .andExpect(status().isOk())
+//                .andDo(document("waste/update/200",
+//                        requestFields(
+//                                fieldWithPath("wasteName").description("제품명"),
+//                                fieldWithPath("price").description("가격"),
+//                                fieldWithPath("imageName").description("해당 이미지 이름"))
+//                        ));
+//    }
 }

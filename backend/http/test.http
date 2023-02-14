@@ -41,13 +41,21 @@ POST http://localhost:8080/logout
 
 ### 폐기물 이미지 업로드
 
-POST http://localhost:8080/waste-management/image
+POST http://localhost:8080/waste-management/file
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="image"; filename="wasteImage1.png"
+Content-Disposition: form-data; name="image"; filename="wasteImage1.png";
 
-< C:\Users\Administrator\Pictures\mssp\waste\wasteImage1.PNG
+< C:\Users\Administrator\Pictures\mssp\waste\wasteImage1.png
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="wasteImage2.png";
+
+< C:\Users\Administrator\Pictures\mssp\waste\wasteImage2.png
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="wasteImage3.png";
+
+< C:\Users\Administrator\Pictures\mssp\waste\wasteImage3.png
 --WebAppBoundary--
 
 
@@ -57,7 +65,7 @@ PATCH http://localhost:8080/waste-management/waste
 Content-Type: application/json
 
 {
-  "imageName": "wasteImage1.png",
+  "wasteIdx": "1",
   "wasteName": "냉장고 - 300L이상",
   "price": 6000
 }

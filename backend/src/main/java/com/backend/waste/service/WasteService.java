@@ -4,9 +4,11 @@ package com.backend.waste.service;
 import com.backend.member.domain.Member;
 import com.backend.member.repository.MemberRepository;
 import com.backend.waste.domain.Waste;
+import com.backend.waste.domain.WasteImage;
 import com.backend.waste.dto.request.PatchWaste;
 import com.backend.waste.dto.response.GetWasteBrief;
 import com.backend.waste.dto.response.GetWasteDetail;
+import com.backend.waste.repository.ImageRepository;
 import com.backend.waste.repository.WasteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,27 +36,44 @@ public class WasteService {
 
     private final MemberRepository memberRepository;
     private final WasteRepository wasteRepository;
+    private final ImageRepository imageRepository;
 
 
     @Value("${spring.file.path}")
     private String uploadFolder;
 
-    @Transactional
-    public Waste postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
-        Member member = memberRepository.getById(memberIdx);
-        UUID uuid = UUID.randomUUID();
-        String imageFileName = uuid + "_" + file.getOriginalFilename();
+//    @Transactional
+//    public Waste postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
+//        Member member = memberRepository.getById(memberIdx);
+//        UUID uuid = UUID.randomUUID();
+//        String imageFileName = uuid + "_" + file.getOriginalFilename();
+//
+//        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
+//        Files.write(imageFilePath, file.getBytes());
+//        Waste waste = Waste.createWaste(member, imageFileName);
+//        wasteRepository.save(waste);
+//        return waste;
+//    }
 
-        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
-        Files.write(imageFilePath, file.getBytes());
-        Waste waste = Waste.createWaste(member, imageFileName);
+    @Transactional
+    public void createWaste(Long memberIdx, List<MultipartFile> files) throws IOException {
+        Member member = memberRepository.getById(memberIdx);
+        Waste waste = Waste.createWaste(member);
+
+        for (MultipartFile file : files) {
+//            UUID uuid = UUID.randomUUID();
+//            String imageFileName = uuid + "_" + file.getOriginalFilename();
+            Path imageFilePath = Paths.get(uploadFolder + "/" + file.getOriginalFilename());
+            Files.write(imageFilePath, file.getBytes());
+            WasteImage wasteImage = WasteImage.createImage(waste,file.getOriginalFilename());
+            imageRepository.save(wasteImage);
+        }
         wasteRepository.save(waste);
-        return waste;
     }
 
     @Transactional
     public void updateWaste(PatchWaste patchWaste) {
-        Waste waste = wasteRepository.getByImageName(patchWaste.getImageName());
+        Waste waste = wasteRepository.getById(patchWaste.getWasteIdx());
         waste.update(patchWaste.getWasteName(), patchWaste.getPrice());
     }
 
@@ -105,25 +124,25 @@ public class WasteService {
         return sb.toString();
     }
 
-    public GetWasteDetail getWaste(Long userIdx, Long wasteIdx) throws IOException {
-        Member member = memberRepository.getById(userIdx);
-        Waste waste = wasteRepository.getById(wasteIdx);
-
-        byte[] imageByteArray = null;
-
-        if (waste.getImageName() != null) {
-            InputStream imageStream = new FileInputStream((uploadFolder + "/" + waste.getImageName()));
-            imageByteArray = imageStream.readAllBytes();
-            imageStream.close();
-        }
-
-        return new GetWasteDetail(
-                member.getNickname(),
-                member.getAddress(),
-                waste.getName(),
-                waste.getPrice(),
-                getTimeGap(waste),
-                imageByteArray
-        );
-    }
+//    public GetWasteDetail getWaste(Long userIdx, Long wasteIdx) throws IOException {
+//        Member member = memberRepository.getById(userIdx);
+//        Waste waste = wasteRepository.getById(wasteIdx);
+//
+//        byte[] imageByteArray = null;
+//
+//        if (waste.getImageName() != null) {
+//            InputStream imageStream = new FileInputStream((uploadFolder + "/" + waste.getImageName()));
+//            imageByteArray = imageStream.readAllBytes();
+//            imageStream.close();
+//        }
+//
+//        return new GetWasteDetail(
+//                member.getNickname(),
+//                member.getAddress(),
+//                waste.getName(),
+//                waste.getPrice(),
+//                getTimeGap(waste),
+//                imageByteArray
+//        );
+//    }
 }

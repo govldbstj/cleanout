@@ -10,11 +10,7 @@ public interface WasteRepository {
 
     Waste save(Waste waste);
 
-    Optional<Waste> findByImageName(String imageName);
-
     Optional<Waste> findById(Long wasteIdx);
-
-    Waste getByImageName(String imageName);
 
     List<Waste> getWasteList(Member member);
 

@@ -19,18 +19,8 @@ public class WasteRepositoryImpl implements WasteRepository {
     public Waste save(Waste waste) { return wasteJpaRepository.save(waste); }
 
     @Override
-    public Optional<Waste> findByImageName(String imageName) {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<Waste> findById(Long wasteIdx) {
         return Optional.empty();
-    }
-
-    @Override
-    public Waste getByImageName(String imageName) {
-        return wasteJpaRepository.findByImageName(imageName).orElseThrow(WasteNotFoundException::new);
     }
 
     @Override
