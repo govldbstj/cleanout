@@ -21,6 +21,7 @@ public class CollectorService {
     private final WasteRepository wasteRepository;
 
 
+    @Transactional
     public Collector createCollector(PostCollector postCollector) {
         Collector collector = postCollector.toCollectorEntity();
         collectorRepository.save(collector);
@@ -30,12 +31,18 @@ public class CollectorService {
     @Transactional
     public void matchCollector(Long wasteIdx, Long collectorIdx, String date) {
         int dateRange = 19;
-        System.out.println(date);
         LocalDateTime collectedDate = LocalDateTime.parse(date.substring(0,dateRange),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         Waste waste = wasteRepository.getById(wasteIdx);
         Collector collector = collectorRepository.getById(collectorIdx);
         waste.matchCollector(collector,collectedDate);
+    }
+
+    @Transactional
+    public void collectWaste(Long wasteIdx, Long collectorIdx) {
+        Waste waste = wasteRepository.getById(wasteIdx);
+        Collector collector = collectorRepository.getById(collectorIdx);
+        waste.collected(collector);
     }
 }

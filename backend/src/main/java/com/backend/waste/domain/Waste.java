@@ -78,4 +78,10 @@ public class Waste {
         this.collector = collector;
         this.collectedDate = date;
     }
+
+    public void collected(Collector collector) {
+        this.isCollected = true;
+        this.collectedDate = LocalDateTime.now();
+        this.collector = collector;
+    }
 }

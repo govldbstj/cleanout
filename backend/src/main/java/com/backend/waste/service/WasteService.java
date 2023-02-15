@@ -55,7 +55,7 @@ public class WasteService {
 //    }
 
     @Transactional
-    public void createWaste(Long memberIdx, List<MultipartFile> images, String unique) throws IOException {
+    public Waste createWaste(Long memberIdx, List<MultipartFile> images, String unique) throws IOException {
         Member member = memberRepository.getById(memberIdx);
         Waste waste = Waste.createWaste(member,unique);
 
@@ -68,6 +68,7 @@ public class WasteService {
             imageRepository.save(wasteImage);
         }
         wasteRepository.save(waste);
+        return waste;
     }
 
     @Transactional

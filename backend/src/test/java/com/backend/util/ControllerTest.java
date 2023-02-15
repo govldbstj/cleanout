@@ -1,10 +1,14 @@
 package com.backend.util;
 
+import com.backend.collector.domain.Collector;
+import com.backend.collector.dto.request.PostCollector;
+import com.backend.collector.service.CollectorService;
 import com.backend.member.domain.Member;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.repository.MemberRepository;
 import com.backend.member.service.MemberService;
 import com.backend.waste.domain.Waste;
+import com.backend.waste.dto.request.PatchWaste;
 import com.backend.waste.repository.WasteRepository;
 import com.backend.waste.service.WasteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +62,9 @@ public class ControllerTest {
     @Autowired
     protected WasteService wasteService;
 
+    @Autowired
+    protected CollectorService collectorService;
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -102,11 +109,33 @@ public class ControllerTest {
         return (MockHttpSession) session;
     }
 
-    protected void saveWaste(Member member, String unique) throws IOException {
+    protected Waste saveWaste(Member member, String unique) throws IOException {
         List<MultipartFile> images = new ArrayList<>();
         images.add(new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes()));
         images.add(new MockMultipartFile("image2", "waste2.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage2>>".getBytes()));
         images.add(new MockMultipartFile("image3", "waste3.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage3>>".getBytes()));
-        wasteService.createWaste(member.getId(), images, unique);
+        return wasteService.createWaste(member.getId(), images, unique);
+    }
+
+    protected void setupWaste(Waste waste) {
+        PatchWaste patchWaste = PatchWaste.builder()
+                .wasteName("냉장고-300L이상")
+                .price(6000)
+                .unique(waste.getUniqueStr())
+                .build();
+        wasteService.updateWaste(patchWaste);
+    }
+
+    protected Long reserveWaste(Long wasteIdx) {
+        PostCollector postCollector = new PostCollector("수거자1","010-0000-0000");
+        Collector collector = collectorService.createCollector(postCollector);
+
+        collectorService.matchCollector(wasteIdx,collector.getId(),"2023-02-20 17:00:00");
+        return collector.getId();
+    }
+
+    protected void collectWaste(Long wasteIdx) {
+        Long collectorIdx = reserveWaste(wasteIdx);
+        collectorService.collectWaste(wasteIdx,collectorIdx);
     }
 }
