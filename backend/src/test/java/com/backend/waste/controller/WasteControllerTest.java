@@ -26,14 +26,18 @@ public class WasteControllerTest extends ControllerTest {
 //    @DisplayName("이미지를 업로드하면 폐기물 등록에 성공합니다")
 //    void createWaste() throws Exception {
 //        //given
-//        MultipartFile imageFile = new MockMultipartFile("image", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage>>".getBytes());
+//        MultipartFile imageFile1 = new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes());
+//        MultipartFile imageFile2 = new MockMultipartFile("image2", "waste2.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage2>>".getBytes());
+//        MultipartFile imageFile3 = new MockMultipartFile("image3", "waste3.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage3>>".getBytes());
 //        Member member = saveMemberInRepository();
 //        MockHttpSession session = loginMemberSession(member);
 //
 //        //
 //        mockMvc.perform(
 //                        multipart("/waste-management/image")
-//                                .file("image", imageFile.getBytes())
+//                                .file("image", imageFile1.getBytes())
+//                                .file("image", imageFile2.getBytes())
+//                                .file("image", imageFile3.getBytes())
 //                                .session(session)
 //                                .contentType(MediaType.MULTIPART_FORM_DATA))
 //                .andExpect(status().isOk())

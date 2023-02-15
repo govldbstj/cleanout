@@ -25,12 +25,17 @@ public class WasteRepositoryImpl implements WasteRepository {
 
     @Override
     public List<Waste> getWasteList(Member member) {
-        return wasteJpaRepository.findAllByMemberOrderByEnrolledDateDesc(member);
+        return wasteJpaRepository.findAllByMemberOrderByEnrolledDateDesc(member).orElseThrow(WasteNotFoundException::new);
     }
 
     @Override
     public Waste getById(Long wasteIdx) {
         return wasteJpaRepository.findById(wasteIdx).orElseThrow(WasteNotFoundException::new);
+    }
+
+    @Override
+    public Waste getByUnique(String unique) {
+        return wasteJpaRepository.findByUniqueStr(unique).orElseThrow(WasteNotFoundException::new);
     }
 
     @Override

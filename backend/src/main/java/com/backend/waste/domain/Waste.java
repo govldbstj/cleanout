@@ -49,19 +49,23 @@ public class Waste {
     @JoinColumn(name = "collector_id")
     private Collector collector;
 
+    private String uniqueStr;
+
     @Builder
-    public Waste(Member member, List<WasteImage> images, LocalDateTime localDateTime, boolean isCollected) {
+    public Waste(Member member, List<WasteImage> images, LocalDateTime localDateTime, boolean isCollected, String unique) {
         this.member = member;
         this.images = images;
         this.enrolledDate = localDateTime;
         this.isCollected = isCollected;
+        this.uniqueStr = unique;
     }
 
-    public static Waste createWaste(Member member) {
+    public static Waste createWaste(Member member, String unique) {
         return Waste.builder()
                 .member(member)
                 .localDateTime(LocalDateTime.now())
                 .isCollected(false)
+                .unique(unique)
                 .build();
     }
 

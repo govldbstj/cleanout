@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 @Transactional(readOnly = true)
@@ -56,11 +55,11 @@ public class WasteService {
 //    }
 
     @Transactional
-    public void createWaste(Long memberIdx, List<MultipartFile> files) throws IOException {
+    public void createWaste(Long memberIdx, List<MultipartFile> images, String unique) throws IOException {
         Member member = memberRepository.getById(memberIdx);
-        Waste waste = Waste.createWaste(member);
+        Waste waste = Waste.createWaste(member,unique);
 
-        for (MultipartFile file : files) {
+        for (MultipartFile file : images) {
 //            UUID uuid = UUID.randomUUID();
 //            String imageFileName = uuid + "_" + file.getOriginalFilename();
             Path imageFilePath = Paths.get(uploadFolder + "/" + file.getOriginalFilename());
@@ -73,7 +72,7 @@ public class WasteService {
 
     @Transactional
     public void updateWaste(PatchWaste patchWaste) {
-        Waste waste = wasteRepository.getById(patchWaste.getWasteIdx());
+        Waste waste = wasteRepository.getByUnique(patchWaste.getUnique());
         waste.update(patchWaste.getWasteName(), patchWaste.getPrice());
     }
 

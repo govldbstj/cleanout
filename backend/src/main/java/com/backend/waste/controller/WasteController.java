@@ -7,10 +7,12 @@ import com.backend.waste.dto.response.GetWasteBrief;
 import com.backend.waste.dto.response.GetWasteDetail;
 import com.backend.waste.service.WasteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,9 +30,12 @@ public class WasteController {
 //        return ResponseEntity.ok().build();
 //    }
 
-    @PostMapping("/file")
-    public ResponseEntity<Void> postWasteimages(@RequestParam(value = "image") List<MultipartFile> files, @Login MemberSession memberSession) throws IOException {
-        wasteService.createWaste(memberSession.getId(),files);
+    @PostMapping("/image")
+    public ResponseEntity<Void> postWasteimage(@RequestParam(value = "image") List<MultipartFile> images,
+                                               @Login MemberSession memberSession,
+                                               @RequestParam String unique) throws IOException {
+        wasteService.createWaste(memberSession.getId(),images,unique);
+
         return ResponseEntity.ok().build();
     }
 

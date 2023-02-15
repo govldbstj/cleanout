@@ -16,5 +16,7 @@ public interface WasteRepository {
 
     Waste getById(Long wasteIdx);
 
+    Waste getByUnique(String unique);
+
     long count();
 }

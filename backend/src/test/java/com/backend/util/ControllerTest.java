@@ -100,8 +100,8 @@ public class ControllerTest {
         return (MockHttpSession) session;
     }
 
-    protected Waste saveWaste(Member member) throws IOException {
-        MultipartFile imageFile = new MockMultipartFile("image","waste1.PNG", MediaType.IMAGE_PNG_VALUE,"<<wasteImage>>".getBytes());
-        return wasteService.postWasteImage(member.getId(),imageFile);
-    }
+//    protected Waste saveWaste(Member member) throws IOException {
+//        MultipartFile imageFile = new MockMultipartFile("image","waste1.PNG", MediaType.IMAGE_PNG_VALUE,"<<wasteImage>>".getBytes());
+//        return wasteService.
+//    }
 }

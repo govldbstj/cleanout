@@ -41,7 +41,7 @@ POST http://localhost:8080/logout
 
 ### 폐기물 이미지 업로드
 
-POST http://localhost:8080/waste-management/file
+POST http://localhost:8080/waste-management/image?unique=qweasdzxc
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -65,7 +65,7 @@ PATCH http://localhost:8080/waste-management/waste
 Content-Type: application/json
 
 {
-  "wasteIdx": "1",
+  "unique": "1",
   "wasteName": "냉장고 - 300L이상",
   "price": 6000
 }

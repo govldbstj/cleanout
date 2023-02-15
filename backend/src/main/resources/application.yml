@@ -22,7 +22,7 @@ spring:
 
   # 서버에 사진이 저장됨, 경로
   file:
-    path: C:\Users\Administrator\Documents\pt
+    path: D:\mssp
 
 logging:
   level:
