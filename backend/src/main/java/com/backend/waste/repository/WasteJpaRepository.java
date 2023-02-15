@@ -13,4 +13,6 @@ public interface WasteJpaRepository extends JpaRepository<Waste, Long> {
     Optional<List<Waste>> findAllByMemberOrderByEnrolledDateDesc(Member member);
 
     Optional<Waste> findByUniqueStr(String unique);
+
+    boolean existsByUniqueStr(String unique);
 }

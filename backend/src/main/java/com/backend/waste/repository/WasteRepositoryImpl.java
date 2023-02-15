@@ -42,4 +42,9 @@ public class WasteRepositoryImpl implements WasteRepository {
     public long count() {
         return wasteJpaRepository.count();
     }
+
+    @Override
+    public boolean existsByUnique(String unique) {
+        return wasteJpaRepository.existsByUniqueStr(unique);
+    }
 }

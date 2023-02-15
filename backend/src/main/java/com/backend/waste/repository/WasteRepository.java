@@ -19,4 +19,6 @@ public interface WasteRepository {
     Waste getByUnique(String unique);
 
     long count();
+
+    boolean existsByUnique(String unique);
 }

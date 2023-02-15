@@ -8,6 +8,7 @@ import com.backend.waste.domain.WasteImage;
 import com.backend.waste.dto.request.PatchWaste;
 import com.backend.waste.dto.response.GetWasteBrief;
 import com.backend.waste.dto.response.GetWasteDetail;
+import com.backend.waste.exception.UniqueDuplicationException;
 import com.backend.waste.repository.ImageRepository;
 import com.backend.waste.repository.WasteRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,10 @@ public class WasteService {
     public Waste createWaste(Long memberIdx, List<MultipartFile> images, String unique) throws IOException {
         Member member = memberRepository.getById(memberIdx);
         Waste waste = Waste.createWaste(member,unique);
+
+        if(wasteRepository.existsByUnique(unique)){
+            throw new UniqueDuplicationException();
+        }
 
         for (MultipartFile file : images) {
 //            UUID uuid = UUID.randomUUID();

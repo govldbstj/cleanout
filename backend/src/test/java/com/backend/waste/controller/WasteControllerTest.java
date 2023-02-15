@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class WasteControllerTest extends ControllerTest {
 
-    //    @Test
+//    @Test
 //    @DisplayName("이미지를 업로드하면 폐기물 등록에 성공합니다")
 //    void createWaste200() throws Exception {
 //        //given
@@ -38,12 +38,12 @@ public class WasteControllerTest extends ControllerTest {
 //                                .file("image", imageFile2.getBytes())
 //                                .file("image", imageFile3.getBytes())
 //                                .session(session)
-//                                .param("unique","qwerasdfzxcv")
+//                                .queryParam("unique","qwerasdf")
 //                                .contentType(MediaType.MULTIPART_FORM_DATA))
 //                .andExpect(status().isOk())
 //                .andDo(document("waste/create/200"));
 //    }
-//
+
     @Test
     @DisplayName("등록된 폐기물일 경우 가격이 책정됩니다.")
     void updateWaste200() throws Exception {
@@ -124,5 +124,21 @@ public class WasteControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("waste/get/200"
                 ));
+    }
+
+    @Test
+    @DisplayName("세부 예약 내역을 확인합니다.")
+    void getDetail200() throws Exception {
+        Member member = saveMemberInRepository();
+        MockHttpSession session = loginMemberSession(member);
+
+        Waste waste1 = saveWaste(member,"12345"); // 예약완료
+        reserveWaste(waste1.getId());
+        setupWaste(waste1);
+
+        mockMvc.perform(get("/waste-management/waste/{wasteIdx}",1)
+                .session(session))
+                .andExpect(status().isOk())
+                .andDo(document("waste/getDetail/200"));
     }
 }
