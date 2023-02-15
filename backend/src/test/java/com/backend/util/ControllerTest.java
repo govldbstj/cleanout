@@ -27,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -100,8 +102,11 @@ public class ControllerTest {
         return (MockHttpSession) session;
     }
 
-//    protected Waste saveWaste(Member member) throws IOException {
-//        MultipartFile imageFile = new MockMultipartFile("image","waste1.PNG", MediaType.IMAGE_PNG_VALUE,"<<wasteImage>>".getBytes());
-//        return wasteService.
-//    }
+    protected void saveWaste(Member member, String unique) throws IOException {
+        List<MultipartFile> images = new ArrayList<>();
+        images.add(new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes()));
+        images.add(new MockMultipartFile("image2", "waste2.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage2>>".getBytes()));
+        images.add(new MockMultipartFile("image3", "waste3.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage3>>".getBytes()));
+        wasteService.createWaste(member.getId(), images, unique);
+    }
 }

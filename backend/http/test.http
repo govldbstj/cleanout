@@ -65,7 +65,7 @@ PATCH http://localhost:8080/waste-management/waste
 Content-Type: application/json
 
 {
-  "unique": "1",
+  "unique": "qweasdzxc",
   "wasteName": "냉장고 - 300L이상",
   "price": 6000
 }
