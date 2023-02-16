@@ -6,25 +6,27 @@ import styled from 'styled-components/native';
  * 기본 텍스트 입력 atom
  * 필요한 경우 props 추가해서 사용
  * @param {string} placeholder 텍스트 입력창에 표시될 텍스트
+ * @param {string?} value 텍스트 입력창의 초기값
  * @param {string?} fontSize 텍스트 입력창의 폰트 크기(기본: 15px)
  * @param {function?} validator 텍스트 입력창의 유효성 검사 함수((string) => bool)
  * @param {string?} invalidateMessage 유효성 검사 실패 시 표시할 메시지
  */
 export default TextInput = (props) => {
-    const { placeholder, fontSize = '15px', validator = () => null, invalidateMessage } = props;
+    const { placeholder, value = '', fontSize = '15px', validator = (_) => null, invalidateMessage, ...others } = props;
     const [validate, setValidate] = React.useState(null);
 
     const onTextChange = (text) => {
         setValidate(validator(text));
     };
 
-    const borderColor = validate === null ? colors.border : (validate ? colors.success : colors.alert);
+    const borderColor = validate === null ? colors.border : validate ? colors.success : colors.alert;
 
     return (
-        <TextInputContainer>
+        <TextInputContainer {...others}>
             <StyledTextInput
                 fontSize={fontSize}
                 borderColor={borderColor}
+                defaultValue={value}
                 placeholder={placeholder}
                 placeholderTextColor={colors.disabled}
                 onChangeText={onTextChange}
@@ -39,7 +41,7 @@ const TextInputContainer = styled.View`
 `;
 
 const StyledTextInput = styled.TextInput`
-    padding: 10px;
+    padding: 5px;
     border-bottom-width: 1px;
     font-size: ${(props) => props.fontSize};
     border-color: ${(props) => props.borderColor};
@@ -48,5 +50,5 @@ const StyledTextInput = styled.TextInput`
 const InfoMessage = styled.Text`
     font-size: 10px;
     color: ${colors.alert};
-    margin-top: 2px;
+    margin: 2px 0 0 5px;
 `;

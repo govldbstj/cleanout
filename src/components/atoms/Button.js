@@ -11,9 +11,9 @@ import styled from 'styled-components/native';
  * @param {string?} fontSize 버튼 글자 크기(기본: 15px)
  */
 export default Button = (props) => {
-    const { title, onPress, backgroundColor = colors.primary, fontSize = "15px" } = props;
+    const { title, onPress, backgroundColor = colors.primary, fontSize = '15px', ...others } = props;
     return (
-        <BoxPressable backgroundColor={backgroundColor} onPress={onPress}>
+        <BoxPressable backgroundColor={backgroundColor} onPress={onPress} {...others}>
             <ButtonLabel fontSize={fontSize}>{title}</ButtonLabel>
         </BoxPressable>
     );

@@ -11,9 +11,9 @@ import {Pressable} from 'react-native';
  * @param {string?} fontSize 버튼 글자 크기(기본: 15px)
  */
 export default Button = (props) => {
-    const { title, onPress, fontSize = "15px" } = props;
+    const { title, onPress, fontSize = "15px", ...others } = props;
     return (
-        <BoxPressable onPress={onPress}>
+        <BoxPressable onPress={onPress} {...others}>
             <ButtonLabel fontSize={fontSize}>{title}</ButtonLabel>
         </BoxPressable>
     );
