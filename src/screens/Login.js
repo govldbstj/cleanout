@@ -15,7 +15,6 @@ const StyledText = styled.Text`
 `;
 
 const TextButtonContainer = styled.View`
-    display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;

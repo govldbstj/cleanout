@@ -3,10 +3,8 @@ import styled from 'styled-components/native';
 import FormTextInput from '../components/molecules/FormTextInput';
 import Button from '../components/atoms/Button';
 import Notice from '../components/atoms/Notice';
+import {ScrollView} from 'react-native';
 
-const Container = styled.View`
-    align-items: center;
-`;
 const StyledText = styled.Text`
     font-size: 30px;
     margin-bottom: 10px;
@@ -19,7 +17,7 @@ const StyledImage = styled.Image`
 const Register = ({ navigation }) => {
     // 각각의 FormItem에 disabled=true를 주면 해당 컴포넌트를 비활성화할 수 있습니다. (2-3-1뷰에서 사용 가능)
     return (
-        <Container>
+        <ScrollView contentContainerStyle={{ alignItems: "center" }}>
             <StyledText>register page</StyledText>
             <FormTextInput label="이름" placeholder="이름을 입력하세요." />
             <FormTextInput
@@ -28,11 +26,11 @@ const Register = ({ navigation }) => {
                 buttonLabel="검색"
                 onButtonPress={() => console.log('주소 검색 기능 필요')}
             />
-            <Button title="이미지 넣기" />
+            <Button title="이미지 넣기" onPress={() => console.log('이미지 넣기 기능 필요')}/>
             <StyledImage source={{uri: "https://dummyimage.com/600x400/000/fff.png&text=Image+Preview"}}/>
             <Notice/>
-            <Button title="등록하기" />
-        </Container>
+            <Button title="등록하기" onPress={() => console.log('등록하기 기능 필요')}/>
+        </ScrollView>
     );
 };
 

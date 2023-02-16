@@ -52,7 +52,6 @@ export default FormTextInput = (props) => {
 
 const Container = styled.View`
     width: 90%;
-    display: flex;
     flex-direction: column;
     align-items: stretch;
     margin: 10px 0;
@@ -60,7 +59,6 @@ const Container = styled.View`
 
 const InputContainer = styled.View`
     width: 100%;
-    display: flex;
     flex-direction: row;
     align-items: top;
 `;
