@@ -19,7 +19,6 @@ const Container = styled.View`
     background-color: ${colors.secondary};
     border-radius: 10px;
     margin: 10px 0;
-    padding: 10px;
 `;
 
 const Title = styled.Text`
