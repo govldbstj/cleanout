@@ -58,10 +58,10 @@ public class Member extends BaseTimeEntity {
         this.accessToken = accessToken;
     }
 
-    public static Member getFromMemberSignup(MemberSignup memberSignup) {
+    public static Member getFromMemberSignup(MemberSignup memberSignup, PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .email(memberSignup.getEmail())
-                .password(memberSignup.getPassword())
+                .password(passwordEncoder.encode(memberSignup.getPassword()))
                 .nickname(memberSignup.getNickname())
                 .address(memberSignup.getAddress())
                 .phoneNumber(memberSignup.getPhoneNumber())
@@ -92,9 +92,5 @@ public class Member extends BaseTimeEntity {
 
     public void updateAccessToken(String accessToken) {
         this.accessToken = accessToken;
-    }
-
-    public void encodePassword(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(password);
     }
 }

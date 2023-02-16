@@ -445,22 +445,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_가입된_회원이라면_로그인_성공_200">가입된 회원이라면 로그인 성공 - 200</a>
+<li><a href="#_가입된_회원이라면_로그인_성공">가입된 회원이라면 로그인 성공</a>
 <ul class="sectlevel2">
 <li><a href="#_요청">요청</a></li>
 <li><a href="#_응답">응답</a></li>
 </ul>
 </li>
-<li><a href="#_가입된_회원이지만_비밀번호가_일치하지_않으면_로그인_실패_400">가입된 회원이지만 비밀번호가 일치하지 않으면 로그인 실패 - 400</a>
+<li><a href="#_가입되지_않은_회원이라면_로그인_실패">가입되지 않은 회원이라면 로그인 실패</a>
 <ul class="sectlevel2">
 <li><a href="#_요청_2">요청</a></li>
 <li><a href="#_응답_2">응답</a></li>
-</ul>
-</li>
-<li><a href="#_가입된_이메일이_아니라면_로그인에_실패합니다_404">가입된 이메일이 아니라면 로그인에 실패합니다 - 404</a>
-<ul class="sectlevel2">
-<li><a href="#_요청_3">요청</a></li>
-<li><a href="#_응답_3">응답</a></li>
 </ul>
 </li>
 </ul>
@@ -468,7 +462,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_가입된_회원이라면_로그인_성공_200">가입된 회원이라면 로그인 성공 - 200</h2>
+<h2 id="_가입된_회원이라면_로그인_성공">가입된 회원이라면 로그인 성공</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_요청">요청</h3>
@@ -521,12 +515,12 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 220
+Content-Length: 164
 
 {
   "nickname" : "닉네임",
   "email" : "xxx@gmail.com",
-  "password" : "$2a$10$xwAOg1x.Gk5FPuYsUT9OVePV7WNowtm5t4vwpxswSSvqb.7AgPxVe",
+  "password" : "1234",
   "address" : "경기도 수원시 영통구",
   "phoneNumber" : "010-0000-0000"
 }</code></pre>
@@ -577,7 +571,7 @@ Content-Length: 220
 </div>
 </div>
 <div class="sect1">
-<h2 id="_가입된_회원이지만_비밀번호가_일치하지_않으면_로그인_실패_400">가입된 회원이지만 비밀번호가 일치하지 않으면 로그인 실패 - 400</h2>
+<h2 id="_가입되지_않은_회원이라면_로그인_실패">가입되지 않은 회원이라면 로그인 실패</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_요청_2">요청</h3>
@@ -585,12 +579,12 @@ Content-Length: 220
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /login HTTP/1.1
 Content-Type: application/json
-Content-Length: 60
+Content-Length: 54
 Host: 43.200.115.73:8080
 
 {
   "email" : "xxx@gmail.com",
-  "password" : "3769392739"
+  "password" : "1234"
 }</code></pre>
 </div>
 </div>
@@ -616,7 +610,7 @@ Host: 43.200.115.73:8080
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">일치하지 않는 비밀 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">비밀 번호</p></td>
 </tr>
 </tbody>
 </table>
@@ -667,102 +661,11 @@ Content-Length: 86
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_가입된_이메일이_아니라면_로그인에_실패합니다_404">가입된 이메일이 아니라면 로그인에 실패합니다 - 404</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_요청_3">요청</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /login HTTP/1.1
-Content-Type: application/json
-Content-Length: 80
-Host: 43.200.115.73:8080
-
-{
-  "email" : "가입되지 않은 이메일@gmail.com",
-  "password" : "1234"
-}</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">가입되지 않은 이메일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">비밀 번호</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_응답_3">응답</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 77
-
-{
-  "statusCode" : "404",
-  "message" : "회원을 찾을 수 없습니다"
-}</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>statusCode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">에러 코드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">에러 메세지</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-11 13:45:10 +0900
+Last updated 2023-02-15 10:44:56 +0900
 </div>
 </div>
 </body>

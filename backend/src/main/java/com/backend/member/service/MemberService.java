@@ -33,8 +33,7 @@ public class MemberService {
 
     @Transactional
     public void signup(MemberSignup memberSignup) {
-        Member member = Member.getFromMemberSignup(memberSignup);
-        member.encodePassword(passwordEncoder);
+        Member member = Member.getFromMemberSignup(memberSignup, passwordEncoder);
         memberRepository.save(member);
     }
 
