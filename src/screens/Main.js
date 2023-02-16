@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-native';
+import Button from '../components/atoms/Button';
 import styled from 'styled-components/native';
 
 const Container = styled.View`

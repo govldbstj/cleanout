@@ -4,8 +4,8 @@ import Login from '../screens/Login';
 import Main from '../screens/Main';
 import Register from '../screens/Register';
 import Reservation from '../screens/Reservation';
-import Kakao from '../register/Kakao';
-import Email from '../register/Email';
+import Kakao from '../screens/register/Kakao';
+import Email from '../screens/register/Email';
 
 const Stack = createStackNavigator();
 
