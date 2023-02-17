@@ -1,32 +1,32 @@
 import React from 'react';
-import {Button} from 'react-native';
 import styled from 'styled-components/native';
+import StatusRow from '../components/molecules/StatusRow';
 
 const Container = styled.View`
-align-items: center;
+    align-items: center;
 `;
 const StyledText = styled.Text`
-font-size : 30px;
-margin-bottom: 10px;
-`;
-const MidText = styled.Text`
-font-size : 22px;
-margin-bottom: 10px;
-`;
-const DetailText = styled.Text`
-font-size : 15px;
-margin-bottom: 10px;
+    font-size: 30px;
+    margin-bottom: 10px;
 `;
 
 //예약 목록
 const Reservation = ({ navigation }) => {
-    return(
+    const header = ['신청일', '품목', '수거 상태'];
+    const data = [
+        ['2023-01-01', '냉장고', '수거 완료'],
+        ['2023-01-04', '에어컨', '1시간 후 수거'],
+    ];
+
+    return (
         <Container>
             <StyledText>reservation page</StyledText>
-            <MidText>22/01/01 | 냉장고 | 수거 완료</MidText>
-            <DetailText>타임스탬프  | 품목 | 현황</DetailText>
+            <StatusRow data={header} isHeader={true}/>
+            {data.map((data) => (
+                <StatusRow data={data} />
+            ))}
         </Container>
-    )
-}
+    );
+};
 
 export default Reservation;
