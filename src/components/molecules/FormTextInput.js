@@ -44,7 +44,7 @@ export default FormTextInput = (props) => {
                     disabled={disabled}
                     onTextChangeListener={onTextChangeListener}
                 />
-                {buttonLabel && <FormButton title={buttonLabel} onPress={onButtonPress} />}
+                {!!buttonLabel && <FormButton title={buttonLabel} onPress={onButtonPress} />}
             </InputContainer>
         </Container>
     );
@@ -60,7 +60,7 @@ const Container = styled.View`
 const InputContainer = styled.View`
     width: 100%;
     flex-direction: row;
-    align-items: top;
+    align-items: flex-start;
 `;
 
 const FormLabel = styled(Label)`

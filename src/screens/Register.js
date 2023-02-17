@@ -14,24 +14,19 @@ const StyledText = styled.Text`
 `;
 
 const Register = ({ navigation }) => {
-    // 각각의 FormItem에 disabled=true를 주면 해당 컴포넌트를 비활성화할 수 있습니다. (2-3-1뷰에서 사용 가능)
     const [name, setName] = useState('');
     const [info, setInfo] = useState('');
+    const [images, setImages] = useState([]);
 
     const { address } = useContext(AddressContext);
 
-    console.log('카카오 주소 ', address);
+    const onSubmit = () => {
+        // 이름, 주소, 상세 주소 전송
 
-    //상세주소는 따로 추가해주세요!
+        // 이미지 전송
 
-    const textImages = [
-        { uri: 'https://dummyimage.com/300x300/000/fff.png&text=Image+Preview+1' },
-        { uri: 'https://dummyimage.com/300x300/000/fff.png&text=Image+Preview+2' },
-        { uri: 'https://dummyimage.com/300x300/000/fff.png&text=Image+Preview+3' },
-        { uri: 'https://dummyimage.com/300x300/000/fff.png&text=Image+Preview+4' },
-    ];
+    };
 
-    /* <ScrollImageList sources={textImages} /> */
     return (
         <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
             <StyledText>register page</StyledText>
@@ -42,7 +37,16 @@ const Register = ({ navigation }) => {
                     setName(text);
                 }}
             />
-            <Button title="주소 검색" onPress={() => navigation.navigate('Address')} />
+            <FormTextInput
+                label="주소"
+                placeholder="주소를 입력하세요."
+                disabled={true}
+                value={address}
+                buttonLabel="검색"
+                onButtonPress={() => {
+                    navigation.navigate('Address');
+                }}
+            />
             <FormTextInput
                 label="상세 주소"
                 placeholder="상세 주소를 입력하세요."
@@ -50,20 +54,29 @@ const Register = ({ navigation }) => {
                     setInfo(text);
                 }}
             />
-            <Button title="이미지 넣기" onPress={() => uploadImage()} />
+            <Button
+                title="이미지 넣기"
+                onPress={() => {
+                    setImages(getImageSelection());
+                }}
+            />
+            <ScrollImageList sources={images} />
             <Notice />
             <Button
                 title="등록하기"
                 onPress={() => {
-                    setName(name);
-                    console.log('name is', name, 'address is ', address + ' ' + info);
+                    onSubmit();
                 }}
             />
         </ScrollView>
     );
 };
 
-const uploadImage = async () => {
+/**
+ * 사용자에게 이미지 선택을 받는 함수
+ * @returns {Promise<string[]>} 선택된 이미지의 uri 리스트
+ */
+async function getImageSelection() {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status !== 'granted') {
@@ -73,14 +86,21 @@ const uploadImage = async () => {
 
     let imageData = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true, // 다중 선택 가능 여부
         allowsEditing: false, // 사진 촬영 후 편집 화면 보여줄 지 여부
         aspect: [1, 1], // 사진의 비율
         quality: 1, // 사진의 용량
-        base64: true, // base64로 인코딩된 텍스트 필요한 지 여부
+        selectionLimit: 5, // 최대 선택 가능한 사진 개수
     });
 
-    // imageData.base64로 base64 인코딩된 텍스트를 받을 수 있습니다.
-    console.log(imageData.base64);
-};
+    if (imageData.cancelled) {
+        return;
+    }
+
+    console.log(imageData);
+
+    const uriList = !!imageData.uri ? [imageData.uri] : imageData.selected.map((item) => item.uri);
+    return uriList;
+}
 
 export default Register;

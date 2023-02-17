@@ -1,28 +1,31 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 /**
  * 좌우 스크롤 가능한 이미지 리스트를 보여주는 컴포넌트
- * @param {Array} sources - 이미지 소스 배열
- * @param {String?} width - 이미지 너비 (기본: 100px)
- * @param {String?} height - 이미지 높이 (기본: 100px)
- * @param {number?} containerMargin - 컨테이너 외부 여백 (단위 없이 숫자만) (기본: 5)
- * @param {String?} imageMargin - 이미지 간 여백 (기본: 5px)
+ * @param {Array} sources - 이미지 Uri 배열
+ * @param {string?} width - 이미지 너비 (기본: 100px)
+ * @param {string?} height - 이미지 높이 (기본: 100px)
+ * @param {string?} containePadding - 컨테이너 내부 여백 (기본: 5%)
+ * @param {string?} imageSpaceWidth - 이미지가 차지하는 너비 (기본: 110px)
  */
 export default ScrollImageList = (props) => {
-    const { sources, width = '100px', height = '100px', containerMargin = 5, imageMargin = '5px', ...others } = props;
+    const {
+        sources,
+        width = '100px',
+        height = '100px',
+        containerPadding = '5%',
+        imageSpaceWidth = '110px',
+        ...others
+    } = props;
 
     return (
-        <ScrollView horizontal={true} contentContainerStyle={{ margin: containerMargin }} {...others}>
+        <ScrollView contentContainerStyle={{ padding: containerPadding }} horizontal={true} {...others}>
             {sources.map((source, index) => (
-                <StyledImage
-                    key={index}
-                    source={source}
-                    width={width}
-                    height={height}
-                    margin={imageMargin}
-                ></StyledImage>
+                <ImageContainer key={index} width={imageSpaceWidth}>
+                    <StyledImage source={{ uri: source }} width={width} height={height}></StyledImage>
+                </ImageContainer>
             ))}
         </ScrollView>
     );
@@ -31,6 +34,11 @@ export default ScrollImageList = (props) => {
 const StyledImage = styled.Image`
     width: ${(props) => props.width};
     height: ${(props) => props.height};
-    margin: ${(props) => props.margin};
     object-fit: cover;
+`;
+
+const ImageContainer = styled.View`
+    width: ${(props) => props.width};
+    justify-content: center;
+    align-items: center;
 `;
