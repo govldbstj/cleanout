@@ -2,20 +2,36 @@ import React from 'react';
 import { WebView } from 'react-native-webview';
 import {View} from 'react-native';
 import testbutton from '../../login/LoginTest.js'
+import qs from 'qs';
+import axios from 'axios';
 
 const getCode = (target: string) => {
     const exp = 'code=';
     const condition = target.indexOf(exp);
     if (condition !== -1) {
       const requestCode = target.substring(condition + exp.length);
-      requestToken(requestCode);
+      console.log("in get Code : ", requestCode);
+      //requestToken(requestCode);
     }
   };
 
+/*const requestToken = async (code: string,) => {
+
+  useEffect(() => {
+    fetch(`http://43.200.115.73:8080/oauth?code=${code}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;",
+      },
+    });
+  }, []);
+
+};*/
+
 const Kakao = ({ navigation }) => {
 
-    const REST_API_KEY = ''
-    const REDIRECT_URI = 'http://localhost:3000/auth/kakao/callback'
+    const REST_API_KEY = '39b1629ce319fa9f89c3b9f947d92255'
+    const REDIRECT_URI = 'http://43.200.115.73:8080/oauth'
 
     const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
