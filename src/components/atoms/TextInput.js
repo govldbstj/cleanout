@@ -43,7 +43,7 @@ export default TextInput = (props) => {
                 borderColor={borderColor}
                 defaultValue={value}
                 secureTextEntry={isPassword}
-                disabled={disabled}
+                editable={!disabled}
                 placeholder={placeholder}
                 placeholderTextColor={colors.disabled}
                 onChangeText={onTextChange}
