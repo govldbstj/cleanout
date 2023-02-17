@@ -124,49 +124,55 @@ async function submit(name, address, info, images) {
         return;
     }
 
-    // 이름, 주소, 상세 주소 전송
-    await fetch('http:///43.200.115.73:8080/waste-management/waste', {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: name,
-            address: address,
-            info: info,
-        }),
-    });
+    try {
+        // 이름, 주소, 상세 주소 전송
+        // const textRequestResult = await fetch('http:///43.200.115.73:8080/waste-management/waste', {
+        //     method: 'PATCH',
+        //     body: JSON.stringify({
+        //         name: name,
+        //         address: address,
+        //         info: info,
+        //     }),
+        // });
+        // if (!textRequestResult.ok)
+        //     throw new Error(`Text Request failed: ${textRequestResult.status} ${textRequestResult.statusText}``);
 
-    // 이미지 전송
-    let imageBody = new FormData();
+        // 이미지 전송
+        let imageBody = new FormData();
 
-    for (const image of images) {
-        const imageName = image.split('/').pop();
-        const imageExtension = imageName.split('.').pop();
+        for (const image of images) {
+            const imageName = image.split('/').pop();
+            const match = /\.(\w+)$/.exec(imageName ?? '');
+            const imageType = match ? `image/${match[1]}` : `image`;
 
-        imageBody.append('image', {
-            uri: image,
-            name: 'image',
-            type: `image/${imageExtension}`,
-            filename: imageName,
-        });
-    }
-    console.log(imageBody);
-
-    fetch('http://43.200.115.73:8080/waste-management/image', {
-        method: 'post',
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-        body: imageBody,
-    }).then((res) => {
-        if (res.ok) {
-            console.log('이미지 전송 성공');
-        } else {
-            console.log('이미지 전송 실패');
-            console.log(res.status);
+            imageBody.append(
+                'image',
+                {
+                    uri: image,
+                    name: 'image',
+                    type: imageType,
+                    filename: imageName,
+                },
+                imageName
+            );
         }
-    });
+
+        const imageRequestResult = await fetch('http://43.200.115.73:8080/waste-management/image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            body: imageBody,
+        });
+
+        if (!imageRequestResult.ok)
+            throw new Error(`Image Request failed: ${imageRequestResult.status} ${imageRequestResult.statusText}`);
+
+        alert('등록에 성공하였습니다.');
+    } catch (e) {
+        console.log(`${e.name}: ${e.message}`);
+        alert('등록에 실패하였습니다.');
+    }
 }
 
 export default Register;
