@@ -24,8 +24,8 @@ const Login = ({ navigation }) => {
     return (
         <Container>
             <StyledText>Login page</StyledText>
-            <Button title="카카오 로그인" onPress={() => navigation.navigate('Kakao')} />
-            <Button title="이메일 로그인" onPress={() => navigation.navigate('Email')} />
+            <Button title = "카카오 로그인" onPress={() => navigation.navigate('Kakao')}/>
+            <Button title = "이메일 로그인" onPress={() => navigation.navigate('Email')} />
             <TextButtonContainer>
                 <TextButton title="회원가입" onPress={() => navigation.navigate('EmailRegister')} />
                 <TextButton title="ID, PW 찾기" onPress={() => console.log('ID, PW 찾기 기능 필요')} />

@@ -7,6 +7,7 @@ import Reservation from '../screens/Reservation';
 import Kakao from '../screens/register/Kakao';
 import Email from '../screens/register/Email';
 import EmailRegister from '../screens/register/EmailRegister';
+import Address from '../screens/Address';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ const StackNavigation = () => {
             <Stack.Screen name="Kakao" component={Kakao} />
             <Stack.Screen name="Email" component={Email} />
             <Stack.Screen name="EmailRegister" component={EmailRegister} />
+            <Stack.Screen name="Address" component={Address} />
         </Stack.Navigator>
     );
 };
