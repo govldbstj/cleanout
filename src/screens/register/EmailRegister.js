@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
 import FormTextInput from '../../components/molecules/FormTextInput';
 import Button from '../../components/atoms/Button';
+import qs from 'qs';
+import axios from 'axios';
 
 const Container = styled.View`
     flex: 1;
@@ -16,12 +18,36 @@ const StyledText = styled.Text`
 
 const EmailRegister = ({ navigation }) => {
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const SetandSent = () =>{
+        console.log(name, email, password),
+        fetch('http://43.200.115.73:8080/signup', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Content-Length": 164,
+            },
+            body: JSON.stringify({
+                "nickname" : name,
+                "email" : email,
+                "password" : password
+            })
+        })
+    };
+    
     return (
         <Container>
-            <StyledText>Email Login page</StyledText>
+            <StyledText>이메일로 회원가입하기</StyledText>
+            <FormTextInput 
+                label="이름" 
+                placeholder="이름을 입력하세요."
+                onTextChangeListener={(text) => {
+                    setName(text)
+                }}
+            />
             <FormTextInput 
                 label="이메일" 
                 placeholder="이메일을 입력하세요."
@@ -44,7 +70,7 @@ const EmailRegister = ({ navigation }) => {
                 validator={(text) => text === password}
                 invalidateMessage="비밀번호가 일치하지 않습니다."
             />
-            <Button title="회원 가입" onPress={() => { setPassword(password); setEmail(email); console.log("pwd is", password, "id is ", email);}}/>
+            <Button title="회원 가입" onPress={() => SetandSent()}/>
         </Container>
     );
 };

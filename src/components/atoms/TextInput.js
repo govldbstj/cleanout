@@ -20,6 +20,7 @@ export default TextInput = (props) => {
         value = '',
         isPassword = false,
         disabled = false,
+        autoCorrect = false,
         fontSize = '15px',
         validator = (_) => null,
         invalidateMessage,

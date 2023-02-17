@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import FormTextInput from '../../components/molecules/FormTextInput';
 import Button from '../../components/atoms/Button';
+import axios from 'axios';
 
 const Container = styled.View`
     flex: 1;
@@ -18,6 +19,20 @@ const Email = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const SetandSent = () =>{
+        fetch('http://43.200.115.73:8080/login', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Content-Length": 54,
+            },
+            body: JSON.stringify({
+                "email" : email,
+                "password" : password
+            })
+        })
+    };
 
     return (
         <Container>
@@ -37,7 +52,7 @@ const Email = ({ navigation }) => {
                     setPassword(text)
                 }}
             />
-            <Button title="로그인" onPress={() => { setPassword(password); setEmail(email); console.log("pwd is", password, "id is ", email);}}/>
+            <Button title="로그인" onPress={() => SetandSent()}/>
         </Container>
     );
 };
