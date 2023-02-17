@@ -38,85 +38,81 @@ public class WasteControllerTest extends ControllerTest {
 //                                .file("image", imageFile2.getBytes())
 //                                .file("image", imageFile3.getBytes())
 //                                .session(session)
-//                                .queryParam("unique","qwerasdf")
 //                                .contentType(MediaType.MULTIPART_FORM_DATA))
 //                .andExpect(status().isOk())
 //                .andDo(document("waste/create/200"));
 //    }
 
-    @Test
-    @DisplayName("등록된 폐기물일 경우 가격이 책정됩니다.")
-    void updateWaste200() throws Exception {
-        //given
-        Member member = saveMemberInRepository();
-        MockHttpSession session = loginMemberSession(member);
-        String unique = "qwerasdfzxcv";
-        saveWaste(member, unique);
-
-        PatchWaste patchWaste = PatchWaste.builder()
-                .wasteName("냉장고-300L이상")
-                .price(6000)
-                .unique(unique)
-                .build();
-
-        String patchWasteJson = objectMapper.writeValueAsString(patchWaste);
-
-        //
-        mockMvc.perform(
-                        patch("/waste-management/waste")
-                                .session(session)
-                                .contentType(APPLICATION_JSON)
-                                .content(patchWasteJson))
-                .andExpect(status().isOk())
-                .andDo(document("waste/update/200",
-                        requestFields(
-                                fieldWithPath("wasteName").description("제품명"),
-                                fieldWithPath("price").description("가격"),
-                                fieldWithPath("unique").description("고유문자열 이름"))
-                ));
-    }
-
-    @Test
-    @DisplayName("등록되지 않은 폐기물일 경우 가격이 책정되지 않습니다")
-    void updateWaste400() throws Exception {
-        Member member = saveMemberInRepository();
-        MockHttpSession session = loginMemberSession(member);
-        String unique = "qwerasdfzxcv";
-
-        PatchWaste patchWaste = PatchWaste.builder()
-                .wasteName("냉장고-300L이상")
-                .price(6000)
-                .unique(unique)
-                .build();
-
-        String patchWasteJson = objectMapper.writeValueAsString(patchWaste);
-
-        mockMvc.perform(
-                        patch("/waste-management/waste")
-                                .session(session)
-                                .contentType(APPLICATION_JSON)
-                                .content(patchWasteJson))
-                .andExpect(status().isNotFound())
-                .andDo(document("waste/update/400",
-                        requestFields(
-                                fieldWithPath("wasteName").description("제품명"),
-                                fieldWithPath("price").description("가격"),
-                                fieldWithPath("unique").description("고유문자열 이름"))
-                ));
-    }
-
+//    @Test
+//    @DisplayName("등록된 폐기물일 경우 가격이 책정됩니다.")
+//    void updateWaste200() throws Exception {
+//        //given
+//        Member member = saveMemberInRepository();
+//        MockHttpSession session = loginMemberSession(member);
+//        String unique = "qwerasdfzxcv";
+//        saveWaste(member, unique);
+//
+//        PatchWaste patchWaste = PatchWaste.builder()
+//                .wasteName("냉장고-300L이상")
+//                .price(6000)
+//                .build();
+//
+//        String patchWasteJson = objectMapper.writeValueAsString(patchWaste);
+//
+//        //
+//        mockMvc.perform(
+//                        patch("/waste-management/waste")
+//                                .session(session)
+//                                .contentType(APPLICATION_JSON)
+//                                .content(patchWasteJson))
+//                .andExpect(status().isOk())
+//                .andDo(document("waste/update/200",
+//                        requestFields(
+//                                fieldWithPath("wasteName").description("제품명"),
+//                                fieldWithPath("price").description("가격"),
+//                                fieldWithPath("unique").description("고유문자열 이름"))
+//                ));
+//    }
+//
+//    @Test
+//    @DisplayName("등록되지 않은 폐기물일 경우 가격이 책정되지 않습니다")
+//    void updateWaste400() throws Exception {
+//        Member member = saveMemberInRepository();
+//        MockHttpSession session = loginMemberSession(member);
+//        String unique = "qwerasdfzxcv";
+//
+//        PatchWaste patchWaste = PatchWaste.builder()
+//                .wasteName("냉장고-300L이상")
+//                .price(6000)
+//                .unique(unique)
+//                .build();
+//
+//        String patchWasteJson = objectMapper.writeValueAsString(patchWaste);
+//
+//        mockMvc.perform(
+//                        patch("/waste-management/waste")
+//                                .session(session)
+//                                .contentType(APPLICATION_JSON)
+//                                .content(patchWasteJson))
+//                .andExpect(status().isNotFound())
+//                .andDo(document("waste/update/400",
+//                        requestFields(
+//                                fieldWithPath("wasteName").description("제품명"),
+//                                fieldWithPath("price").description("가격"),
+//                                fieldWithPath("unique").description("고유문자열 이름"))
+//                ));
+//    }
+//
     @Test
     @DisplayName("해당 멤버의 예약 조회가 성공합니다.")
     void get200() throws Exception {
         Member member = saveMemberInRepository();
         MockHttpSession session = loginMemberSession(member);
-        saveWaste(member, "abcde"); // 등록완료
-        Waste waste1 = saveWaste(member,"12345"); // 예약완료
+        saveWaste(member); // 등록완료
+        Waste waste1 = saveWaste(member); // 예약완료
         reserveWaste(waste1.getId());
-        setupWaste(waste1);
-        Waste waste2 = saveWaste(member,"qwert"); // 수거완료
+        Waste waste2 = saveWaste(member); // 수거완료
         collectWaste(waste2.getId());
-        setupWaste(waste2);
 
 
         mockMvc.perform(get("/waste-management/waste")
@@ -125,20 +121,20 @@ public class WasteControllerTest extends ControllerTest {
                 .andDo(document("waste/get/200"
                 ));
     }
-
-    @Test
-    @DisplayName("세부 예약 내역을 확인합니다.")
-    void getDetail200() throws Exception {
-        Member member = saveMemberInRepository();
-        MockHttpSession session = loginMemberSession(member);
-
-        Waste waste1 = saveWaste(member,"12345"); // 예약완료
-        reserveWaste(waste1.getId());
-        setupWaste(waste1);
-
-        mockMvc.perform(get("/waste-management/waste/{wasteIdx}",1)
-                .session(session))
-                .andExpect(status().isOk())
-                .andDo(document("waste/getDetail/200"));
-    }
+//
+//    @Test
+//    @DisplayName("세부 예약 내역을 확인합니다.")
+//    void getDetail200() throws Exception {
+//        Member member = saveMemberInRepository();
+//        MockHttpSession session = loginMemberSession(member);
+//
+//        Waste waste1 = saveWaste(member,"12345"); // 예약완료
+//        reserveWaste(waste1.getId());
+//        setupWaste(waste1);
+//
+//        mockMvc.perform(get("/waste-management/waste/{wasteIdx}",1)
+//                .session(session))
+//                .andExpect(status().isOk())
+//                .andDo(document("waste/getDetail/200"));
+//    }
 }

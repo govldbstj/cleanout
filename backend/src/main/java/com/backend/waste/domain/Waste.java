@@ -60,12 +60,11 @@ public class Waste {
         this.uniqueStr = unique;
     }
 
-    public static Waste createWaste(Member member, String unique) {
+    public static Waste createWaste(Member member) {
         return Waste.builder()
                 .member(member)
                 .localDateTime(LocalDateTime.now())
                 .isCollected(false)
-                .unique(unique)
                 .build();
     }
 

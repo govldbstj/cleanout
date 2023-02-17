@@ -109,22 +109,21 @@ public class ControllerTest {
         return (MockHttpSession) session;
     }
 
-    protected Waste saveWaste(Member member, String unique) throws IOException {
+    protected Waste saveWaste(Member member) throws IOException {
         List<MultipartFile> images = new ArrayList<>();
         images.add(new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes()));
         images.add(new MockMultipartFile("image2", "waste2.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage2>>".getBytes()));
         images.add(new MockMultipartFile("image3", "waste3.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage3>>".getBytes()));
-        return wasteService.createWaste(member.getId(), images, unique);
+        return wasteService.createWaste(member.getId(), images);
     }
 
-    protected void setupWaste(Waste waste) {
-        PatchWaste patchWaste = PatchWaste.builder()
-                .wasteName("냉장고-300L이상")
-                .price(6000)
-                .unique(waste.getUniqueStr())
-                .build();
-        wasteService.updateWaste(patchWaste);
-    }
+//    protected void setupWaste(Waste waste) {
+//        PatchWaste patchWaste = PatchWaste.builder()
+//                .wasteName("냉장고-300L이상")
+//                .price(6000)
+//                .build();
+//        wasteService.updateWaste(patchWaste);
+//    }
 
     protected Long reserveWaste(Long wasteIdx) {
         PostCollector postCollector = new PostCollector("수거자1","010-0000-0000");

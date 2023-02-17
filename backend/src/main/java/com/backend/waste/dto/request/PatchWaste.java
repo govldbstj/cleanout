@@ -6,13 +6,15 @@ import lombok.Getter;
 
 @Getter
 public class PatchWaste {
-    private String unique;
     private String wasteName;
     private int price;
 
+    public PatchWaste() {
+
+    }
+
     @Builder
-    public PatchWaste(String unique, String wasteName, int price) {
-        this.unique = unique;
+    public PatchWaste(String wasteName, int price) {
         this.wasteName = wasteName;
         this.price = price;
     }

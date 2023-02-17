@@ -11,21 +11,31 @@ import com.backend.waste.dto.response.GetWasteDetail;
 import com.backend.waste.exception.UniqueDuplicationException;
 import com.backend.waste.repository.ImageRepository;
 import com.backend.waste.repository.WasteRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.runtime.ObjectMethods;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 
@@ -42,45 +52,30 @@ public class WasteService {
     @Value("${spring.file.path}")
     private String uploadFolder;
 
-//    @Transactional
-//    public Waste postWasteImage(Long memberIdx, MultipartFile file) throws IOException {
-//        Member member = memberRepository.getById(memberIdx);
-//        UUID uuid = UUID.randomUUID();
-//        String imageFileName = uuid + "_" + file.getOriginalFilename();
-//
-//        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
-//        Files.write(imageFilePath, file.getBytes());
-//        Waste waste = Waste.createWaste(member, imageFileName);
-//        wasteRepository.save(waste);
-//        return waste;
-//    }
-
     @Transactional
-    public Waste createWaste(Long memberIdx, List<MultipartFile> images, String unique) throws IOException {
+    public Waste createWaste(Long memberIdx, List<MultipartFile> images) throws IOException {
         Member member = memberRepository.getById(memberIdx);
-        Waste waste = Waste.createWaste(member,unique);
-
-        if(wasteRepository.existsByUnique(unique)){
-            throw new UniqueDuplicationException();
-        }
+        Waste waste = Waste.createWaste(member);
 
         for (MultipartFile file : images) {
 //            UUID uuid = UUID.randomUUID();
 //            String imageFileName = uuid + "_" + file.getOriginalFilename();
             Path imageFilePath = Paths.get(uploadFolder + "/" + file.getOriginalFilename());
             Files.write(imageFilePath, file.getBytes());
-            WasteImage wasteImage = WasteImage.createImage(waste,file.getOriginalFilename());
+            WasteImage wasteImage = WasteImage.createImage(waste, file.getOriginalFilename());
             imageRepository.save(wasteImage);
         }
+        PatchWaste patchWaste = requestToML(images);
+        waste.update(patchWaste.getWasteName(),patchWaste.getPrice());
         wasteRepository.save(waste);
         return waste;
     }
 
-    @Transactional
-    public void updateWaste(PatchWaste patchWaste) {
-        Waste waste = wasteRepository.getByUnique(patchWaste.getUnique());
-        waste.update(patchWaste.getWasteName(), patchWaste.getPrice());
-    }
+//    @Transactional
+//    public void updateWaste(PatchWaste patchWaste) {
+//        Waste waste = wasteRepository.getByUnique(patchWaste.getUnique());
+//        waste.update(patchWaste.getWasteName(), patchWaste.getPrice());
+//    }
 
     @Transactional
     public List<GetWasteBrief> getWasteList(Long id) {
@@ -155,4 +150,49 @@ public class WasteService {
                 imageByteArrays
         );
     }
+
+    private List<String> getBase64String(List<MultipartFile> images) throws IOException {
+        List<String> imageStr = new ArrayList<>();
+        for (MultipartFile image : images) {
+            byte[] bytes = image.getBytes();
+            imageStr.add(Base64.getEncoder().encodeToString(bytes));
+        }
+        return imageStr;
+    }
+
+    @Transactional
+    public PatchWaste requestToML(List<MultipartFile> images) throws IOException {
+
+        String url = "http://localhost:8080/waste-management/ML";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        //인코딩용
+        HttpHeaders header1 = new HttpHeaders();
+        header1.setContentType(MediaType.APPLICATION_JSON);
+        MultiValueMap<String, String> bodyStr = new LinkedMultiValueMap<>();
+        List<String> imageFileString = getBase64String(images);
+        for (String image : imageFileString) {
+            bodyStr.add("image", image);
+        }
+
+        //파일용
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> bodyFile = new LinkedMultiValueMap<>();
+        for (MultipartFile image : images) {
+            bodyFile.add("image",image);
+        }
+
+        HttpEntity<?> requestMessage = new HttpEntity<>(bodyStr, header1);
+        System.out.println(requestMessage);
+        HttpEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
+        System.out.println(response);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+        PatchWaste patchWaste = objectMapper.readValue(response.getBody(), PatchWaste.class);
+        return patchWaste;
+    }
+
 }
