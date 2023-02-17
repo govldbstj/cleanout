@@ -2,12 +2,14 @@ package com.backend.member.domain;
 
 import com.backend.kakao.dto.KakaoSignup;
 import com.backend.member.dto.request.MemberSignup;
+import com.backend.util.BaseTimeEntity;
 import com.backend.waste.domain.Waste;
 import com.backend.member.dto.request.MemberUpdate;
 import com.backend.util.enumerated.SignupType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -22,7 +24,7 @@ import static org.apache.logging.log4j.util.Strings.EMPTY;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -56,10 +58,10 @@ public class Member {
         this.accessToken = accessToken;
     }
 
-    public static Member getFromMemberSignup(MemberSignup memberSignup) {
+    public static Member getFromMemberSignup(MemberSignup memberSignup, PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .email(memberSignup.getEmail())
-                .password(memberSignup.getPassword())
+                .password(passwordEncoder.encode(memberSignup.getPassword()))
                 .nickname(memberSignup.getNickname())
                 .address(memberSignup.getAddress())
                 .phoneNumber(memberSignup.getPhoneNumber())
@@ -71,18 +73,18 @@ public class Member {
     public static Member getFromKakaoSignup(KakaoSignup kakaoSignup) {
         return Member.builder()
                 .email(kakaoSignup.getEmail())
-                .password(EMPTY)
                 .nickname(kakaoSignup.getNickname())
+                .accessToken(kakaoSignup.getAccessToken())
+                .password(EMPTY)
                 .address(EMPTY)
                 .phoneNumber(EMPTY)
                 .signupType(SignupType.KAKAO)
-                .accessToken(kakaoSignup.getAccessToken())
                 .build();
     }
 
-    public void update(MemberUpdate memberUpdate) {
+    public void update(MemberUpdate memberUpdate, PasswordEncoder passwordEncoder) {
         this.email = memberUpdate.getEmail();
-        this.password = memberUpdate.getPassword();
+        this.password = passwordEncoder.encode(memberUpdate.getPassword());
         this.nickname = memberUpdate.getNickname();
         this.address = memberUpdate.getAddress();
         this.phoneNumber = memberUpdate.getPhoneNumber();

@@ -30,6 +30,7 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<MemberResponse> login(@RequestBody MemberLogin memberLogin,
                                                 HttpServletRequest httpServletRequest) {
+        memberService.validateMatch(memberLogin);
         MemberSession memberSession = memberService.getMemberSession(memberLogin);
         memberService.makeSessionForMemberSession(memberSession, httpServletRequest);
         MemberResponse memberResponse = MemberResponse.getFromMemberSession(memberSession);
@@ -46,6 +47,7 @@ public class MemberController {
     @PatchMapping("/member")
     public ResponseEntity<MemberResponse> update(@Login MemberSession memberSession,
                                                  @RequestBody MemberUpdate memberUpdate) {
+        memberService.validateDuplication(memberUpdate);
         Member member = memberService.update(memberSession, memberUpdate);
         MemberResponse memberResponse = MemberResponse.getFromMember(member);
         return ResponseEntity.ok(memberResponse);

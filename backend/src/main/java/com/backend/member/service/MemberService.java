@@ -1,20 +1,19 @@
 package com.backend.member.service;
 
-import com.backend.kakao.dto.KakaoLogin;
-import com.backend.kakao.dto.KakaoSignup;
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.dto.request.MemberSignup;
 import com.backend.member.dto.request.MemberUpdate;
 import com.backend.member.exception.MemberDuplicationException;
+import com.backend.member.exception.MemberNotMatchException;
 import com.backend.member.repository.MemberRepository;
 import com.backend.util.enumerated.SignupType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -30,9 +29,11 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public void signup(MemberSignup memberSignup) {
-        Member member = Member.getFromMemberSignup(memberSignup);
+        Member member = Member.getFromMemberSignup(memberSignup, passwordEncoder);
         memberRepository.save(member);
     }
 
@@ -44,10 +45,25 @@ public class MemberService {
         }
     }
 
+    public void validateDuplication(MemberUpdate memberUpdate) {
+        Optional<Member> byNickname = memberRepository.findByNickname(memberUpdate.getNickname());
+        Optional<Member> byEmail = memberRepository.findByEmail(memberUpdate.getEmail());
+        if (byNickname.isPresent() || byEmail.isPresent()) {
+            throw new MemberDuplicationException();
+        }
+    }
+
     public MemberSession getMemberSession(MemberLogin memberLogin) {
-        Member member = memberRepository.getByEmailAndPassword(memberLogin.getEmail(), memberLogin.getPassword());
+        Member member = memberRepository.getByEmail(memberLogin.getEmail());
         MemberSession memberSession = MemberSession.getFromMember(member);
         return memberSession;
+    }
+
+    public void validateMatch(MemberLogin memberLogin) {
+        Member member = memberRepository.getByEmail(memberLogin.getEmail());
+        if (!passwordEncoder.matches(memberLogin.getPassword(), member.getPassword())) {
+            throw new MemberNotMatchException();
+        }
     }
 
     public void makeSessionForMemberSession(MemberSession memberSession, HttpServletRequest httpServletRequest) {
@@ -57,7 +73,7 @@ public class MemberService {
     @Transactional
     public Member update(MemberSession memberSession, MemberUpdate memberUpdate) {
         Member member = memberRepository.getById(memberSession.getId());
-        member.update(memberUpdate);
+        member.update(memberUpdate, passwordEncoder);
         return member;
     }
 

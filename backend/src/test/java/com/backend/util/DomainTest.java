@@ -2,8 +2,12 @@ package com.backend.util;
 
 import com.backend.member.domain.Member;
 import com.backend.member.domain.MemberSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 public class DomainTest {
+
+    protected PasswordEncoder passwordEncoder = new SCryptPasswordEncoder();
 
     protected Member getMember() {
         Member member = Member.builder()

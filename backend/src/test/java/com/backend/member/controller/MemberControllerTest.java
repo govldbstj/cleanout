@@ -72,8 +72,8 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("member/signup/400",
                         requestFields(
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("nickname").description("존재하는 닉네임이거나"),
+                                fieldWithPath("email").description("존재하는 이메일이다"),
                                 fieldWithPath("password").description("비밀 번호"),
                                 fieldWithPath("address").description("주소"),
                                 fieldWithPath("phoneNumber").description("전화 번호")),
@@ -115,12 +115,13 @@ class MemberControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("가입되지 않은 회원이라면 로그인에 실패합니다")
+    @DisplayName("가입된 이메일이지만 비밀번호가 일치하지 않으면 예외가 발생합니다")
     void login400() throws Exception {
         // given
+        saveMemberInRepository();
         MemberLogin memberLogin = MemberLogin.builder()
                 .email("xxx@gmail.com")
-                .password("1234")
+                .password("3769392739")
                 .build();
 
         String memberLoginJson = objectMapper.writeValueAsString(memberLogin);
@@ -133,6 +134,32 @@ class MemberControllerTest extends ControllerTest {
                 .andDo(document("member/login/400",
                         requestFields(
                                 fieldWithPath("email").description("이메일"),
+                                fieldWithPath("password").description("일치하지 않는 비밀 번호")),
+                        responseFields(
+                                fieldWithPath("statusCode").description("에러 코드"),
+                                fieldWithPath("message").description("에러 메세지"))
+                ));
+    }
+
+    @Test
+    @DisplayName("가입된 이메일이 아니라면 예외가 발생합니다")
+    void login404() throws Exception {
+        // given
+        MemberLogin memberLogin = MemberLogin.builder()
+                .email("가입되지 않은 이메일@gmail.com")
+                .password("1234")
+                .build();
+
+        String memberLoginJson = objectMapper.writeValueAsString(memberLogin);
+
+        // expected
+        mockMvc.perform(post("/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(memberLoginJson))
+                .andExpect(status().isNotFound())
+                .andDo(document("member/login/404",
+                        requestFields(
+                                fieldWithPath("email").description("가입되지 않은 이메일"),
                                 fieldWithPath("password").description("비밀 번호")),
                         responseFields(
                                 fieldWithPath("statusCode").description("에러 코드"),
@@ -180,8 +207,44 @@ class MemberControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("로그인하지 않으면 회원정보 수정에 실패합니다")
+    @DisplayName("이미 존재하는 닉네임이나 이메일로 수정하실 수 없습니다")
     void update400() throws Exception {
+        // given
+        Member member = saveMemberInRepository();
+        MockHttpSession session = loginMemberSession(member);
+
+        MemberUpdate memberUpdate = MemberUpdate.builder()
+                .nickname("닉네임")
+                .email("xxx@gmail.com")
+                .password("update1234")
+                .address("경기도 서울시 강남구")
+                .phoneNumber("010-1234-5678")
+                .build();
+
+        String memberUpdateJson = objectMapper.writeValueAsString(memberUpdate);
+
+        // expected
+        mockMvc.perform(patch("/member")
+                        .session(session)
+                        .contentType(APPLICATION_JSON)
+                        .content(memberUpdateJson))
+                .andExpect(status().isBadRequest())
+                .andDo(document("member/update/400",
+                        requestFields(
+                                fieldWithPath("nickname").description("이미 존재하는 닉네임이거나"),
+                                fieldWithPath("email").description("이미 존재하는 이메일이다"),
+                                fieldWithPath("password").description("수정 비밀 번호"),
+                                fieldWithPath("address").description("수정 주소"),
+                                fieldWithPath("phoneNumber").description("수정 전화 번호")),
+                        responseFields(
+                                fieldWithPath("statusCode").description("에러 코드"),
+                                fieldWithPath("message").description("에러 메세지"))
+                ));
+    }
+
+    @Test
+    @DisplayName("로그인하지 않으면 회원정보 수정에 실패합니다")
+    void update401() throws Exception {
         // given
         Member member = saveMemberInRepository();
 

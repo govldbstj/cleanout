@@ -7,6 +7,8 @@ import com.backend.member.repository.MemberRepository;
 import com.backend.waste.repository.WasteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
 public class ServiceTest {
@@ -16,6 +18,7 @@ public class ServiceTest {
 
     @Autowired
     protected WasteRepository wasteRepository;
+    protected PasswordEncoder passwordEncoder;
 
     protected Member saveMemberInRepository() {
         Member member = Member.builder()
