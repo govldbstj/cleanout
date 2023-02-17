@@ -14,7 +14,7 @@ const getCode = (target: string) => {
 
 const Kakao = ({ navigation }) => {
 
-    const REST_API_KEY = ''
+    const REST_API_KEY = '39b1629ce319fa9f89c3b9f947d92255'
     const REDIRECT_URI = 'http://localhost:3000/auth/kakao/callback'
 
     const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;

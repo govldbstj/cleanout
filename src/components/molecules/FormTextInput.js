@@ -72,5 +72,5 @@ const FormInput = styled(TextInput)`
 `;
 
 const FormButton = styled(Button)`
-    margin-left: 10px;
+    margin: 0 0 0 10px;
 `;
