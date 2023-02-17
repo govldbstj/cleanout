@@ -121,20 +121,19 @@ public class WasteControllerTest extends ControllerTest {
                 .andDo(document("waste/get/200"
                 ));
     }
-//
-//    @Test
-//    @DisplayName("세부 예약 내역을 확인합니다.")
-//    void getDetail200() throws Exception {
-//        Member member = saveMemberInRepository();
-//        MockHttpSession session = loginMemberSession(member);
-//
-//        Waste waste1 = saveWaste(member,"12345"); // 예약완료
-//        reserveWaste(waste1.getId());
-//        setupWaste(waste1);
-//
-//        mockMvc.perform(get("/waste-management/waste/{wasteIdx}",1)
-//                .session(session))
-//                .andExpect(status().isOk())
-//                .andDo(document("waste/getDetail/200"));
-//    }
+
+    @Test
+    @DisplayName("세부 예약 내역을 확인합니다.")
+    void getDetail200() throws Exception {
+        Member member = saveMemberInRepository();
+        MockHttpSession session = loginMemberSession(member);
+
+        Waste waste1 = saveWaste(member); // 예약완료
+        reserveWaste(waste1.getId());
+
+        mockMvc.perform(get("/waste-management/waste/{wasteIdx}",1)
+                .session(session))
+                .andExpect(status().isOk())
+                .andDo(document("waste/getDetail/200"));
+    }
 }
