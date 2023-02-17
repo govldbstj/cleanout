@@ -10,13 +10,15 @@ public interface WasteRepository {
 
     Waste save(Waste waste);
 
-    Optional<Waste> findByImageName(String imageName);
-
     Optional<Waste> findById(Long wasteIdx);
-
-    Waste getByImageName(String imageName);
 
     List<Waste> getWasteList(Member member);
 
     Waste getById(Long wasteIdx);
+
+    Waste getByUnique(String unique);
+
+    long count();
+
+    boolean existsByUnique(String unique);
 }

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -29,8 +31,8 @@ public class Waste {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "img_name")
-    private String imageName;
+    @OneToMany(mappedBy = "waste")
+    private List<WasteImage> images = new ArrayList<>();
 
     private int price;
     @Column(name = "waste_name")
@@ -47,18 +49,20 @@ public class Waste {
     @JoinColumn(name = "collector_id")
     private Collector collector;
 
+    private String uniqueStr;
+
     @Builder
-    public Waste(Member member, String imgName, LocalDateTime localDateTime, boolean isCollected) {
+    public Waste(Member member, List<WasteImage> images, LocalDateTime localDateTime, boolean isCollected, String unique) {
         this.member = member;
-        this.imageName = imgName;
+        this.images = images;
         this.enrolledDate = localDateTime;
         this.isCollected = isCollected;
+        this.uniqueStr = unique;
     }
 
-    public static Waste getWasteFromPostImage(Member member, String imageName) {
+    public static Waste createWaste(Member member) {
         return Waste.builder()
                 .member(member)
-                .imgName(imageName)
                 .localDateTime(LocalDateTime.now())
                 .isCollected(false)
                 .build();
@@ -72,5 +76,11 @@ public class Waste {
     public void matchCollector(Collector collector, LocalDateTime date) {
         this.collector = collector;
         this.collectedDate = date;
+    }
+
+    public void collected(Collector collector) {
+        this.isCollected = true;
+        this.collectedDate = LocalDateTime.now();
+        this.collector = collector;
     }
 }

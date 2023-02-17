@@ -1,17 +1,26 @@
 package com.backend.util;
 
+import com.backend.collector.domain.Collector;
+import com.backend.collector.dto.request.PostCollector;
+import com.backend.collector.service.CollectorService;
 import com.backend.member.domain.Member;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.repository.MemberRepository;
 import com.backend.member.service.MemberService;
+import com.backend.waste.domain.Waste;
+import com.backend.waste.dto.request.PatchWaste;
+import com.backend.waste.repository.WasteRepository;
+import com.backend.waste.service.WasteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,8 +28,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -45,6 +59,13 @@ public class ControllerTest {
     protected MemberService memberService;
 
     @Autowired
+    protected WasteRepository wasteRepository;
+
+    @Autowired
+    protected WasteService wasteService;
+
+    @Autowired
+    protected CollectorService collectorService;
     protected PasswordEncoder passwordEncoder;
 
     @BeforeEach
@@ -88,6 +109,35 @@ public class ControllerTest {
                 .andReturn().getRequest();
 
         HttpSession session = request.getSession();
-        return (MockHttpSession)session;
+        return (MockHttpSession) session;
+    }
+
+    protected Waste saveWaste(Member member) throws IOException {
+        List<MultipartFile> images = new ArrayList<>();
+        images.add(new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes()));
+        images.add(new MockMultipartFile("image2", "waste2.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage2>>".getBytes()));
+        images.add(new MockMultipartFile("image3", "waste3.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage3>>".getBytes()));
+        return wasteService.createWaste(member.getId(), images);
+    }
+
+//    protected void setupWaste(Waste waste) {
+//        PatchWaste patchWaste = PatchWaste.builder()
+//                .wasteName("냉장고-300L이상")
+//                .price(6000)
+//                .build();
+//        wasteService.updateWaste(patchWaste);
+//    }
+
+    protected Long reserveWaste(Long wasteIdx) {
+        PostCollector postCollector = new PostCollector("수거자1","010-0000-0000");
+        Collector collector = collectorService.createCollector(postCollector);
+
+        collectorService.matchCollector(wasteIdx,collector.getId(),"2023-02-20 17:00:00");
+        return collector.getId();
+    }
+
+    protected void collectWaste(Long wasteIdx) {
+        Long collectorIdx = reserveWaste(wasteIdx);
+        collectorService.collectWaste(wasteIdx,collectorIdx);
     }
 }

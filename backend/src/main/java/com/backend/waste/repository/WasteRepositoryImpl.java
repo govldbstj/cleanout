@@ -19,27 +19,32 @@ public class WasteRepositoryImpl implements WasteRepository {
     public Waste save(Waste waste) { return wasteJpaRepository.save(waste); }
 
     @Override
-    public Optional<Waste> findByImageName(String imageName) {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<Waste> findById(Long wasteIdx) {
         return Optional.empty();
     }
 
     @Override
-    public Waste getByImageName(String imageName) {
-        return wasteJpaRepository.findByImageName(imageName).orElseThrow(WasteNotFoundException::new);
-    }
-
-    @Override
     public List<Waste> getWasteList(Member member) {
-        return wasteJpaRepository.findAllByMemberOrderByEnrolledDateDesc(member);
+        return wasteJpaRepository.findAllByMemberOrderByEnrolledDateDesc(member).orElseThrow(WasteNotFoundException::new);
     }
 
     @Override
     public Waste getById(Long wasteIdx) {
         return wasteJpaRepository.findById(wasteIdx).orElseThrow(WasteNotFoundException::new);
+    }
+
+    @Override
+    public Waste getByUnique(String unique) {
+        return wasteJpaRepository.findByUniqueStr(unique).orElseThrow(WasteNotFoundException::new);
+    }
+
+    @Override
+    public long count() {
+        return wasteJpaRepository.count();
+    }
+
+    @Override
+    public boolean existsByUnique(String unique) {
+        return wasteJpaRepository.existsByUniqueStr(unique);
     }
 }

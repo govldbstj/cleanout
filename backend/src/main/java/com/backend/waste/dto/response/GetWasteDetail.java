@@ -3,6 +3,8 @@ package com.backend.waste.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class GetWasteDetail {
     private String memberName;
@@ -10,14 +12,15 @@ public class GetWasteDetail {
     private String wasteName;
     private int price;
     private String status;
+    private List<byte[]> images;
 
     @Builder
-
-    public GetWasteDetail(String memberName, String address, String wasteName, int price, String status) {
+    public GetWasteDetail(String memberName, String address, String wasteName, int price, String status, List<byte[]> images) {
         this.memberName = memberName;
         this.address = address;
         this.wasteName = wasteName;
         this.price = price;
         this.status = status;
+        this.images = images;
     }
 }

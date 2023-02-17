@@ -20,11 +20,18 @@ public class CollectorController {
         return ResponseEntity.ok(collector.getId());
     }
 
-    @PostMapping("/{wasteIdx}/{collectorIdx}")
+    @PatchMapping("/reserve/{wasteIdx}/{collectorIdx}")
     public ResponseEntity<Void> matchCollector(@PathVariable("wasteIdx") Long wasteIdx,
                                                @PathVariable("collectorIdx") Long collectorIdx,
                                                @RequestBody MatchCollector matchCollector){
         collectorService.matchCollector(wasteIdx, collectorIdx, matchCollector.getAtTime());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/collect/{wasteIdx}/{collectorIdx}")
+    public ResponseEntity<Void> collectWaste(@PathVariable("wasteIdx") Long wasteIdx,
+                                             @PathVariable("collectorIdx") Long collectorIdx){
+        collectorService.collectWaste(wasteIdx,collectorIdx);
         return ResponseEntity.ok().build();
     }
 }

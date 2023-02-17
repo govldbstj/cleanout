@@ -39,15 +39,24 @@ Content-Type: application/json
 POST http://localhost:8080/logout
 
 
+
 ### 폐기물 이미지 업로드
 
-POST http://localhost:8080/waste-management/image
+POST http://localhost:8080/waste-management/image?unique=qweasdzxc
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="image"; filename="wasteImage1.png"
+Content-Disposition: form-data; name="image"; filename="wasteImage1.png";
 
-< C:\Users\Administrator\Pictures\mssp\waste\wasteImage1.PNG
+< C:\Users\Administrator\Pictures\mssp\waste\wasteImage1.png
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="wasteImage2.png";
+
+< C:\Users\Administrator\Pictures\mssp\waste\wasteImage2.png
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="wasteImage3.png";
+
+< C:\Users\Administrator\Pictures\mssp\waste\wasteImage3.png
 --WebAppBoundary--
 
 
@@ -57,7 +66,7 @@ PATCH http://localhost:8080/waste-management/waste
 Content-Type: application/json
 
 {
-  "imageName": "wasteImage1.png",
+  "unique": "qweasdzxc",
   "wasteName": "냉장고 - 300L이상",
   "price": 6000
 }
@@ -86,9 +95,14 @@ Content-Type: application/json
 
 ### 수거 예약
 
-POST http://localhost:8080/collector-management/1/1
+PATCH http://localhost:8080/collector-management/reserve/1/1
 Content-Type: application/json
 
 {
   "atTime" : "2023-02-20 19:54:21"
 }
+
+
+### 수거 완료
+
+PATCH  http://localhost:8080/collector-management/collect/1/1
