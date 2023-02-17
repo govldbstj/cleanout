@@ -4,10 +4,10 @@ spring:
       enabled: true
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:mississippi
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://db-mississippi.cn6qj3gf4bmy.ap-northeast-2.rds.amazonaws.com:3306/
+    username: mssp
+    password: mssp1234
 
   jpa:
     hibernate:
@@ -34,4 +34,4 @@ kakao:
       token: https://kauth.kakao.com/oauth/token
       userInfo: https://kapi.kakao.com/v2/user/me
   clientId : 39b1629ce319fa9f89c3b9f947d92255
-  redirectUri : http://localhost:8080/oauth
+  redirectUri : http://43.200.115.73:8080/oauth
