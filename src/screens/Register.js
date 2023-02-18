@@ -13,19 +13,13 @@ const StyledText = styled.Text`
     margin-bottom: 10px;
 `;
 
+// 이미지 선택이 안되는 버그 => IOS Simulator에서만 발생하는 문제로, 다른 기기로 테스트해주세요!
 const Register = ({ navigation }) => {
     const [name, setName] = useState('');
     const [info, setInfo] = useState('');
     const [images, setImages] = useState([]);
 
     const { address } = useContext(AddressContext);
-
-    const onSubmit = () => {
-        // 이름, 주소, 상세 주소 전송
-
-        // 이미지 전송
-
-    };
 
     return (
         <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
@@ -39,7 +33,7 @@ const Register = ({ navigation }) => {
             />
             <FormTextInput
                 label="주소"
-                placeholder="주소를 입력하세요."
+                placeholder="검색 버튼을 눌러 주소를 입력하세요."
                 disabled={true}
                 value={address}
                 buttonLabel="검색"
@@ -56,8 +50,9 @@ const Register = ({ navigation }) => {
             />
             <Button
                 title="이미지 넣기"
-                onPress={() => {
-                    setImages(getImageSelection());
+                onPress={async () => {
+                    const images = await getImageSelection();
+                    if (images !== null) setImages(images);
                 }}
             />
             <ScrollImageList sources={images} />
@@ -65,7 +60,7 @@ const Register = ({ navigation }) => {
             <Button
                 title="등록하기"
                 onPress={() => {
-                    onSubmit();
+                    submit(name, address, info, images);
                 }}
             />
         </ScrollView>
@@ -74,14 +69,14 @@ const Register = ({ navigation }) => {
 
 /**
  * 사용자에게 이미지 선택을 받는 함수
- * @returns {Promise<string[]>} 선택된 이미지의 uri 리스트
+ * @returns {Promise<string[]> | null} 선택된 이미지의 uri 리스트
  */
 async function getImageSelection() {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status !== 'granted') {
         alert('게시글을 업로드하려면 사진첩 권한이 필요합니다.');
-        return;
+        return null;
     }
 
     let imageData = await ImagePicker.launchImageLibraryAsync({
@@ -94,13 +89,90 @@ async function getImageSelection() {
     });
 
     if (imageData.cancelled) {
-        return;
+        return null;
     }
 
     console.log(imageData);
 
     const uriList = !!imageData.uri ? [imageData.uri] : imageData.selected.map((item) => item.uri);
     return uriList;
+}
+
+/**
+ * 사용자가 입력한 정보를 서버로 전송하는 함수
+ * @param {string} name 이름
+ * @param {string} address 주소
+ * @param {string} info 상세 주소
+ * @param {string[]} images 이미지 uri 리스트
+ */
+async function submit(name, address, info, images) {
+    // 사전 검증
+    if (name === '') {
+        alert('이름을 입력해주세요.');
+        return;
+    }
+    if (address === '') {
+        alert('주소를 입력해주세요.');
+        return;
+    }
+    if (info === '') {
+        alert('상세 주소를 입력해주세요.');
+        return;
+    }
+    if (images.length === 0) {
+        alert('이미지를 선택해주세요.');
+        return;
+    }
+
+    try {
+        // 이름, 주소, 상세 주소 전송
+        // const textRequestResult = await fetch('http:///43.200.115.73:8080/waste-management/waste', {
+        //     method: 'PATCH',
+        //     body: JSON.stringify({
+        //         name: name,
+        //         address: address,
+        //         info: info,
+        //     }),
+        // });
+        // if (!textRequestResult.ok)
+        //     throw new Error(`Text Request failed: ${textRequestResult.status} ${textRequestResult.statusText}``);
+
+        // 이미지 전송
+        let imageBody = new FormData();
+
+        for (const image of images) {
+            const imageName = image.split('/').pop();
+            const match = /\.(\w+)$/.exec(imageName ?? '');
+            const imageType = match ? `image/${match[1]}` : `image`;
+
+            imageBody.append(
+                'image',
+                {
+                    uri: image,
+                    name: 'image',
+                    type: imageType,
+                    filename: imageName,
+                },
+                imageName
+            );
+        }
+
+        const imageRequestResult = await fetch('http://43.200.115.73:8080/waste-management/image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            body: imageBody,
+        });
+
+        if (!imageRequestResult.ok)
+            throw new Error(`Image Request failed: ${imageRequestResult.status} ${imageRequestResult.statusText}`);
+
+        alert('등록에 성공하였습니다.');
+    } catch (e) {
+        console.log(`${e.name}: ${e.message}`);
+        alert('등록에 실패하였습니다.');
+    }
 }
 
 export default Register;
