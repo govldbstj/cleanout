@@ -9,7 +9,7 @@ import colors from '../../styles/colors';
  * @param {function} onPress 버튼 클릭 시 실행할 함수
  * @param {String} animationSource Lottie 애니메이션 파일 경로
  * @param {object?} animationRef Lottie 애니메이션 ref(기본: null)
- * @param {string?} animationHeight Lottie 애니메이션 높이(기본: 100px)
+ * @param {string?} animationHeight Lottie 애니메이션 높이(기본: 90px)
  * @param {string?} backgroundColor 버튼 배경색(기본: colors.secondary)
  * @param {string?} fontSize 버튼 글자 크기(기본: 17px)
  * @param {string?} align 버튼 내부 요소 정렬(기본: center)
@@ -22,7 +22,7 @@ export default AnimatingButton = (props) => {
         onPress,
         animationSource,
         animationRef = null,
-        animationHeight = '100px',
+        animationHeight = '90px',
         backgroundColor = colors.secondary,
         fontSize = '17px',
         align = 'center',
