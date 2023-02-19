@@ -14,9 +14,28 @@ const EmailRegister = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordRemind, setPasswordRemind] = useState('');
 
     const SetandSent = async () => {
         console.log('EmailRegister:', name, email, password);
+
+        if (name.length === 0) {
+            alert('이름을 입력해주세요.');
+            return;
+        }
+        if (email.length === 0) {
+            alert('이메일을 입력해주세요.');
+            return;
+        }
+        if (password.length < 8) {
+            alert('비밀번호를 8자 이상 입력해주세요.');
+            return;
+        }
+        if (password !== passwordRemind) {
+            alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+            return;
+        }
+        
 
         const result = await Api.post('signup', {
             body: {
@@ -56,18 +75,17 @@ const EmailRegister = ({ navigation }) => {
             />
             <FormTextInput
                 label="비밀번호"
-                placeholder="비밀번호를 입력하세요."
-                validator={(text) => text.length >= 8}
-                invalidateMessage="비밀번호는 8자 이상이어야 합니다."
+                placeholder="비밀번호를 8자 이상 입력하세요."
                 onTextChangeListener={(text) => {
                     setPassword(text);
                 }}
             />
             <FormTextInput
                 label="비밀번호 확인"
-                placeholder="비밀번호를 입력하세요."
-                validator={(text) => text === password}
-                invalidateMessage="비밀번호가 일치하지 않습니다."
+                placeholder="비밀번호를 똑같이 입력하세요."
+                onTextChangeListener={(text) => {
+                    setPasswordRemind(text);
+                }}
             />
             <Button title="회원 가입" onPress={() => SetandSent()} />
         </Container>

@@ -68,7 +68,7 @@ const Register = ({ navigation }) => {
                         images,
                         () => {
                             alert('등록에 성공하였습니다.');
-                            navigation.pop();
+                            navigation.popToTop();
                         },
                         () => {
                             alert('등록에 실패하였습니다. 다시 시도해주세요.');
@@ -125,16 +125,12 @@ async function getImageSelection() {
  */
 async function submit(name, address, info, images, onSuccess, onFailure) {
     // 사전 검증
-    if (name === '') {
+    if (name.length === 0) {
         alert('이름을 입력해주세요.');
         return;
     }
-    if (address === '') {
+    if (address.length === 0) {
         alert('주소를 입력해주세요.');
-        return;
-    }
-    if (info === '') {
-        alert('상세 주소를 입력해주세요.');
         return;
     }
     if (images.length === 0) {
