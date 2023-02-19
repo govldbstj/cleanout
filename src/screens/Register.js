@@ -7,6 +7,7 @@ import Notice from '../components/atoms/Notice';
 import { ScrollView } from 'react-native';
 import AddressContext, { AddressConsumer } from '../context/Address';
 import * as ImagePicker from 'expo-image-picker';
+import * as Api from '../controllers/ApiController';
 
 const StyledText = styled.Text`
     font-size: 30px;
@@ -60,7 +61,22 @@ const Register = ({ navigation }) => {
             <Button
                 title="등록하기"
                 onPress={() => {
-                    submit(name, address, info, images);
+                    submit(
+                        name,
+                        address,
+                        info,
+                        images,
+                        () => {
+                            alert('등록에 성공하였습니다.');
+                            navigation.pop();
+                        },
+                        () => {
+                            alert('등록에 실패하였습니다. 다시 시도해주세요.');
+                            setName('');
+                            setInfo('');
+                            setImages([]);
+                        }
+                    );
                 }}
             />
         </ScrollView>
@@ -104,8 +120,10 @@ async function getImageSelection() {
  * @param {string} address 주소
  * @param {string} info 상세 주소
  * @param {string[]} images 이미지 uri 리스트
+ * @param {function} onSuccess 성공 시 실행할 함수
+ * @param {function} onFailure 실패 시 실행할 함수
  */
-async function submit(name, address, info, images) {
+async function submit(name, address, info, images, onSuccess, onFailure) {
     // 사전 검증
     if (name === '') {
         alert('이름을 입력해주세요.');
@@ -126,16 +144,18 @@ async function submit(name, address, info, images) {
 
     try {
         // 이름, 주소, 상세 주소 전송
-        // const textRequestResult = await fetch('http:///43.200.115.73:8080/waste-management/waste', {
-        //     method: 'PATCH',
-        //     body: JSON.stringify({
-        //         name: name,
-        //         address: address,
-        //         info: info,
-        //     }),
-        // });
-        // if (!textRequestResult.ok)
-        //     throw new Error(`Text Request failed: ${textRequestResult.status} ${textRequestResult.statusText}``);
+        const textRequestResult = await Api.patch('waste', {
+            body: {
+                name: name,
+                address: address,
+                info: info,
+            },
+        });
+
+        if (textRequestResult.isFailure())
+            throw new Error(
+                `Text Request failed: ${textRequestResult.tryGetErrorCode()} ${textRequestResult.tryGetErrorMessage()}`
+            );
 
         // 이미지 전송
         let imageBody = new FormData();
@@ -157,21 +177,19 @@ async function submit(name, address, info, images) {
             );
         }
 
-        const imageRequestResult = await fetch('http://43.200.115.73:8080/waste-management/image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+        const imageRequestResult = await Api.postImage('image', {
             body: imageBody,
         });
 
-        if (!imageRequestResult.ok)
-            throw new Error(`Image Request failed: ${imageRequestResult.status} ${imageRequestResult.statusText}`);
+        if (imageRequestResult.isFailure())
+            throw new Error(
+                `Image Request failed: ${imageRequestResult.tryGetErrorCode()} ${imageRequestResult.tryGetErrorMessage()}`
+            );
 
-        alert('등록에 성공하였습니다.');
+        onSuccess();
     } catch (e) {
-        console.log(`${e.name}: ${e.message}`);
-        alert('등록에 실패하였습니다.');
+        console.log(`RegisterError ${e.name}: ${e.message}`);
+        onFailure();
     }
 }
 

@@ -1,11 +1,8 @@
 import React from 'react';
 import { WebView } from 'react-native-webview';
 import {View} from 'react-native';
-import testbutton from '../../login/LoginTest.js'
-import qs from 'qs';
-import axios from 'axios';
 
-const getCode = (target: string) => {
+const getCode = (target) => {
     const exp = 'code=';
     const condition = target.indexOf(exp);
     if (condition !== -1) {
@@ -14,19 +11,6 @@ const getCode = (target: string) => {
       //requestToken(requestCode);
     }
   };
-
-/*const requestToken = async (code: string,) => {
-
-  useEffect(() => {
-    fetch(`http://43.200.115.73:8080/oauth?code=${code}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;",
-      },
-    });
-  }, []);
-
-};*/
 
 const Kakao = ({ navigation }) => {
 

@@ -27,7 +27,7 @@ export default TextInput = (props) => {
         onTextChangeListener = (_) => {},
         ...others
     } = props;
-    const [validate, setValidate] = React.useState(null);
+    const [validate, setValidate] = React.useState(validator(''));
 
     const onTextChange = (text) => {
         onTextChangeListener(text);

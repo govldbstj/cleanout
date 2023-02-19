@@ -39,7 +39,7 @@ const Login = ({ navigation }) => {
             />
             <TextButtonContainer>
                 <TextButton title="회원가입" onPress={() => navigation.navigate('EmailRegister')} />
-                <TextButton title="ID, PW 찾기" onPress={() => console.log('ID, PW 찾기 기능 필요')} />
+                <TextButton title="ID, PW 찾기" onPress={() => alert('준비 중인 기능입니다.')} />
             </TextButtonContainer>
         </Container>
     );
