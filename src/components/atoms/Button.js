@@ -1,10 +1,9 @@
 import React from 'react';
 import colors from '../../styles/colors';
 import styled from 'styled-components/native';
-import {StyleSheet, View, SafeAreaView} from 'react-native';
 
 import { Image } from 'react-native';
-import kakaoimg from '../../images/kakao_login_medium_narrow.png';
+import kakaoimg from '../../../assets/kakao_login_medium_narrow.png';
 
 /**
  * 기본 버튼 atom

@@ -5,4 +5,4 @@ export default colors = {
     alert: '#FF0000',
     success: '#009900',
     border: '#333333',
-}
+};

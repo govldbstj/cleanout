@@ -15,8 +15,8 @@ export default StatusRow = (props) => {
         <Container color={isHeader ? colors.primary : colors.secondary} {...others}>
             {data.map((text, index) => (
                 <>
-                    {!!index && <Divider />}
-                    <TextLabel key={index} fontWeight={isHeader ? 'bold' : 'normal'}>{text}</TextLabel>
+                    {!!index && <Divider key={`divider${index}`} />}
+                    <TextLabel key={`label${index}`} fontWeight={isHeader ? 'bold' : 'normal'}>{text}</TextLabel>
                 </>
             ))}
         </Container>
