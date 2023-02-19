@@ -58,7 +58,10 @@ const Main = ({ navigation }) => {
                         title="나의 예약 현황"
                         animationSource={clockAnimation}
                         animationRef={clockAnim}
+                        animationHeight="70px"
                         align="flex-start"
+                        textAlign="left"
+                        gap="20px"
                         onPress={() => navigation.navigate('Reservation')}
                     />
                     <ButtonDivider />
@@ -67,7 +70,7 @@ const Main = ({ navigation }) => {
                         animationSource={trashAnimation}
                         animationRef={trashAnim}
                         align="flex-end"
-                        gap="5px"
+                        textAlign="right"
                         onPress={() => navigation.navigate('Register')}
                     />
                 </Row>

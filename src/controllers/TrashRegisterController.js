@@ -16,7 +16,7 @@ export async function registerWaste(name, address, addressInfo) {
         return Result.failure(invalidateErrorCode, '주소를 입력해주세요.');
     }
 
-    return await Api.patch('waste', {
+    return await Api.patch('waste-management/waste', {
         body: {
             name: name,
             address: `${address} ${addressInfo}`,
@@ -49,7 +49,7 @@ export async function uploadWasteImage(images) {
         );
     }
 
-    return await Api.postImage('image', {
+    return await Api.postImage('waste-management/image', {
         body: imageBody,
     });
 }
