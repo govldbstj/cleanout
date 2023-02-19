@@ -3,11 +3,8 @@ import styled from 'styled-components/native';
 import StatusRow from '../components/molecules/StatusRow';
 
 const Container = styled.View`
+    margin-top: 10px;
     align-items: center;
-`;
-const StyledText = styled.Text`
-    font-size: 30px;
-    margin-bottom: 10px;
 `;
 
 //예약 목록
@@ -20,7 +17,6 @@ const Reservation = ({ navigation }) => {
 
     return (
         <Container>
-            <StyledText>reservation page</StyledText>
             <StatusRow data={header} isHeader={true} />
             {data.map((data, index) => (
                 <StatusRow key={index} data={data} />

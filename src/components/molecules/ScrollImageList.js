@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
+import colors from '../../styles/colors';
 
 /**
  * 좌우 스크롤 가능한 이미지 리스트를 보여주는 컴포넌트
@@ -20,7 +21,7 @@ export default ScrollImageList = (props) => {
         ...others
     } = props;
 
-    return (
+    return sources.length > 0 ? (
         <ScrollView contentContainerStyle={{ padding: containerPadding }} horizontal={true} {...others}>
             {sources.map((source, index) => (
                 <ImageContainer key={index} width={imageSpaceWidth}>
@@ -28,6 +29,10 @@ export default ScrollImageList = (props) => {
                 </ImageContainer>
             ))}
         </ScrollView>
+    ) : (
+        <PlaceHolder height={height} marginVertical={containerPadding}>
+            <PlaceHolderText>여기에 불러온 이미지가 표시됩니다.</PlaceHolderText>
+        </PlaceHolder>
     );
 };
 
@@ -41,4 +46,18 @@ const ImageContainer = styled.View`
     width: ${(props) => props.width};
     justify-content: center;
     align-items: center;
+`;
+
+const PlaceHolder = styled.View`
+    width: 100%;
+    height: ${(props) => props.height};
+    background-color: ${colors.placeholder};
+    margin: ${(props) => props.marginVertical} 0;
+    align-items: center;
+    justify-content: center;
+`;
+
+const PlaceHolderText = styled.Text`
+    color: ${colors.disabled};
+    font-size: 13px;
 `;

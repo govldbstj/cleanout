@@ -9,9 +9,14 @@ import AddressContext, { AddressConsumer } from '../context/Address';
 import * as ImagePicker from 'expo-image-picker';
 import * as Api from '../controllers/ApiController';
 
-const StyledText = styled.Text`
-    font-size: 30px;
-    margin-bottom: 10px;
+const AlignRightContainer = styled.View`
+    width: 90%;
+    align-items: flex-end;
+    margin: 20px 0;
+`;
+
+const Spacer = styled.View`
+    height: 50px;
 `;
 
 // 이미지 선택이 안되는 버그 => IOS Simulator에서만 발생하는 문제로, 다른 기기로 테스트해주세요!
@@ -23,8 +28,7 @@ const Register = ({ navigation }) => {
     const { address } = useContext(AddressContext);
 
     return (
-        <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
-            <StyledText>register page</StyledText>
+        <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: '5%' }}>
             <FormTextInput
                 label="이름"
                 placeholder="이름을 입력하세요."
@@ -49,14 +53,16 @@ const Register = ({ navigation }) => {
                     setInfo(text);
                 }}
             />
-            <Button
-                title="이미지 넣기"
-                onPress={async () => {
-                    const images = await getImageSelection();
-                    if (images !== null) setImages(images);
-                }}
-            />
-            <ScrollImageList sources={images} />
+            <AlignRightContainer>
+                <Button
+                    title="📩 이미지 불러오기"
+                    onPress={async () => {
+                        const images = await getImageSelection();
+                        if (images !== null) setImages(images);
+                    }}
+                />
+                <ScrollImageList sources={images} />
+            </AlignRightContainer>
             <Notice />
             <Button
                 title="등록하기"
@@ -79,6 +85,7 @@ const Register = ({ navigation }) => {
                     );
                 }}
             />
+            <Spacer />
         </ScrollView>
     );
 };
