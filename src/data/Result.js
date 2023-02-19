@@ -54,6 +54,14 @@ class Result {
     }
 
     /**
+     * 앱 내부에서 발생한 에러인지 확인
+     * @returns {boolean} 인 앱 에러 여부
+     */
+    isInAppFailure() {
+        return this.errorCode === invalidateErrorCode;
+    }
+
+    /**
      * API 전송 결과 가져오기
      * @returns {any | undefined} API 전송 결과 (전송 실패 시 undefined)
      */
@@ -86,5 +94,7 @@ class Result {
         return undefined;
     }
 }
+
+export const invalidateErrorCode = 0;
 
 export default Result;

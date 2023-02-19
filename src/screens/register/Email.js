@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import FormTextInput from '../../components/molecules/FormTextInput';
 import Button from '../../components/atoms/Button';
-import * as Api from '../../controllers/ApiController';
+import { emailSignIn } from '../../controllers/LoginController';
 
 const Container = styled.View`
     flex: 1;
@@ -17,26 +17,16 @@ const Email = ({ navigation }) => {
     const SetandSent = async () => {
         console.log('Email:', email, password);
 
-        if (email.length === 0) {
-            alert('이메일을 입력해주세요.');
-            return;
-        }
-        if (password.length < 8) {
-            alert('비밀번호를 8자 이상 입력해주세요.');
-            return;
-        }
-
-        const result = await Api.post('login', {
-            body: {
-                email: email,
-                password: password,
-            },
-        });
+        const result = await emailSignIn(email, password);
 
         if (result.isSuccess()) {
             alert('로그인에 성공하였습니다.');
             navigation.popToTop();
         } else {
+            if (result.isInAppFailure()) {
+                alert(result.tryGetErrorMessage());
+                return;
+            }
             alert('로그인에 실패하였습니다. 다시 시도해주세요.');
             console.log('EmailError', result.tryGetErrorCode(), result.tryGetErrorMessage());
         }

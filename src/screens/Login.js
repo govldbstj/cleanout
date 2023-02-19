@@ -1,6 +1,5 @@
 import React from 'react';
 import TextButton from '../components/atoms/TextButton';
-import Button from '../components/atoms/Button';
 import ImageButton from '../components/atoms/ImageButton';
 import styled from 'styled-components/native';
 import kakaoLoginImage from '../../assets/kakao.png';

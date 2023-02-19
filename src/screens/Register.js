@@ -7,7 +7,7 @@ import Notice from '../components/atoms/Notice';
 import { ScrollView } from 'react-native';
 import AddressContext, { AddressConsumer } from '../context/Address';
 import * as ImagePicker from 'expo-image-picker';
-import * as Api from '../controllers/ApiController';
+import { registerWaste, uploadWasteImage } from '../controllers/TrashRegisterController';
 
 const AlignRightContainer = styled.View`
     width: 90%;
@@ -67,22 +67,9 @@ const Register = ({ navigation }) => {
             <Button
                 title="등록하기"
                 onPress={() => {
-                    submit(
-                        name,
-                        address,
-                        info,
-                        images,
-                        () => {
-                            alert('등록에 성공하였습니다.');
-                            navigation.popToTop();
-                        },
-                        () => {
-                            alert('등록에 실패하였습니다. 다시 시도해주세요.');
-                            setName('');
-                            setInfo('');
-                            setImages([]);
-                        }
-                    );
+                    submit(name, address, info, images, () => {
+                        navigation.popToTop();
+                    });
                 }}
             />
             <Spacer />
@@ -128,71 +115,48 @@ async function getImageSelection() {
  * @param {string} info 상세 주소
  * @param {string[]} images 이미지 uri 리스트
  * @param {function} onSuccess 성공 시 실행할 함수
- * @param {function} onFailure 실패 시 실행할 함수
  */
-async function submit(name, address, info, images, onSuccess, onFailure) {
-    // 사전 검증
-    if (name.length === 0) {
-        alert('이름을 입력해주세요.');
-        return;
-    }
-    if (address.length === 0) {
-        alert('주소를 입력해주세요.');
-        return;
-    }
-    if (images.length === 0) {
-        alert('이미지를 선택해주세요.');
-        return;
-    }
+async function submit(name, address, info, images, onSuccess) {
+    /* 아마도 최종 코드?
+    const result = await registerWaste(name, address, info);
 
-    try {
-        // 이름, 주소, 상세 주소 전송
-        const textRequestResult = await Api.patch('waste', {
-            body: {
-                name: name,
-                address: address,
-                info: info,
-            },
-        });
+    if (result.isSuccess()) {
+        const imageResult = await uploadWasteImage(images);
 
-        if (textRequestResult.isFailure())
-            throw new Error(
-                `Text Request failed: ${textRequestResult.tryGetErrorCode()} ${textRequestResult.tryGetErrorMessage()}`
-            );
-
-        // 이미지 전송
-        let imageBody = new FormData();
-
-        for (const image of images) {
-            const imageName = image.split('/').pop();
-            const match = /\.(\w+)$/.exec(imageName ?? '');
-            const imageType = match ? `image/${match[1]}` : `image`;
-
-            imageBody.append(
-                'image',
-                {
-                    uri: image,
-                    name: 'image',
-                    type: imageType,
-                    filename: imageName,
-                },
-                imageName
-            );
+        if (imageResult.isSuccess()) {
+            alert('등록에 성공하였습니다.');
+            onSuccess();
+        } else {
+            if (imageResult.isInAppFailure()) {
+                alert(imageResult.tryGetErrorMessage());
+                return;
+            }
+            alert('등록에 실패하였습니다. 다시 시도해주세요.');
+            console.log('RegisterImageError', imageResult.tryGetErrorCode(), imageResult.tryGetErrorMessage());
         }
+    } else {
+        if (result.isInAppFailure()) {
+            alert(result.tryGetErrorMessage());
+            return;
+        }
+        alert('등록에 실패하였습니다. 다시 시도해주세요.');
+        console.log('RegisterError', result.tryGetErrorCode(), result.tryGetErrorMessage());
+    }
+    */
 
-        const imageRequestResult = await Api.postImage('image', {
-            body: imageBody,
-        });
+    // 이미지만 전송하는 코드
+    const imageResult = await uploadWasteImage(images);
 
-        if (imageRequestResult.isFailure())
-            throw new Error(
-                `Image Request failed: ${imageRequestResult.tryGetErrorCode()} ${imageRequestResult.tryGetErrorMessage()}`
-            );
-
+    if (imageResult.isSuccess()) {
+        alert('등록에 성공하였습니다.');
         onSuccess();
-    } catch (e) {
-        console.log(`RegisterError ${e.name}: ${e.message}`);
-        onFailure();
+    } else {
+        if (imageResult.isInAppFailure()) {
+            alert(imageResult.tryGetErrorMessage());
+            return;
+        }
+        alert('등록에 실패하였습니다. 다시 시도해주세요.');
+        console.log('RegisterImageError', imageResult.tryGetErrorCode(), imageResult.tryGetErrorMessage());
     }
 }
 

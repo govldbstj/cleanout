@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import FormTextInput from '../../components/molecules/FormTextInput';
 import Button from '../../components/atoms/Button';
-import * as Api from '../../controllers/ApiController';
+import { emailSignUp } from '../../controllers/LoginController';
 
 const Container = styled.View`
     flex: 1;
@@ -19,41 +19,18 @@ const EmailRegister = ({ navigation }) => {
     const SetandSent = async () => {
         console.log('EmailRegister:', name, email, password);
 
-        if (name.length === 0) {
-            alert('이름을 입력해주세요.');
-            return;
-        }
-        if (email.length === 0) {
-            alert('이메일을 입력해주세요.');
-            return;
-        }
-        if (password.length < 8) {
-            alert('비밀번호를 8자 이상 입력해주세요.');
-            return;
-        }
-        if (password !== passwordRemind) {
-            alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-            return;
-        }
-        
-
-        const result = await Api.post('signup', {
-            body: {
-                nickname: name,
-                email: email,
-                password: password,
-            },
-        });
+        const result = await emailSignUp(name, email, password, passwordRemind);
 
         if (result.isSuccess()) {
             alert('가입에 성공하였습니다.');
             navigation.pop();
         } else {
+            if (result.isInAppFailure()) {
+                alert(result.tryGetErrorMessage());
+                return;
+            }
             alert('가입에 실패하였습니다. 다시 시도해주세요.');
             console.log('EmailRegisterError', result.tryGetErrorCode(), result.tryGetErrorMessage());
-            setName('');
-            setEmail('');
-            setPassword('');
         }
     };
 
@@ -76,6 +53,7 @@ const EmailRegister = ({ navigation }) => {
             <FormTextInput
                 label="비밀번호"
                 placeholder="비밀번호를 8자 이상 입력하세요."
+                isPassword={true}
                 onTextChangeListener={(text) => {
                     setPassword(text);
                 }}
@@ -83,6 +61,7 @@ const EmailRegister = ({ navigation }) => {
             <FormTextInput
                 label="비밀번호 확인"
                 placeholder="비밀번호를 똑같이 입력하세요."
+                isPassword={true}
                 onTextChangeListener={(text) => {
                     setPasswordRemind(text);
                 }}
