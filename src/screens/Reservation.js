@@ -21,7 +21,7 @@ const Reservation = ({ navigation }) => {
     return (
         <Container>
             <StyledText>reservation page</StyledText>
-            <StatusRow data={header} isHeader={true}/>
+            <StatusRow data={header} isHeader={true} />
             {data.map((data, index) => (
                 <StatusRow key={index} data={data} />
             ))}
