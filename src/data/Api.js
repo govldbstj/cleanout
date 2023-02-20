@@ -55,7 +55,7 @@ export async function postImage(path, { headers, body } = defaultValue) {
  * @param {string} path 요청 경로 (URL 뒷부분)
  * @param {object?} headers 요청 헤더
  * @param {object?} body 요청 바디
- * @returns
+ * @returns {Promise<Result>} 요청 결과
  */
 export async function sendApi(method, path, { headers, body } = defaultApiValue) {
     try {
