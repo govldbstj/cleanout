@@ -151,7 +151,7 @@ public class WasteService {
     @Transactional
     public PatchWaste requestToML(MultipartFile image) throws IOException {
 
-        String url = "http://localhost:8080/waste-management/ML";
+        String url = "http://3.35.179.83";
 
         RestTemplate restTemplate = new RestTemplate();
 
