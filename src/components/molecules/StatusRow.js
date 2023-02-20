@@ -2,6 +2,7 @@ import React from 'react';
 import colors from '../../styles/colors';
 import styled from 'styled-components/native';
 import Label from '../atoms/Label';
+import { Fragment } from 'react';
 
 /**
  * 여러개의 라벨을 가로로 나열하는 컴포넌트
@@ -13,11 +14,13 @@ export default StatusRow = (props) => {
 
     return (
         <Container color={isHeader ? colors.primary : colors.secondary} {...others}>
-            {data.map((text, index) => (
-                <>
-                    {!!index && <Divider />}
-                    <TextLabel fontWeight={isHeader ? 'bold' : 'normal'}>{text}</TextLabel>
-                </>
+            {data.map((text, childIndex) => (
+                <Fragment key={childIndex}>
+                    {!!childIndex && <Divider />}
+                    <TextLabel fontWeight={isHeader ? 'bold' : 'normal'} numberOfLines={1}>
+                        {text}
+                    </TextLabel>
+                </Fragment>
             ))}
         </Container>
     );
@@ -25,7 +28,7 @@ export default StatusRow = (props) => {
 
 const Container = styled.View`
     width: 90%;
-    padding: 10px 0;
+    padding: 13px 0;
     background-color: ${(props) => props.color};
     border-radius: 10px;
     margin: 5px 0;
@@ -43,4 +46,5 @@ const TextLabel = styled(Label)`
     flex: 1;
     font-weight: ${(props) => props.fontWeight};
     text-align: center;
+    font-size: 12px;
 `;

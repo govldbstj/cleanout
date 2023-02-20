@@ -7,20 +7,45 @@ import Reservation from '../screens/Reservation';
 import Kakao from '../screens/register/Kakao';
 import Email from '../screens/register/Email';
 import EmailRegister from '../screens/register/EmailRegister';
+import Address from '../screens/Address';
+import ReservationDetail from '../screens/ReservationDetail';
+import LoadingContext from '../context/Loading';
+import styled from 'styled-components/native';
+import { ActivityIndicator } from 'react-native';
 
 const Stack = createStackNavigator();
 
+const LoadingContainer = styled.View`
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+`;
+
 const StackNavigation = () => {
+    const { isLoading } = React.useContext(LoadingContext);
+
     return (
-        <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Main" component={Main} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="Reservation" component={Reservation} />
-            <Stack.Screen name="Kakao" component={Kakao} />
-            <Stack.Screen name="Email" component={Email} />
-            <Stack.Screen name="EmailRegister" component={EmailRegister} />
-        </Stack.Navigator>
+        <>
+            <Stack.Navigator initialRouteName="Home" screenOptions={{ headerBackTitleVisible: false }}>
+                <Stack.Screen name="Main" component={Main} options={{ title: '(서비스 이름)' }} />
+                <Stack.Screen name="Login" component={Login} options={{ title: '로그인' }} />
+                <Stack.Screen name="Register" component={Register} options={{ title: '쓰레기 등록' }} />
+                <Stack.Screen name="Reservation" component={Reservation} options={{ title: '예약 현황' }} />
+                <Stack.Screen name="Kakao" component={Kakao} options={{ title: '카카오 로그인' }} />
+                <Stack.Screen name="Email" component={Email} options={{ title: '이메일 로그인' }} />
+                <Stack.Screen name="EmailRegister" component={EmailRegister} options={{ title: '회원 가입' }} />
+                <Stack.Screen name="Address" component={Address} options={{ title: '주소' }} />
+                <Stack.Screen name="ReservationDetail" component={ReservationDetail} options={{ title: '예약 정보' }} />
+            </Stack.Navigator>
+            {isLoading && (
+                <LoadingContainer>
+                    <ActivityIndicator size="large" color={colors.primary}></ActivityIndicator>
+                </LoadingContainer>
+            )}
+        </>
     );
 };
 
