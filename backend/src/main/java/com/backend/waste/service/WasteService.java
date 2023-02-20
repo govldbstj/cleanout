@@ -38,6 +38,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 
 
 @Transactional(readOnly = true)
@@ -133,12 +134,17 @@ public class WasteService {
         imageByteArray = imageStream.readAllBytes();
         imageStream.close();
 
+        String imageName = waste.getImages().get(0).getImageName();
+
+        String fileExtension = imageName.substring(imageName.lastIndexOf(".") + 1).toUpperCase(Locale.ROOT);
+
         return new GetWasteDetail(
                 member.getNickname(),
                 member.getAddress(),
                 waste.getName(),
                 waste.getPrice(),
                 getTimeGap(waste),
+                fileExtension,
                 imageByteArray
         );
     }
@@ -151,26 +157,28 @@ public class WasteService {
     @Transactional
     public PatchWaste requestToML(MultipartFile image) throws IOException {
 
-        String url = "http://3.35.179.83/8080";
+        String url = "http://localhost:8080/waste-management/ML";
 
         RestTemplate restTemplate = new RestTemplate();
 
         //인코딩용
         HttpHeaders header1 = new HttpHeaders();
         header1.setContentType(MediaType.APPLICATION_JSON);
-        MultiValueMap<String, String> bodyStr = new LinkedMultiValueMap<>();
+        MultiValueMap<String, Object> bodyStr = new LinkedMultiValueMap<>();
         String imageFileString = getBase64String(image);
+        String fileExtension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf(".") + 1);
+        bodyStr.add("imageType", fileExtension.toUpperCase(Locale.ROOT));
         bodyStr.add("image", imageFileString);
 
+        System.out.println(bodyStr);
+
         //파일용
-        HttpHeaders header2 = new HttpHeaders();
-        header2.setContentType(MediaType.MULTIPART_FORM_DATA);
-        MultiValueMap<String, Object> bodyFile = new LinkedMultiValueMap<>();
-        bodyFile.add("image", new ByteArrayResource(image.getBytes()));
+//        HttpHeaders header2 = new HttpHeaders();
+//        header2.setContentType(MediaType.MULTIPART_FORM_DATA);
+//        MultiValueMap<String, Object> bodyFile = new LinkedMultiValueMap<>();
+//        bodyFile.add("image", new ByteArrayResource(image.getBytes()));
 
         HttpEntity<?> requestMessage = new HttpEntity<>(bodyStr, header1);
-        System.out.println(imageFileString);
-        System.out.println(requestMessage);
         HttpEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
