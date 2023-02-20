@@ -5,6 +5,7 @@ import com.backend.member.domain.MemberSession;
 import com.backend.member.dto.request.MemberLogin;
 import com.backend.member.dto.request.MemberSignup;
 import com.backend.member.dto.request.MemberUpdate;
+import com.backend.member.dto.response.MemberGet;
 import com.backend.member.dto.response.MemberResponse;
 import com.backend.member.service.MemberService;
 import com.backend.util.annotation.Login;
@@ -25,6 +26,13 @@ public class MemberController {
         memberService.validateDuplication(memberSignup);
         memberService.signup(memberSignup);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/member")
+    public MemberGet get(@Login MemberSession memberSession) {
+        Member member = memberService.getMember(memberSession);
+        MemberGet memberGet = MemberGet.getFromMember(member);
+        return memberGet;
     }
 
     @PostMapping("/login")

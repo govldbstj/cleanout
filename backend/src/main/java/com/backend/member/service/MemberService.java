@@ -37,6 +37,11 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    public Member getMember(MemberSession memberSession) {
+        Member member = memberRepository.getById(memberSession.getId());
+        return member;
+    }
+
     public void validateDuplication(MemberSignup memberSignup) {
         Optional<Member> byNickname = memberRepository.findByNickname(memberSignup.getNickname());
         Optional<Member> byEmail = memberRepository.findByEmail(memberSignup.getEmail());
