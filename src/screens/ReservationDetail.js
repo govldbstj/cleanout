@@ -40,10 +40,8 @@ const ReservationDetail = ({ navigation, route }) => {
         setIsLoading(true);
         getReservation(id).then((result) => {
             if (result.isSuccess()) {
-                const trashData = result.tryGetValue();
-                setTrashData({
-                    ...trashData[0],
-                });
+                const data = result.tryGetValue();
+                setTrashData(data);
             } else {
                 alert('예약 정보를 불러오는데 실패했습니다.');
                 navigation.popToTop();

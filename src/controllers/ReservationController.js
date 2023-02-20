@@ -25,7 +25,7 @@ export async function getReservation(id) {
             name: data.memberName,
             address: data.address,
             wasteName: data.wasteName,
-            price: data.price,
+            price: `${data.price}원`,
             status: data.status,
             // image: `data:image/${imageType};base64,${data.images}`,
         });
