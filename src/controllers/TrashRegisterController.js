@@ -1,4 +1,4 @@
-import Result, { invalidateErrorCode } from '../data/Result';
+import Result from '../data/Result';
 import * as Api from '../data/Api';
 
 /**
