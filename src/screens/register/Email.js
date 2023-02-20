@@ -23,14 +23,16 @@ const BottomButton = styled(Button)`
 `;
 
 const Email = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [input, setInput] = useState({
+        email: '',
+        password: '',
+    });
     const { dispatch } = React.useContext(LoginContext);
     const { setIsLoading } = React.useContext(LoadingContext);
 
     const SetandSent = async () => {
         setIsLoading(true);
-        const result = await emailSignIn(email, password);
+        const result = await emailSignIn(input.email, input.password);
 
         if (result.isSuccess()) {
             dispatch(true);
@@ -39,9 +41,9 @@ const Email = ({ navigation }) => {
         } else {
             if (result.isInAppFailure()) {
                 alert(result.tryGetErrorMessage());
-                return;
+            } else {
+                alert('로그인에 실패하였습니다. 다시 시도해주세요.');
             }
-            alert('로그인에 실패하였습니다. 다시 시도해주세요.');
         }
         setIsLoading(false);
     };
@@ -52,7 +54,7 @@ const Email = ({ navigation }) => {
                 label="이메일"
                 placeholder="이메일을 입력하세요."
                 onTextChangeListener={(text) => {
-                    setEmail(text);
+                    setInput({ ...input, email: text });
                 }}
             />
             <FormTextInput
@@ -60,7 +62,7 @@ const Email = ({ navigation }) => {
                 placeholder="비밀번호를 8자 이상 입력하세요."
                 isPassword={true}
                 onTextChangeListener={(text) => {
-                    setPassword(text);
+                    setInput({ ...input, password: text });
                 }}
             />
             <ButtonContainer>

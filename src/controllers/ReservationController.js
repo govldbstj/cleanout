@@ -19,7 +19,7 @@ export async function getReservation(id) {
 
     if (result.isSuccess()) {
         const data = result.tryGetValue();
-        const imageType = data.imageType.toLowerCase();
+        // const imageType = data.imageType.toLowerCase();
 
         return Result.success({
             name: data.memberName,
@@ -27,7 +27,7 @@ export async function getReservation(id) {
             wasteName: data.wasteName,
             price: data.price,
             status: data.status,
-            image: `data:image/${imageType};base64,${data.image}`,
+            // image: `data:image/${imageType};base64,${data.images}`,
         });
     } else {
         return result;

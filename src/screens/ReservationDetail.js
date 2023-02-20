@@ -17,7 +17,7 @@ const Center = styled.View`
     align-items: center;
 `;
 
-// TODO: 사진 보여주기
+
 const ReservationDetail = ({ navigation, route }) => {
     const id = route.params.id;
 
@@ -52,14 +52,10 @@ const ReservationDetail = ({ navigation, route }) => {
         });
     }, []);
 
-    return userData.isLoading || trashData.isLoading ? (
-        <Center>
-            <ActivityIndicator size="large" color={colors.primary}></ActivityIndicator>
-        </Center>
-    ) : (
+    return (
         <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: '5%' }}>
             <FormTextInput label="이름" value={trashData.name} disabled={true} />
-            <FormTextInput label="주소" disabled={true} value={userData.address} />
+            <FormTextInput label="주소" disabled={true} value={trashData.address} />
             <FormTextInput label="쓰레기 종류" disabled={true} value={trashData.wasteName} />
             <FormTextInput label="가격" disabled={true} value={trashData.price} />
             <FormTextInput label="수거 상태" disabled={true} value={trashData.status} />

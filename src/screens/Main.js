@@ -7,6 +7,7 @@ import clockAnimation from '../../assets/anims/clock.json';
 import Notice from '../components/atoms/Notice';
 import LoginContext from '../context/Login';
 import { signOut } from '../controllers/LoginController';
+import LoadingContext from '../context/Loading';
 
 const Container = styled.View`
     flex: 1;
@@ -42,6 +43,7 @@ const Main = ({ navigation }) => {
     const trashAnim = React.useRef(null);
     const clockAnim = React.useRef(null);
     const { isLogin, dispatch } = React.useContext(LoginContext);
+    const { setIsLoading } = React.useContext(LoadingContext);
 
     React.useEffect(() => {
         trashAnim.current?.play();
@@ -58,6 +60,7 @@ const Main = ({ navigation }) => {
                 title={isLogin ? '로그아웃' : '로그인'}
                 onPress={async () => {
                     if (isLogin) {
+                        setIsLoading(true);
                         const result = await signOut();
                         if (result.isSuccess()) {
                             dispatch(false);
@@ -65,6 +68,7 @@ const Main = ({ navigation }) => {
                         } else {
                             alert('로그아웃에 실패했습니다.');
                         }
+                        setIsLoading(false);
                     } else {
                         navigation.navigate('Email');
                     }

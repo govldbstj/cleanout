@@ -13,18 +13,28 @@ const Container = styled.View`
 `;
 
 const EmailRegister = ({ navigation }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [info, setInfo] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordRemind, setPasswordRemind] = useState('');
+    const [input, setInput] = useState({
+        name: '',
+        email: '',
+        address: '',
+        info: '',
+        password: '',
+        passwordRemind: '',
+    });
 
     const { address } = useContext(AddressContext);
     const { setIsLoading } = useContext(LoadingContext);
 
     const SetandSent = async () => {
         setIsLoading(true);
-        const result = await emailSignUp(name, email, address, info, password, passwordRemind);
+        const result = await emailSignUp(
+            input.name,
+            input.email,
+            input.address,
+            input.info,
+            input.password,
+            input.passwordRemind
+        );
 
         if (result.isSuccess()) {
             alert('가입에 성공하였습니다.');
@@ -32,9 +42,9 @@ const EmailRegister = ({ navigation }) => {
         } else {
             if (result.isInAppFailure()) {
                 alert(result.tryGetErrorMessage());
-                return;
+            } else {
+                alert('가입에 실패하였습니다. 다시 시도해주세요.');
             }
-            alert('가입에 실패하였습니다. 다시 시도해주세요.');
         }
         setIsLoading(false);
     };
@@ -45,14 +55,14 @@ const EmailRegister = ({ navigation }) => {
                 label="이름"
                 placeholder="이름을 입력하세요."
                 onTextChangeListener={(text) => {
-                    setName(text);
+                    setInput({ ...input, name: text });
                 }}
             />
             <FormTextInput
                 label="이메일"
                 placeholder="이메일을 입력하세요."
                 onTextChangeListener={(text) => {
-                    setEmail(text);
+                    setInput({ ...input, email: text });
                 }}
             />
             <FormTextInput
@@ -67,9 +77,9 @@ const EmailRegister = ({ navigation }) => {
             />
             <FormTextInput
                 label="상세 주소"
-                placeholder="상세 주소를 입력하세요."
+                placeholder="상세 주소를 입력하세요. (동, 호수 등)"
                 onTextChangeListener={(text) => {
-                    setInfo(text);
+                    setInput({ ...input, info: text });
                 }}
             />
             <FormTextInput
@@ -77,7 +87,7 @@ const EmailRegister = ({ navigation }) => {
                 placeholder="비밀번호를 8자 이상 입력하세요."
                 isPassword={true}
                 onTextChangeListener={(text) => {
-                    setPassword(text);
+                    setInput({ ...input, password: text });
                 }}
             />
             <FormTextInput
@@ -85,7 +95,7 @@ const EmailRegister = ({ navigation }) => {
                 placeholder="비밀번호를 똑같이 입력하세요."
                 isPassword={true}
                 onTextChangeListener={(text) => {
-                    setPasswordRemind(text);
+                    setInput({ ...input, passwordRemind: text });
                 }}
             />
             <Button title="회원 가입" onPress={() => SetandSent()} />

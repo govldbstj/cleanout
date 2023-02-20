@@ -14,7 +14,7 @@ import LoadingContext from '../context/Loading';
 const AlignRightContainer = styled.View`
     width: 90%;
     align-items: flex-end;
-    margin: 20px 0;
+    margintop: 20px;
 `;
 
 const Spacer = styled.View`
@@ -64,9 +64,9 @@ const Register = ({ navigation }) => {
         } else {
             if (imageResult.isInAppFailure()) {
                 alert(imageResult.tryGetErrorMessage());
-                return;
+            } else {
+                alert('등록에 실패하였습니다. 다시 시도해주세요.');
             }
-            alert('등록에 실패하였습니다. 다시 시도해주세요.');
         }
         setIsLoading(false);
     };
