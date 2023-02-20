@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImageJpaRepository extends JpaRepository<WasteImage, Long> {
-    Optional<List<WasteImage>> findByWaste(Waste waste);
+    Optional<WasteImage> findByWaste(Waste waste);
 }

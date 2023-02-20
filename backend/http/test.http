@@ -50,14 +50,6 @@ Content-Disposition: form-data; name="image"; filename="wasteImage1.png";
 
 < C:\Users\Administrator\Pictures\mssp\waste\wasteImage1.png
 --WebAppBoundary
-Content-Disposition: form-data; name="image"; filename="wasteImage2.png";
-
-< C:\Users\Administrator\Pictures\mssp\waste\wasteImage2.png
---WebAppBoundary
-Content-Disposition: form-data; name="image"; filename="wasteImage3.png";
-
-< C:\Users\Administrator\Pictures\mssp\waste\wasteImage3.png
---WebAppBoundary--
 
 
 ### 폐기물 라벨, 가격 입력

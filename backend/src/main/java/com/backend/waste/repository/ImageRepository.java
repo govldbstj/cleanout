@@ -9,5 +9,5 @@ public interface ImageRepository {
 
     WasteImage save(WasteImage wasteImage);
 
-    List<WasteImage> getImagesByWaste(Waste waste);
+    WasteImage getImageByWaste(Waste waste);
 }

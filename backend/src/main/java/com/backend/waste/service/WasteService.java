@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -53,20 +54,17 @@ public class WasteService {
     private String uploadFolder;
 
     @Transactional
-    public Waste createWaste(Long memberIdx, List<MultipartFile> images) throws IOException {
+    public Waste createWaste(Long memberIdx, MultipartFile image) throws IOException {
         Member member = memberRepository.getById(memberIdx);
         Waste waste = Waste.createWaste(member);
 
-        for (MultipartFile file : images) {
-//            UUID uuid = UUID.randomUUID();
-//            String imageFileName = uuid + "_" + file.getOriginalFilename();
-            Path imageFilePath = Paths.get(uploadFolder + "/" + file.getOriginalFilename());
-            Files.write(imageFilePath, file.getBytes());
-            WasteImage wasteImage = WasteImage.createImage(waste, file.getOriginalFilename());
-            imageRepository.save(wasteImage);
-        }
-        PatchWaste patchWaste = requestToML(images);
-        waste.update(patchWaste.getWasteName(),patchWaste.getPrice());
+        Path imageFilePath = Paths.get(uploadFolder + "/" + image.getOriginalFilename());
+        Files.write(imageFilePath, image.getBytes());
+        WasteImage wasteImage = WasteImage.createImage(waste, image.getOriginalFilename());
+        imageRepository.save(wasteImage);
+
+        PatchWaste patchWaste = requestToML(image);
+        waste.update(patchWaste.getWasteName(), patchWaste.getPrice());
         wasteRepository.save(waste);
         return waste;
     }
@@ -128,18 +126,12 @@ public class WasteService {
         Member member = memberRepository.getById(userIdx);
         Waste waste = wasteRepository.getById(wasteIdx);
 
-        List<WasteImage> images = imageRepository.getImagesByWaste(waste);
+        WasteImage image = imageRepository.getImageByWaste(waste);
 
-        List<byte[]> imageByteArrays = new ArrayList<>();
-
-        for (WasteImage image : images) {
-            byte[] imageByteArray = null;
-            InputStream imageStream = new FileInputStream((uploadFolder + "/" + image.getImageName()));
-            imageByteArray = imageStream.readAllBytes();
-            imageStream.close();
-
-            imageByteArrays.add(imageByteArray);
-        }
+        byte[] imageByteArray = null;
+        InputStream imageStream = new FileInputStream((uploadFolder + "/" + image.getImageName()));
+        imageByteArray = imageStream.readAllBytes();
+        imageStream.close();
 
         return new GetWasteDetail(
                 member.getNickname(),
@@ -147,21 +139,17 @@ public class WasteService {
                 waste.getName(),
                 waste.getPrice(),
                 getTimeGap(waste),
-                imageByteArrays
+                imageByteArray
         );
     }
 
-    private List<String> getBase64String(List<MultipartFile> images) throws IOException {
-        List<String> imageStr = new ArrayList<>();
-        for (MultipartFile image : images) {
-            byte[] bytes = image.getBytes();
-            imageStr.add(Base64.getEncoder().encodeToString(bytes));
-        }
-        return imageStr;
+    private String getBase64String(MultipartFile image) throws IOException {
+        byte[] bytes = image.getBytes();
+        return Base64.getEncoder().encodeToString(bytes);
     }
 
     @Transactional
-    public PatchWaste requestToML(List<MultipartFile> images) throws IOException {
+    public PatchWaste requestToML(MultipartFile image) throws IOException {
 
         String url = "http://localhost:8080/waste-management/ML";
 
@@ -171,24 +159,19 @@ public class WasteService {
         HttpHeaders header1 = new HttpHeaders();
         header1.setContentType(MediaType.APPLICATION_JSON);
         MultiValueMap<String, String> bodyStr = new LinkedMultiValueMap<>();
-        List<String> imageFileString = getBase64String(images);
-        for (String image : imageFileString) {
-            bodyStr.add("image", image);
-        }
+        String imageFileString = getBase64String(image);
+        bodyStr.add("image", imageFileString);
 
         //파일용
-        HttpHeaders headers2 = new HttpHeaders();
-        headers2.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpHeaders header2 = new HttpHeaders();
+        header2.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> bodyFile = new LinkedMultiValueMap<>();
-        for (MultipartFile image : images) {
-            bodyFile.add("image",image);
-        }
+        bodyFile.add("image", new ByteArrayResource(image.getBytes()));
 
         HttpEntity<?> requestMessage = new HttpEntity<>(bodyStr, header1);
+        System.out.println(imageFileString);
         System.out.println(requestMessage);
         HttpEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
-        System.out.println(response);
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
         PatchWaste patchWaste = objectMapper.readValue(response.getBody(), PatchWaste.class);

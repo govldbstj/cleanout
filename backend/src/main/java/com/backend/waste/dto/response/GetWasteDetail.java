@@ -12,15 +12,15 @@ public class GetWasteDetail {
     private String wasteName;
     private int price;
     private String status;
-    private List<byte[]> images;
+    private byte[] images;
 
     @Builder
-    public GetWasteDetail(String memberName, String address, String wasteName, int price, String status, List<byte[]> images) {
+    public GetWasteDetail(String memberName, String address, String wasteName, int price, String status, byte[] image) {
         this.memberName = memberName;
         this.address = address;
         this.wasteName = wasteName;
         this.price = price;
         this.status = status;
-        this.images = images;
+        this.images = image;
     }
 }

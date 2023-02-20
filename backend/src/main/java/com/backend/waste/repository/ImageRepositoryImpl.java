@@ -20,7 +20,7 @@ public class ImageRepositoryImpl implements ImageRepository{
     }
 
     @Override
-    public List<WasteImage> getImagesByWaste(Waste waste) {
+    public WasteImage getImageByWaste(Waste waste) {
         return imageJpaRepository.findByWaste(waste).orElseThrow(ImageNotFoundException::new);
     }
 }

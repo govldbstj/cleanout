@@ -66,6 +66,7 @@ public class ControllerTest {
 
     @Autowired
     protected CollectorService collectorService;
+    @Autowired
     protected PasswordEncoder passwordEncoder;
 
     @BeforeEach
@@ -114,10 +115,8 @@ public class ControllerTest {
 
     protected Waste saveWaste(Member member) throws IOException {
         List<MultipartFile> images = new ArrayList<>();
-        images.add(new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes()));
-        images.add(new MockMultipartFile("image2", "waste2.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage2>>".getBytes()));
-        images.add(new MockMultipartFile("image3", "waste3.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage3>>".getBytes()));
-        return wasteService.createWaste(member.getId(), images);
+        MockMultipartFile image = new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes());
+        return wasteService.createWaste(member.getId(), image);
     }
 
 //    protected void setupWaste(Waste waste) {
