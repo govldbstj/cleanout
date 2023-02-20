@@ -9,6 +9,7 @@ import { ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { getUserInfo } from '../controllers/LoginController';
 import { uploadWasteImage } from '../controllers/TrashRegisterController';
+import LoadingContext from '../context/Loading';
 
 const AlignRightContainer = styled.View`
     width: 90%;
@@ -34,8 +35,10 @@ const Register = ({ navigation }) => {
         address: '',
         isLoading: true,
     });
+    const { setIsLoading } = React.useContext(LoadingContext);
 
     useEffect(() => {
+        setIsLoading(true);
         getUserInfo().then((result) => {
             if (result.isSuccess()) {
                 const data = result.tryGetValue();
@@ -47,8 +50,26 @@ const Register = ({ navigation }) => {
                 alert('회원 정보를 불러오는데 실패했습니다.');
                 navigation.popToTop();
             }
+            setIsLoading(false);
         });
     }, []);
+
+    const submit = async () => {
+        setIsLoading(true);
+        const imageResult = await uploadWasteImage(images);
+
+        if (imageResult.isSuccess()) {
+            alert('등록에 성공하였습니다.');
+            navigation.popToTop();
+        } else {
+            if (imageResult.isInAppFailure()) {
+                alert(imageResult.tryGetErrorMessage());
+                return;
+            }
+            alert('등록에 실패하였습니다. 다시 시도해주세요.');
+        }
+        setIsLoading(false);
+    };
 
     return userData.isLoading ? (
         <Center>
@@ -69,14 +90,7 @@ const Register = ({ navigation }) => {
                 <ScrollImageList sources={images} />
             </AlignRightContainer>
             <Notice />
-            <Button
-                title="등록하기"
-                onPress={() => {
-                    submit(images, () => {
-                        navigation.popToTop();
-                    });
-                }}
-            />
+            <Button title="등록하기" onPress={() => submit()} />
             <Spacer />
         </ScrollView>
     );
@@ -109,26 +123,6 @@ async function getImageSelection() {
 
     const uriList = !!imageData.uri ? [imageData.uri] : imageData.selected.map((item) => item.uri);
     return uriList;
-}
-
-/**
- * 사용자가 입력한 정보를 서버로 전송하는 함수
- * @param {string[]} images 이미지 uri 리스트
- * @param {function} onSuccess 성공 시 실행할 함수
- */
-async function submit(images, onSuccess) {
-    const imageResult = await uploadWasteImage(images);
-
-    if (imageResult.isSuccess()) {
-        alert('등록에 성공하였습니다.');
-        onSuccess();
-    } else {
-        if (imageResult.isInAppFailure()) {
-            alert(imageResult.tryGetErrorMessage());
-            return;
-        }
-        alert('등록에 실패하였습니다. 다시 시도해주세요.');
-    }
 }
 
 export default Register;

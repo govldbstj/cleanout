@@ -6,7 +6,7 @@ const LoginContext = createContext({
 });
 
 const LoginProvider = ({ children }) => {
-    const [isLogin, setIsLogin] = useState('');
+    const [isLogin, setIsLogin] = useState(false);
 
     const value = { isLogin, dispatch: setIsLogin };
     return <LoginContext.Provider value={value}>{children}</LoginContext.Provider>;

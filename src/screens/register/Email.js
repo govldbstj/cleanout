@@ -4,6 +4,7 @@ import FormTextInput from '../../components/molecules/FormTextInput';
 import Button from '../../components/atoms/Button';
 import LoginContext from '../../context/Login';
 import { emailSignIn } from '../../controllers/LoginController';
+import LoadingContext from '../../context/Loading';
 
 const Container = styled.View`
     flex: 1;
@@ -25,8 +26,10 @@ const Email = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { dispatch } = React.useContext(LoginContext);
+    const { setIsLoading } = React.useContext(LoadingContext);
 
     const SetandSent = async () => {
+        setIsLoading(true);
         const result = await emailSignIn(email, password);
 
         if (result.isSuccess()) {
@@ -40,6 +43,7 @@ const Email = ({ navigation }) => {
             }
             alert('로그인에 실패하였습니다. 다시 시도해주세요.');
         }
+        setIsLoading(false);
     };
 
     return (

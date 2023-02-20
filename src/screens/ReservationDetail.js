@@ -6,6 +6,7 @@ import colors from '../styles/colors';
 import { ScrollView, ActivityIndicator } from 'react-native';
 import { getUserInfo } from '../controllers/LoginController';
 import { getReservation } from '../controllers/ReservationController';
+import LoadingContext from '../context/Loading';
 
 const Spacer = styled.View`
     height: 50px;
@@ -17,6 +18,7 @@ const Center = styled.View`
     align-items: center;
 `;
 
+// TODO: 사진 보여주기
 const ReservationDetail = ({ navigation, route }) => {
     const id = route.params.id;
 
@@ -25,40 +27,32 @@ const ReservationDetail = ({ navigation, route }) => {
         navigation.popToTop();
     }
 
-    const [userData, setUserData] = useState({
-        name: '',
-        address: '',
-        isLoading: true,
-    });
-    const [trashData, setTrashData] = useState({
-
-    });
+    const [userData, setUserData] = useState({});
+    const [trashData, setTrashData] = useState({});
+    const { setIsLoading } = React.useContext(LoadingContext);
 
     useEffect(() => {
+        setIsLoading(true);
         getUserInfo().then((result) => {
             if (result.isSuccess()) {
-                const data = result.tryGetValue();
-                setUserData({
-                    ...data,
-                    isLoading: false,
+                const userData = result.tryGetValue();
+                setUserData(userData);
+                getReservation(id).then((result) => {
+                    if (result.isSuccess()) {
+                        const trashData = result.tryGetValue();
+                        setTrashData({
+                            ...trashData[0],
+                        });
+                    } else {
+                        alert('예약 정보를 불러오는데 실패했습니다.');
+                        navigation.popToTop();
+                    }
+                    setIsLoading(false);
                 });
             } else {
                 alert('회원 정보를 불러오는데 실패했습니다.');
                 navigation.popToTop();
-            }
-        });
-
-        getReservation(id).then((result) => {
-            if (result.isSuccess()) {
-                const data = result.tryGetValue();
-                console.log(data);
-                setTrashData({
-                    ...data[0],
-                    isLoading: false,
-                });
-            } else {
-                alert('예약 정보를 불러오는데 실패했습니다.');
-                navigation.popToTop();
+                setIsLoading(false);
             }
         });
     }, []);

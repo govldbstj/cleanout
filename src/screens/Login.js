@@ -1,3 +1,5 @@
+// 사용하지 않음
+
 import React from 'react';
 import TextButton from '../components/atoms/TextButton';
 import ImageButton from '../components/atoms/ImageButton';

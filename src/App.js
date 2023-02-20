@@ -3,14 +3,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import StackNavigation from './navigations/Stack';
 import { AddressProvider } from './context/Address';
 import { LoginProvider } from './context/Login';
+import { LoadingProvider } from './context/Loading';
 
 const App = () => {
     return (
         <LoginProvider>
             <AddressProvider>
-                <NavigationContainer>
-                    <StackNavigation />
-                </NavigationContainer>
+                <LoadingProvider>
+                    <NavigationContainer>
+                        <StackNavigation />
+                    </NavigationContainer>
+                </LoadingProvider>
             </AddressProvider>
         </LoginProvider>
     );

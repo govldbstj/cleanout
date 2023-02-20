@@ -4,6 +4,7 @@ import FormTextInput from '../../components/molecules/FormTextInput';
 import Button from '../../components/atoms/Button';
 import { emailSignUp } from '../../controllers/LoginController';
 import AddressContext, { AddressConsumer } from '../../context/Address';
+import LoadingContext from '../../context/Loading';
 
 const Container = styled.View`
     flex: 1;
@@ -19,8 +20,10 @@ const EmailRegister = ({ navigation }) => {
     const [passwordRemind, setPasswordRemind] = useState('');
 
     const { address } = useContext(AddressContext);
+    const { setIsLoading } = useContext(LoadingContext);
 
     const SetandSent = async () => {
+        setIsLoading(true);
         const result = await emailSignUp(name, email, address, info, password, passwordRemind);
 
         if (result.isSuccess()) {
@@ -33,6 +36,7 @@ const EmailRegister = ({ navigation }) => {
             }
             alert('가입에 실패하였습니다. 다시 시도해주세요.');
         }
+        setIsLoading(false);
     };
 
     return (
