@@ -96,5 +96,6 @@ class Result {
 }
 
 export const invalidateErrorCode = 0;
+export const networkErrorCode = 1;
 
 export default Result;

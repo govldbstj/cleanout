@@ -1,4 +1,4 @@
-import Result from './Result';
+import Result, { networkErrorCode } from './Result';
 
 const baseUrl = 'http://43.200.115.73:8080/';
 const baseHeaders = {
@@ -8,34 +8,23 @@ const baseImageHeaders = {
     'Content-Type': 'multipart/form-data',
 };
 
+const defaultValue = {
+    headers: {},
+    body: {},
+};
+const defaultApiValue = {
+    headers: {},
+    body: "",
+};
+
 /**
  * GET 요청
  * @param {string} path 요청 경로 (URL 뒷부분)
  * @param {object?} headers 요청 헤더 (Content-Type 등은 자동으로 설정됨)
  * @returns {Promise<Result>} 요청 결과
  */
-export async function get(path, { headers = {} }) {
-    const result = await fetch(baseUrl + path, {
-        method: 'GET',
-        headers: {
-            ...baseHeaders,
-            ...headers,
-        },
-    });
-
-    if (result.ok) {
-        try {
-            const data = await result.json();
-            console.log('GET', path, 'SUCCESS:', data);
-            return Result.success(data);
-        } catch (e) {
-            console.log('GET', path, 'SUCCESS');
-            return Result.success(null);
-        }
-    } else {
-        console.log('GET', path, 'FAILED:', result.status, result.statusText);
-        return Result.failure(result.status, result.statusText);
-    }
+export async function get(path, { headers } = defaultValue) {
+    return await sendApi('GET', path, { headers: { ...baseHeaders, ...headers } });
 }
 
 /**
@@ -45,29 +34,8 @@ export async function get(path, { headers = {} }) {
  * @param {object?} body 요청 바디 (JSON.stringify는 내부에서 수행됨)
  * @returns {Promise<Result>} 요청 결과
  */
-export async function post(path, { headers = {}, body = {} }) {
-    const result = await fetch(baseUrl + path, {
-        method: 'POST',
-        headers: {
-            ...baseHeaders,
-            ...headers,
-        },
-        body: JSON.stringify(body),
-    });
-
-    if (result.ok) {
-        try {
-            const data = await result.json();
-            console.log('POST', path, 'SUCCESS:', data);
-            return Result.success(data);
-        } catch (e) {
-            console.log('POST', path, 'SUCCESS');
-            return Result.success(null);
-        }
-    } else {
-        console.log('POST', path, 'FAILED:', result.status, result.statusText);
-        return Result.failure(result.status, result.statusText);
-    }
+export async function post(path, { headers, body } = defaultValue) {
+    return await sendApi('POST', path, { headers: { ...baseHeaders, ...headers }, body: JSON.stringify(body) });
 }
 
 /**
@@ -77,27 +45,42 @@ export async function post(path, { headers = {}, body = {} }) {
  * @param {FormData?} body 요청 바디
  * @returns {Promise<Result>} 요청 결과
  */
-export async function postImage(path, { headers = {}, body = {} }) {
-    const result = await fetch(baseUrl + path, {
-        method: 'POST',
-        headers: {
-            ...baseImageHeaders,
-            ...headers,
-        },
-        body: body,
-    });
+export async function postImage(path, { headers, body } = defaultValue) {
+    return await sendApi('POST', path, { headers: { ...baseImageHeaders, ...headers }, body: JSON.stringify(body) });
+}
 
-    if (result.ok) {
-        try {
-            const data = await result.json();
-            console.log('POST', path, 'SUCCESS:', data);
-            return Result.success(data);
-        } catch (e) {
-            console.log('POST', path, 'SUCCESS');
-            return Result.success(null);
+/**
+ * API 요청 (Method 문자열로 지정)
+ * @param {string} method HTTP Method
+ * @param {string} path 요청 경로 (URL 뒷부분)
+ * @param {object?} headers 요청 헤더
+ * @param {object?} body 요청 바디
+ * @returns
+ */
+export async function sendApi(method, path, { headers, body } = defaultApiValue) {
+    try {
+        console.log(baseUrl + path, method, headers, body);
+        const result = await fetch(baseUrl + path, {
+            method: method,
+            headers: headers,
+            body: body,
+        });
+
+        if (result.ok) {
+            try {
+                const data = await result.json();
+                console.log(method, path, 'SUCCESS:', data);
+                return Result.success(data);
+            } catch (e) {
+                console.log(method, path, 'SUCCESS');
+                return Result.success(null);
+            }
+        } else {
+            console.log(method, path, 'FAILED:', result.status, result.statusText);
+            return Result.failure(result.status, result.statusText);
         }
-    } else {
-        console.log('POST', path, 'FAILED:', result.status, result.statusText);
-        return Result.failure(result.status, result.statusText);
+    } catch (e) {
+        console.log(method, path, 'FAILED: 네트워크 연결이 원활하지 않습니다.');
+        return Result.failure(networkErrorCode, '네트워크 연결이 원활하지 않습니다.');
     }
 }
