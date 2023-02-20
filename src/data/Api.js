@@ -14,7 +14,7 @@ const baseImageHeaders = {
  * @param {object?} headers 요청 헤더 (Content-Type 등은 자동으로 설정됨)
  * @returns {Promise<Result>} 요청 결과
  */
-export async function get(path, { headers }) {
+export async function get(path, { headers = {} }) {
     const result = await fetch(baseUrl + path, {
         method: 'GET',
         headers: {
@@ -24,8 +24,16 @@ export async function get(path, { headers }) {
     });
 
     if (result.ok) {
-        return Result.success(result.json());
+        try {
+            const data = await result.json();
+            console.log('GET', path, 'SUCCESS:', data);
+            return Result.success(data);
+        } catch (e) {
+            console.log('GET', path, 'SUCCESS');
+            return Result.success(null);
+        }
     } else {
+        console.log('GET', path, 'FAILED:', result.status, result.statusText);
         return Result.failure(result.status, result.statusText);
     }
 }
@@ -37,7 +45,7 @@ export async function get(path, { headers }) {
  * @param {object?} body 요청 바디 (JSON.stringify는 내부에서 수행됨)
  * @returns {Promise<Result>} 요청 결과
  */
-export async function post(path, { headers, body }) {
+export async function post(path, { headers = {}, body = {} }) {
     const result = await fetch(baseUrl + path, {
         method: 'POST',
         headers: {
@@ -48,8 +56,16 @@ export async function post(path, { headers, body }) {
     });
 
     if (result.ok) {
-        return Result.success(result.json());
+        try {
+            const data = await result.json();
+            console.log('POST', path, 'SUCCESS:', data);
+            return Result.success(data);
+        } catch (e) {
+            console.log('POST', path, 'SUCCESS');
+            return Result.success(null);
+        }
     } else {
+        console.log('POST', path, 'FAILED:', result.status, result.statusText);
         return Result.failure(result.status, result.statusText);
     }
 }
@@ -61,7 +77,7 @@ export async function post(path, { headers, body }) {
  * @param {FormData?} body 요청 바디
  * @returns {Promise<Result>} 요청 결과
  */
-export async function postImage(path, { headers, body }) {
+export async function postImage(path, { headers = {}, body = {} }) {
     const result = await fetch(baseUrl + path, {
         method: 'POST',
         headers: {
@@ -72,78 +88,16 @@ export async function postImage(path, { headers, body }) {
     });
 
     if (result.ok) {
-        return Result.success(result.json());
+        try {
+            const data = await result.json();
+            console.log('POST', path, 'SUCCESS:', data);
+            return Result.success(data);
+        } catch (e) {
+            console.log('POST', path, 'SUCCESS');
+            return Result.success(null);
+        }
     } else {
-        return Result.failure(result.status, result.statusText);
-    }
-}
-
-/**
- * PATCH 요청
- * @param {string} path 요청 경로 (URL 뒷부분)
- * @param {object?} headers 요청 헤더 (Content-Type 등은 자동으로 설정됨)
- * @param {object?} body 요청 바디 (JSON.stringify는 내부에서 수행됨)
- * @returns {Promise<Result>} 요청 결과
- */
-export async function patch(path, { headers, body }) {
-    const result = await fetch(baseUrl + path, {
-        method: 'PATCH',
-        headers: {
-            ...baseHeaders,
-            ...headers,
-        },
-        body: JSON.stringify(body),
-    });
-
-    if (result.ok) {
-        return Result.success(result.json());
-    } else {
-        return Result.failure(result.status, result.statusText);
-    }
-}
-
-/**
- * DELETE 요청
- * @param {string} path 요청 경로 (URL 뒷부분)
- * @param {object?} headers 요청 헤더 (Content-Type 등은 자동으로 설정됨)
- * @returns {Promise<Result>} 요청 결과
- */
-export async function del(path, { headers }) {
-    const result = await fetch(baseUrl + path, {
-        method: 'DELETE',
-        headers: {
-            ...baseHeaders,
-            ...headers,
-        },
-    });
-
-    if (result.ok) {
-        return Result.success(result.json());
-    } else {
-        return Result.failure(result.status, result.statusText);
-    }
-}
-
-/**
- * PUT 요청
- * @param {string} path 요청 경로 (URL 뒷부분)
- * @param {object?} headers 요청 헤더 (Content-Type 등은 자동으로 설정됨)
- * @param {object?} body 요청 바디 (JSON.stringify는 내부에서 수행됨)
- * @returns {Promise<Result>} 요청 결과
- */
-export async function put(path, { headers, body }) {
-    const result = await fetch(baseUrl + path, {
-        method: 'PUT',
-        headers: {
-            ...baseHeaders,
-            ...headers,
-        },
-        body: JSON.stringify(body),
-    });
-
-    if (result.ok) {
-        return Result.success(result.json());
-    } else {
+        console.log('POST', path, 'FAILED:', result.status, result.statusText);
         return Result.failure(result.status, result.statusText);
     }
 }

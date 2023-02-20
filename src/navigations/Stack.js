@@ -8,6 +8,7 @@ import Kakao from '../screens/register/Kakao';
 import Email from '../screens/register/Email';
 import EmailRegister from '../screens/register/EmailRegister';
 import Address from '../screens/Address';
+import ReservationDetail from '../screens/ReservationDetail';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const StackNavigation = () => {
             <Stack.Screen name="Email" component={Email} options={{title: "이메일 로그인"}}/>
             <Stack.Screen name="EmailRegister" component={EmailRegister} options={{title: "회원 가입"}}/>
             <Stack.Screen name="Address" component={Address} options={{title: "주소"}}/>
+            <Stack.Screen name="ReservationDetail" component={ReservationDetail} options={{title: "예약 정보"}}/>
         </Stack.Navigator>
     );
 };

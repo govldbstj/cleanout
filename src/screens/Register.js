@@ -1,13 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import FormTextInput from '../components/molecules/FormTextInput';
 import ScrollImageList from '../components/molecules/ScrollImageList';
 import Button from '../components/atoms/Button';
 import Notice from '../components/atoms/Notice';
-import { ScrollView } from 'react-native';
-import AddressContext, { AddressConsumer } from '../context/Address';
+import colors from '../styles/colors';
+import { ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { registerWaste, uploadWasteImage } from '../controllers/TrashRegisterController';
+import { getUserInfo } from '../controllers/LoginController';
+import { uploadWasteImage } from '../controllers/TrashRegisterController';
 
 const AlignRightContainer = styled.View`
     width: 90%;
@@ -19,40 +20,44 @@ const Spacer = styled.View`
     height: 50px;
 `;
 
+const Center = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+`;
+
 // 이미지 선택이 안되는 버그 => IOS Simulator에서만 발생하는 문제로, 다른 기기로 테스트해주세요!
 const Register = ({ navigation }) => {
-    const [name, setName] = useState('');
-    const [info, setInfo] = useState('');
     const [images, setImages] = useState([]);
+    const [userData, setUserData] = useState({
+        name: '',
+        address: '',
+        isLoading: true,
+    });
 
-    const { address } = useContext(AddressContext);
+    useEffect(() => {
+        getUserInfo().then((result) => {
+            if (result.isSuccess()) {
+                const data = result.tryGetValue();
+                setUserData({
+                    ...data,
+                    isLoading: false,
+                });
+            } else {
+                alert('회원 정보를 불러오는데 실패했습니다.');
+                navigation.popToTop();
+            }
+        });
+    }, []);
 
-    return (
+    return userData.isLoading ? (
+        <Center>
+            <ActivityIndicator size="large" color={colors.primary}></ActivityIndicator>
+        </Center>
+    ) : (
         <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: '5%' }}>
-            <FormTextInput
-                label="이름"
-                placeholder="이름을 입력하세요."
-                onTextChangeListener={(text) => {
-                    setName(text);
-                }}
-            />
-            <FormTextInput
-                label="주소"
-                placeholder="검색 버튼을 눌러 주소를 입력하세요."
-                disabled={true}
-                value={address}
-                buttonLabel="검색"
-                onButtonPress={() => {
-                    navigation.navigate('Address');
-                }}
-            />
-            <FormTextInput
-                label="상세 주소"
-                placeholder="상세 주소를 입력하세요."
-                onTextChangeListener={(text) => {
-                    setInfo(text);
-                }}
-            />
+            <FormTextInput label="이름" value={userData.name} disabled={true} />
+            <FormTextInput label="주소" disabled={true} value={userData.address} />
             <AlignRightContainer>
                 <Button
                     title="📩 이미지 불러오기"
@@ -67,7 +72,7 @@ const Register = ({ navigation }) => {
             <Button
                 title="등록하기"
                 onPress={() => {
-                    submit(name, address, info, images, () => {
+                    submit(images, () => {
                         navigation.popToTop();
                     });
                 }}
@@ -91,18 +96,16 @@ async function getImageSelection() {
 
     let imageData = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true, // 다중 선택 가능 여부
+        allowsMultipleSelection: false, // 다중 선택 가능 여부
         allowsEditing: false, // 사진 촬영 후 편집 화면 보여줄 지 여부
         aspect: [1, 1], // 사진의 비율
         quality: 1, // 사진의 용량
-        selectionLimit: 5, // 최대 선택 가능한 사진 개수
+        selectionLimit: 1, // 최대 선택 가능한 사진 개수
     });
 
     if (imageData.cancelled) {
         return null;
     }
-
-    console.log(imageData);
 
     const uriList = !!imageData.uri ? [imageData.uri] : imageData.selected.map((item) => item.uri);
     return uriList;
@@ -110,41 +113,10 @@ async function getImageSelection() {
 
 /**
  * 사용자가 입력한 정보를 서버로 전송하는 함수
- * @param {string} name 이름
- * @param {string} address 주소
- * @param {string} info 상세 주소
  * @param {string[]} images 이미지 uri 리스트
  * @param {function} onSuccess 성공 시 실행할 함수
  */
-async function submit(name, address, info, images, onSuccess) {
-    /* 아마도 최종 코드?
-    const result = await registerWaste(name, address, info);
-
-    if (result.isSuccess()) {
-        const imageResult = await uploadWasteImage(images);
-
-        if (imageResult.isSuccess()) {
-            alert('등록에 성공하였습니다.');
-            onSuccess();
-        } else {
-            if (imageResult.isInAppFailure()) {
-                alert(imageResult.tryGetErrorMessage());
-                return;
-            }
-            alert('등록에 실패하였습니다. 다시 시도해주세요.');
-            console.log('RegisterImageError', imageResult.tryGetErrorCode(), imageResult.tryGetErrorMessage());
-        }
-    } else {
-        if (result.isInAppFailure()) {
-            alert(result.tryGetErrorMessage());
-            return;
-        }
-        alert('등록에 실패하였습니다. 다시 시도해주세요.');
-        console.log('RegisterError', result.tryGetErrorCode(), result.tryGetErrorMessage());
-    }
-    */
-
-    // 이미지만 전송하는 코드
+async function submit(images, onSuccess) {
     const imageResult = await uploadWasteImage(images);
 
     if (imageResult.isSuccess()) {
@@ -156,7 +128,6 @@ async function submit(name, address, info, images, onSuccess) {
             return;
         }
         alert('등록에 실패하였습니다. 다시 시도해주세요.');
-        console.log('RegisterImageError', imageResult.tryGetErrorCode(), imageResult.tryGetErrorMessage());
     }
 }
 

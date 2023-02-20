@@ -5,6 +5,8 @@ import styled from 'styled-components/native';
 import trashAnimation from '../../assets/anims/trash.json';
 import clockAnimation from '../../assets/anims/clock.json';
 import Notice from '../components/atoms/Notice';
+import LoginContext from '../context/Login';
+import { signOut } from '../controllers/LoginController';
 
 const Container = styled.View`
     flex: 1;
@@ -39,6 +41,7 @@ const NoticeArea = styled(Notice)`
 const Main = ({ navigation }) => {
     const trashAnim = React.useRef(null);
     const clockAnim = React.useRef(null);
+    const { isLogin, dispatch } = React.useContext(LoginContext);
 
     React.useEffect(() => {
         trashAnim.current?.play();
@@ -51,7 +54,22 @@ const Main = ({ navigation }) => {
 
     return (
         <Container>
-            <Button title="로그인" onPress={() => navigation.navigate('Login')} />
+            <Button
+                title={isLogin ? '로그아웃' : '로그인'}
+                onPress={async () => {
+                    if (isLogin) {
+                        const result = await signOut();
+                        if (result.isSuccess()) {
+                            dispatch(false);
+                            alert('로그아웃 되었습니다.');
+                        } else {
+                            alert('로그아웃에 실패했습니다.');
+                        }
+                    } else {
+                        navigation.navigate('Email');
+                    }
+                }}
+            />
             <MenuContainer>
                 <Row>
                     <MenuButton
@@ -62,7 +80,13 @@ const Main = ({ navigation }) => {
                         align="flex-start"
                         textAlign="left"
                         gap="20px"
-                        onPress={() => navigation.navigate('Reservation')}
+                        onPress={() => {
+                            if (isLogin) {
+                                navigation.navigate('Reservation');
+                            } else {
+                                navigation.navigate('Email');
+                            }
+                        }}
                     />
                     <ButtonDivider />
                     <MenuButton
@@ -71,7 +95,13 @@ const Main = ({ navigation }) => {
                         animationRef={trashAnim}
                         align="flex-end"
                         textAlign="right"
-                        onPress={() => navigation.navigate('Register')}
+                        onPress={() => {
+                            if (isLogin) {
+                                navigation.navigate('Register');
+                            } else {
+                                navigation.navigate('Email');
+                            }
+                        }}
                     />
                 </Row>
                 <NoticeArea />

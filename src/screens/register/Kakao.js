@@ -7,7 +7,6 @@ const getCode = (target, onSuccess) => {
     const condition = target.indexOf(exp);
     if (condition !== -1) {
         const requestCode = target.substring(condition + exp.length);
-        console.log('in get Code : ', requestCode);
         //requestToken(requestCode);
         onSuccess();
     }

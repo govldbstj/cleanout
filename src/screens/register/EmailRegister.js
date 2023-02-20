@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import FormTextInput from '../../components/molecules/FormTextInput';
 import Button from '../../components/atoms/Button';
 import { emailSignUp } from '../../controllers/LoginController';
+import AddressContext, { AddressConsumer } from '../../context/Address';
 
 const Container = styled.View`
     flex: 1;
@@ -13,13 +14,14 @@ const Container = styled.View`
 const EmailRegister = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [info, setInfo] = useState('');
     const [password, setPassword] = useState('');
     const [passwordRemind, setPasswordRemind] = useState('');
 
-    const SetandSent = async () => {
-        console.log('EmailRegister:', name, email, password);
+    const { address } = useContext(AddressContext);
 
-        const result = await emailSignUp(name, email, password, passwordRemind);
+    const SetandSent = async () => {
+        const result = await emailSignUp(name, email, address, info, password, passwordRemind);
 
         if (result.isSuccess()) {
             alert('가입에 성공하였습니다.');
@@ -30,7 +32,6 @@ const EmailRegister = ({ navigation }) => {
                 return;
             }
             alert('가입에 실패하였습니다. 다시 시도해주세요.');
-            console.log('EmailRegisterError', result.tryGetErrorCode(), result.tryGetErrorMessage());
         }
     };
 
@@ -48,6 +49,23 @@ const EmailRegister = ({ navigation }) => {
                 placeholder="이메일을 입력하세요."
                 onTextChangeListener={(text) => {
                     setEmail(text);
+                }}
+            />
+            <FormTextInput
+                label="주소"
+                placeholder="검색 버튼을 눌러 주소를 입력하세요."
+                disabled={true}
+                value={address}
+                buttonLabel="검색"
+                onButtonPress={() => {
+                    navigation.navigate('Address');
+                }}
+            />
+            <FormTextInput
+                label="상세 주소"
+                placeholder="상세 주소를 입력하세요."
+                onTextChangeListener={(text) => {
+                    setInfo(text);
                 }}
             />
             <FormTextInput

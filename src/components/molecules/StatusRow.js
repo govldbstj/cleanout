@@ -17,7 +17,7 @@ export default StatusRow = (props) => {
             {data.map((text, childIndex) => (
                 <Fragment key={childIndex}>
                     {!!childIndex && <Divider />}
-                    <TextLabel fontWeight={isHeader ? 'bold' : 'normal'}>
+                    <TextLabel fontWeight={isHeader ? 'bold' : 'normal'} numberOfLines={1}>
                         {text}
                     </TextLabel>
                 </Fragment>
@@ -28,7 +28,7 @@ export default StatusRow = (props) => {
 
 const Container = styled.View`
     width: 90%;
-    padding: 10px 0;
+    padding: 13px 0;
     background-color: ${(props) => props.color};
     border-radius: 10px;
     margin: 5px 0;
@@ -46,4 +46,5 @@ const TextLabel = styled(Label)`
     flex: 1;
     font-weight: ${(props) => props.fontWeight};
     text-align: center;
+    font-size: 12px;
 `;
