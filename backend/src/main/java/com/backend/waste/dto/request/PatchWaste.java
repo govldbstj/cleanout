@@ -10,7 +10,6 @@ public class PatchWaste {
     private int price;
 
     public PatchWaste() {
-
     }
 
     @Builder

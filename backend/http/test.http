@@ -46,9 +46,9 @@ POST http://localhost:8080/waste-management/image
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="image"; filename="asdf.jfif";
+Content-Disposition: form-data; name="image"; filename="image11.png";
 
-< C:\Users\Administrator\Pictures\mssp\upload\asdf.jfif
+< C:\Users\Administrator\Pictures\mssp\upload\image11.png
 --WebAppBoundary
 
 

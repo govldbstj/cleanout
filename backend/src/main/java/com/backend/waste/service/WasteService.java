@@ -70,12 +70,6 @@ public class WasteService {
         return waste;
     }
 
-//    @Transactional
-//    public void updateWaste(PatchWaste patchWaste) {
-//        Waste waste = wasteRepository.getByUnique(patchWaste.getUnique());
-//        waste.update(patchWaste.getWasteName(), patchWaste.getPrice());
-//    }
-
     @Transactional
     public List<GetWasteBrief> getWasteList(Long id) {
         Member member = memberRepository.getById(id);
@@ -157,7 +151,7 @@ public class WasteService {
     @Transactional
     public PatchWaste requestToML(MultipartFile image) throws IOException {
 
-        String url = "http://localhost:8080/waste-management/ML";
+        String url = "https://10c8-49-174-123-69.ngrok.io/submit";
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -168,7 +162,7 @@ public class WasteService {
         String imageFileString = getBase64String(image);
         String fileExtension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf(".") + 1);
         bodyStr.add("imageType", fileExtension.toUpperCase(Locale.ROOT));
-        bodyStr.add("image", imageFileString);
+        bodyStr.add("value", imageFileString);
 
         System.out.println(bodyStr);
 
