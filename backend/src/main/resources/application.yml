@@ -1,11 +1,7 @@
 spring:
-  h2:
-    console:
-      enabled: true
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db-mississippi.cn6qj3gf4bmy.ap-northeast-2.rds.amazonaws.com:3306/
+    url: jdbc:mysql://db-mississippi.cn6qj3gf4bmy.ap-northeast-2.rds.amazonaws.com:3306/mississippi?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: mssp
     password: mssp1234
 
