@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { ScrollView } from 'react-native';
 import colors from '../../styles/colors';
+import splash from '../../../assets/splash.png';
 
 /**
  * 좌우 스크롤 가능한 이미지 리스트를 보여주는 컴포넌트
@@ -21,7 +22,7 @@ export default ScrollImageList = (props) => {
         ...others
     } = props;
 
-    return sources.length > 0 ? (
+    return sources.length > 0 && sources[0].length > 0 ? (
         <ScrollView
             contentContainerStyle={{ padding: containerPadding, flexGrow: 1, justifyContent: 'center' }}
             horizontal={true}
