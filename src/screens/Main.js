@@ -23,7 +23,6 @@ const MenuContainer = styled.View`
     flex: 1;
     width: 100%;
     align-items: center;
-    justify-content: center;
 `;
 
 const MenuButton = styled(AnimatingButton)`
@@ -37,6 +36,20 @@ const ButtonDivider = styled.View`
 const NoticeArea = styled(Notice)`
     width: 100%;
     margin-top: 20px;
+`;
+
+const LoginContainer = styled.View`
+    width: 100%;
+    padding: 15px;
+    background-color: ${colors.secondary};
+    border-radius: 10px;
+    margin: 10px 0;
+`;
+
+const Title = styled.Text`
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
 `;
 
 const Main = ({ navigation }) => {
@@ -56,6 +69,11 @@ const Main = ({ navigation }) => {
 
     return (
         <Container>
+            <LoginContainer>
+                {isLogin ? 
+                <Title>안녕하세요 사용자 님</Title>:
+                <Title>로그인이 필요합니다</Title>
+                }
             <Button
                 title={isLogin ? '로그아웃' : '로그인'}
                 onPress={async () => {
@@ -74,6 +92,7 @@ const Main = ({ navigation }) => {
                     }
                 }}
             />
+            </LoginContainer>
             <MenuContainer>
                 <Row>
                     <MenuButton

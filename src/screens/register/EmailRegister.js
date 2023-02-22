@@ -30,7 +30,7 @@ const EmailRegister = ({ navigation }) => {
         const result = await emailSignUp(
             input.name,
             input.email,
-            input.address,
+            address,
             input.info,
             input.password,
             input.passwordRemind
