@@ -8,13 +8,14 @@ import colors from '../styles/colors';
 import { ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { getUserInfo } from '../controllers/LoginController';
-import { uploadWasteImage } from '../controllers/TrashRegisterController';
+import { uploadWasteImages } from '../controllers/TrashRegisterController';
 import LoadingContext from '../context/Loading';
 
 const AlignRightContainer = styled.View`
     width: 90%;
     align-items: flex-end;
-    margintop: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 `;
 
 const Spacer = styled.View`
@@ -56,7 +57,7 @@ const Register = ({ navigation }) => {
 
     const submit = async () => {
         setIsLoading(true);
-        const imageResult = await uploadWasteImage(images);
+        const imageResult = await uploadWasteImages(images);
 
         if (imageResult.isSuccess()) {
             alert('등록에 성공하였습니다.');
@@ -81,7 +82,7 @@ const Register = ({ navigation }) => {
             <FormTextInput label="주소" disabled={true} value={userData.address} />
             <AlignRightContainer>
                 <Button
-                    title="📩 이미지 불러오기"
+                    title={`📩 이미지 ${images.length > 0 ? '다시 ' : ''}불러오기`}
                     onPress={async () => {
                         const images = await getImageSelection();
                         if (images !== null) setImages(images);
@@ -110,11 +111,11 @@ async function getImageSelection() {
 
     let imageData = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: false, // 다중 선택 가능 여부
+        allowsMultipleSelection: true, // 다중 선택 가능 여부
         allowsEditing: false, // 사진 촬영 후 편집 화면 보여줄 지 여부
         aspect: [1, 1], // 사진의 비율
         quality: 1, // 사진의 용량
-        selectionLimit: 1, // 최대 선택 가능한 사진 개수
+        selectionLimit: 5, // 최대 선택 가능한 사진 개수
     });
 
     if (imageData.cancelled) {
