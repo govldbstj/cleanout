@@ -2,12 +2,16 @@ import React from 'react';
 import styled from 'styled-components/native';
 import StatusRow from '../components/molecules/StatusRow';
 import { getReservations } from '../controllers/ReservationController';
-import { Pressable } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
+import colors from '../styles/colors';
 import LoadingContext from '../context/Loading';
 
-const Container = styled.View`
-    margin-top: 10px;
-    align-items: center;
+const Description = styled.Text`
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-size: 13px;
+    color: ${colors.disabled};
+    flex: 1;
 `;
 
 //예약 목록
@@ -15,8 +19,6 @@ const Reservation = ({ navigation }) => {
     const header = ['신청일', '품목', '수거 상태'];
     const [data, setData] = React.useState([]);
     const { setIsLoading } = React.useContext(LoadingContext);
-
-    // 날짜 품목 시간
 
     React.useEffect(() => {
         setIsLoading(true);
@@ -32,14 +34,15 @@ const Reservation = ({ navigation }) => {
     }, []);
 
     return (
-        <Container>
+        <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: '2%' }}>
             <StatusRow data={header} isHeader={true} />
             {data.map((data, index) => (
                 <Pressable key={index} onPress={() => navigation.push('ReservationDetail', { id: data.id })}>
                     <StatusRow data={[data.date, data.name, data.status]} />
                 </Pressable>
             ))}
-        </Container>
+            <Description>각 항목을 눌러 자세한 내용을 확인하세요.</Description>
+        </ScrollView>
     );
 };
 

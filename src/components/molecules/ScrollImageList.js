@@ -2,28 +2,21 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { ScrollView } from 'react-native';
 import colors from '../../styles/colors';
+import splash from '../../../assets/splash.png';
 
 /**
  * 좌우 스크롤 가능한 이미지 리스트를 보여주는 컴포넌트
  * @param {Array} sources - 이미지 Uri 배열
  * @param {string?} width - 이미지 너비 (기본: 200px)
  * @param {string?} height - 이미지 높이 (기본: 200px)
- * @param {string?} containePadding - 컨테이너 내부 여백 (기본: 5%)
  * @param {string?} imageSpaceWidth - 이미지가 차지하는 너비 (기본: 110px)
  */
 export default ScrollImageList = (props) => {
-    const {
-        sources,
-        width = '200px',
-        height = '200px',
-        containerPadding = '5%',
-        imageSpaceWidth = '110px',
-        ...others
-    } = props;
+    const { sources, width = '150px', height = '150px', imageSpaceWidth = '160px', ...others } = props;
 
-    return sources.length > 0 ? (
+    return sources.length > 0 && sources[0].length > 0 ? (
         <ScrollView
-            contentContainerStyle={{ padding: containerPadding, flexGrow: 1, justifyContent: 'center' }}
+            contentContainerStyle={{ paddingTop: '3%', paddingBottom: '3%', flexGrow: 1, justifyContent: 'center' }}
             horizontal={true}
             {...others}
         >
@@ -34,7 +27,7 @@ export default ScrollImageList = (props) => {
             ))}
         </ScrollView>
     ) : (
-        <PlaceHolder height={height} marginVertical={containerPadding}>
+        <PlaceHolder height={height} marginVertical='3%'>
             <PlaceHolderText>여기에 불러온 이미지가 표시됩니다.</PlaceHolderText>
         </PlaceHolder>
     );

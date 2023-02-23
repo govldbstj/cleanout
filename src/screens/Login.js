@@ -23,7 +23,6 @@ const LoginButton = styled(ImageButton)`
     margin: 5px 0;
 `;
 
-// 더익상 사용하지 않음.
 const Login = ({ navigation }) => {
     return (
         <Container>

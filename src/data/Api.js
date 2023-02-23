@@ -31,7 +31,7 @@ export async function get(path, { headers } = defaultValue) {
  * POST 요청
  * @param {string} path 요청 경로 (URL 뒷부분)
  * @param {object?} headers 요청 헤더 (Content-Type 등은 자동으로 설정됨)
- * @param {object?} body 요청 바디 (JSON.stringify는 내부에서 수행됨)
+ * @param {object?} body 요청 바디 (JSON.stringify 필요 없음)
  * @returns {Promise<Result>} 요청 결과
  */
 export async function post(path, { headers, body } = defaultValue) {
@@ -46,7 +46,7 @@ export async function post(path, { headers, body } = defaultValue) {
  * @returns {Promise<Result>} 요청 결과
  */
 export async function postImage(path, { headers, body } = defaultValue) {
-    return await sendApi('POST', path, { headers: { ...baseImageHeaders, ...headers }, body: JSON.stringify(body) });
+    return await sendApi('POST', path, { headers: { ...baseImageHeaders, ...headers }, body: body });
 }
 
 /**
@@ -55,7 +55,7 @@ export async function postImage(path, { headers, body } = defaultValue) {
  * @param {string} path 요청 경로 (URL 뒷부분)
  * @param {object?} headers 요청 헤더
  * @param {object?} body 요청 바디
- * @returns
+ * @returns {Promise<Result>} 요청 결과
  */
 export async function sendApi(method, path, { headers, body } = defaultApiValue) {
     try {

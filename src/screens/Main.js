@@ -6,7 +6,8 @@ import trashAnimation from '../../assets/anims/trash.json';
 import clockAnimation from '../../assets/anims/clock.json';
 import Notice from '../components/atoms/Notice';
 import LoginContext from '../context/Login';
-import { signOut } from '../controllers/LoginController';
+import { getUserInfo, signOut } from '../controllers/LoginController';
+import LoadingContext from '../context/Loading';
 
 const Container = styled.View`
     flex: 1;
@@ -22,7 +23,6 @@ const MenuContainer = styled.View`
     flex: 1;
     width: 100%;
     align-items: center;
-    justify-content: center;
 `;
 
 const MenuButton = styled(AnimatingButton)`
@@ -38,10 +38,26 @@ const NoticeArea = styled(Notice)`
     margin-top: 20px;
 `;
 
+const LoginContainer = styled.View`
+    width: 100%;
+    padding: 15px;
+    background-color: ${colors.secondary};
+    border-radius: 10px;
+    margin: 10px 0;
+`;
+
+const Title = styled.Text`
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+`;
+
 const Main = ({ navigation }) => {
+    const [userName, setUsetName] = React.useState('사용자');
     const trashAnim = React.useRef(null);
     const clockAnim = React.useRef(null);
     const { isLogin, dispatch } = React.useContext(LoginContext);
+    const { setIsLoading } = React.useContext(LoadingContext);
 
     React.useEffect(() => {
         trashAnim.current?.play();
@@ -52,24 +68,40 @@ const Main = ({ navigation }) => {
         }, 10000);
     }, []);
 
+    React.useEffect(() => {
+        if (isLogin) {
+            getUserInfo().then((result) => {
+                if (result.isSuccess()) {
+                    const data = result.tryGetValue();
+                    setUsetName(data.name);
+                }
+            });
+        }
+    }, [isLogin]);
+
     return (
         <Container>
-            <Button
-                title={isLogin ? '로그아웃' : '로그인'}
-                onPress={async () => {
-                    if (isLogin) {
-                        const result = await signOut();
-                        if (result.isSuccess()) {
-                            dispatch(false);
-                            alert('로그아웃 되었습니다.');
+            <LoginContainer>
+                {isLogin ? <Title>안녕하세요 {userName}님</Title> : <Title>로그인이 필요합니다</Title>}
+                <Button
+                    title={isLogin ? '로그아웃' : '로그인'}
+                    onPress={async () => {
+                        if (isLogin) {
+                            setIsLoading(true);
+                            const result = await signOut();
+                            if (result.isSuccess()) {
+                                dispatch(false);
+                                alert('로그아웃 되었습니다.');
+                            } else {
+                                alert('로그아웃에 실패했습니다.');
+                            }
+                            setIsLoading(false);
                         } else {
-                            alert('로그아웃에 실패했습니다.');
+                            navigation.navigate('Email');
                         }
-                    } else {
-                        navigation.navigate('Email');
-                    }
-                }}
-            />
+                    }}
+                />
+            </LoginContainer>
             <MenuContainer>
                 <Row>
                     <MenuButton

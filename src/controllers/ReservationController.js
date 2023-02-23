@@ -15,5 +15,21 @@ export async function getReservations() {
  * @returns {Promise<Result>} 예약 내역 상세 조회 결과
  */
 export async function getReservation(id) {
-    return await Api.get(`waste-management/waste/${id}`, {});
+    const result = await Api.get(`waste-management/waste/${id}`, {});
+
+    if (result.isSuccess()) {
+        const data = result.tryGetValue();
+        const imageType = data.imageType.toLowerCase();
+
+        return Result.success({
+            name: data.memberName,
+            address: data.address,
+            wasteName: data.wasteName,
+            price: `${data.price}원`,
+            status: data.status,
+            image: `data:image/${imageType};base64,${data.images}`,
+        });
+    } else {
+        return result;
+    }
 }
