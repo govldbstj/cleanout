@@ -30,7 +30,7 @@ const StackNavigation = () => {
     return (
         <>
             <Stack.Navigator initialRouteName="Home" screenOptions={{ headerBackTitleVisible: false }}>
-                <Stack.Screen name="Main" component={Main} options={{ title: '(서비스 이름)' }} />
+                <Stack.Screen name="Main" component={Main} options={{ title: '쓰레기 수거 서비스' }} />
                 <Stack.Screen name="Login" component={Login} options={{ title: '로그인' }} />
                 <Stack.Screen name="Register" component={Register} options={{ title: '쓰레기 등록' }} />
                 <Stack.Screen name="Reservation" component={Reservation} options={{ title: '예약 현황' }} />
