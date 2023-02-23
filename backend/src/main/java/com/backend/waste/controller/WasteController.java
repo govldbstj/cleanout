@@ -29,8 +29,8 @@ public class WasteController {
 
     @PostMapping("/image")
     public ResponseEntity<Void> createWaste(@RequestParam(value = "image") MultipartFile image,
-                                               @Login MemberSession memberSession) throws IOException {
-        wasteService.createWaste(memberSession.getId(),image);
+                                            @Login MemberSession memberSession) throws IOException {
+        wasteService.createWaste(memberSession.getId(), image);
 
         return ResponseEntity.ok().build();
     }

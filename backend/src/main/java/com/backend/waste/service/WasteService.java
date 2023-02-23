@@ -35,10 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 
 @Transactional(readOnly = true)
@@ -59,9 +56,11 @@ public class WasteService {
         Member member = memberRepository.getById(memberIdx);
         Waste waste = Waste.createWaste(member);
 
-        Path imageFilePath = Paths.get(uploadFolder + "/" + image.getOriginalFilename());
+        UUID uuid = UUID.randomUUID();
+        String imageFileName = uuid + "_" + image.getOriginalFilename();
+        Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
         Files.write(imageFilePath, image.getBytes());
-        WasteImage wasteImage = WasteImage.createImage(waste, image.getOriginalFilename());
+        WasteImage wasteImage = WasteImage.createImage(waste, imageFileName);
         imageRepository.save(wasteImage);
 
         PatchWaste patchWaste = requestToML(image);
@@ -151,7 +150,7 @@ public class WasteService {
     @Transactional
     public PatchWaste requestToML(MultipartFile image) throws IOException {
 
-        String url = "https://10c8-49-174-123-69.ngrok.io/submit";
+        String url = "https://8ae3-121-168-186-64.ngrok.io/submit";
 
         RestTemplate restTemplate = new RestTemplate();
 
