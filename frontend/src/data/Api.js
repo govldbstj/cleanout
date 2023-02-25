@@ -1,6 +1,6 @@
 import Result, { networkErrorCode } from './Result';
 
-const baseUrl = 'http://43.200.115.73:8080/';
+const baseUrl = 'http://13.125.214.56:8080/';
 const baseHeaders = {
     'Content-Type': 'application/json',
 };
