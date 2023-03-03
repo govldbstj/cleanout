@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image, View, StyleSheet } from 'react-native';
 import Button from '../components/atoms/Button';
 import AnimatingButton from '../components/molecules/AnimatingButton';
 import styled from 'styled-components/native';
@@ -8,6 +9,8 @@ import Notice from '../components/atoms/Notice';
 import LoginContext from '../context/Login';
 import { getUserInfo, signOut } from '../controllers/LoginController';
 import LoadingContext from '../context/Loading';
+
+import cleanout_logo from '../../assets/cleanout-logo.png';
 
 const Container = styled.View`
     flex: 1;
@@ -43,7 +46,8 @@ const LoginContainer = styled.View`
     padding: 15px;
     background-color: ${colors.secondary};
     border-radius: 10px;
-    margin: 10px 0;
+    margin: 15px 0;
+    margin-top : 1px;
 `;
 
 const Title = styled.Text`
@@ -81,6 +85,10 @@ const Main = ({ navigation }) => {
 
     return (
         <Container>
+            <View>
+                <Image style = {{ resizeMode : 'contain', height : 75, width : 280, marginRight : '5%', marginTop: 15}}
+                source = {cleanout_logo} />
+            </View>
             <LoginContainer>
                 {isLogin ? <Title>안녕하세요 {userName}님</Title> : <Title>로그인이 필요합니다</Title>}
                 <Button

@@ -30,6 +30,8 @@ export async function uploadWasteImages(images) {
             imageName
         );
 
+        console.log(imageBody);
+        
         promises.push(
             Api.postImage('waste-management/image', {
                 body: imageBody,
