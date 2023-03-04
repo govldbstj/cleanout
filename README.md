@@ -120,8 +120,7 @@ Mississipi
 
  # ML
 * 데이터셋</br>
-생활 폐기물 이미지</br>
-URL : https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&dataSetSn=140</br>
+[생활 폐기물 데이터](https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&dataSetSn=140)</br>
 * 모델</br>
 mobileNet</br>
 
