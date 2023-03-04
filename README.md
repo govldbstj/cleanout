@@ -6,7 +6,8 @@
 > 대형 폐기물 자동화 처리 시스템</br>2023 Prometheus Startup Hackathon
 
 <div>
-  FE</br><img src="https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=React%20Native&logoColor=blue"/>
+  FE</br>
+  <img src = "https://img.shields.io/badge/-ReactNative-blue"/>
   ## BE
   ## ML
 </div>
