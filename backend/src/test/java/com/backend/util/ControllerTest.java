@@ -114,24 +114,15 @@ public class ControllerTest {
     }
 
     protected Waste saveWaste(Member member) throws IOException {
-        List<MultipartFile> images = new ArrayList<>();
         MockMultipartFile image = new MockMultipartFile("image1", "waste1.PNG", MediaType.IMAGE_PNG_VALUE, "<<wasteImage1>>".getBytes());
         return wasteService.createWaste(member.getId(), image);
     }
-
-//    protected void setupWaste(Waste waste) {
-//        PatchWaste patchWaste = PatchWaste.builder()
-//                .wasteName("냉장고-300L이상")
-//                .price(6000)
-//                .build();
-//        wasteService.updateWaste(patchWaste);
-//    }
 
     protected Long reserveWaste(Long wasteIdx) {
         PostCollector postCollector = new PostCollector("수거자1","010-0000-0000");
         Collector collector = collectorService.createCollector(postCollector);
 
-        collectorService.matchCollector(wasteIdx,collector.getId(),"2023-02-20 17:00:00");
+        collectorService.matchCollector(wasteIdx,collector.getId(),"2023-03-30 17:00:00");
         return collector.getId();
     }
 
