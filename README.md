@@ -13,10 +13,10 @@
   BE
   <img src = "https://img.shields.io/badge/-SpringBoot-green"/>
   <img src = "https://img.shields.io/badge/-SpringDataJPA-orange"/>
-  <img src = "https://img.shields.io/badge/-H2-deepblue"/>
+  <img src = "https://img.shields.io/badge/-H2-blue"/>
   <img src = "https://img.shields.io/badge/-MySQL-lightgrey"/>
   <img src = "https://img.shields.io/badge/-aws%EC2-blue"/>
-  <img src = "https://img.shields.io/badge/-aws%rds-babyblue"/>
+  <img src = "https://img.shields.io/badge/-aws%rds-9cf"/>
   
   ## ML
 </div>
