@@ -48,15 +48,12 @@ public class Waste {
     @JoinColumn(name = "collector_id")
     private Collector collector;
 
-    private String uniqueStr;
-
     @Builder
-    public Waste(Member member, String image, LocalDateTime localDateTime, boolean isCollected, String unique) {
+    public Waste(Member member, String image, LocalDateTime localDateTime, boolean isCollected) {
         this.member = member;
         this.image = image;
         this.enrolledDate = localDateTime;
         this.isCollected = isCollected;
-        this.uniqueStr = unique;
     }
 
     public static Waste createWaste(Member member, String image) {
