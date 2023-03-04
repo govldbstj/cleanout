@@ -9,6 +9,7 @@
   FE</br>
   <img src = "https://img.shields.io/badge/-ReactNative-blue"/>
   <img src = "https://img.shields.io/badge/-Expo-white"/>
+  <img src = "https://img.shields.io/badge/-Javascript-yellow"/>
   ## BE
   ## ML
 </div>
