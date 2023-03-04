@@ -79,7 +79,7 @@ PATCH http://localhost:8080/collector-management/reserve/1/1
 Content-Type: application/json
 
 {
-  "atTime" : "2023-02-25 19:54:21"
+  "atTime" : "2024-03-25 19:54:21"
 }
 
 
