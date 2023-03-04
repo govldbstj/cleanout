@@ -1,0 +1,12 @@
+= 회원 로그아웃
+:toc:
+
+== 회원 로그아웃 성공
+
+=== 요청
+
+include::{snippets}/member/logout/200/http-request.adoc[]
+
+=== 응답
+
+include::{snippets}/member/logout/200/http-response.adoc[]

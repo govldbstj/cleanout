@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body>
+  <section class="mx-auto">
+  <h2>카카오 Oauth</h2>
+  <h3>====================</h3>
+  <h3>요청 성공</h3>
+
+  <h4>http://43.200.115.73:8080/oauth?code=인가 코드</h4>
+  <h4>결과 : 카카오 정보로부터 자체 서비스 회원가입 및 로그인</h4>
+
+  <h3>====================</h3>
+  <h3>요청 실패</h3>
+
+  <h4>http://43.200.115.73:8080/oauth?code=존재하지 않는 인가 코드</h4>
+
+  <h4>
+    에러 반환
+    {
+      "statusCode": "400",
+      "message": "Server returned HTTP response code: 400 for URL: https://kauth.kakao.com/oauth/token"
+    }
+  </h4>
+  </section>
+</body>
+</html>
