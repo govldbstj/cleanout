@@ -1,9 +1,11 @@
 package com.backend.waste.controller;
 
+import com.backend.collector.domain.Collector;
+import com.backend.collector.dto.request.MatchCollector;
+import com.backend.collector.dto.request.PostCollector;
 import com.backend.member.domain.Member;
 import com.backend.util.ControllerTest;
 import com.backend.waste.domain.Waste;
-import com.backend.waste.dto.request.PatchWaste;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -12,6 +14,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,7 +68,6 @@ public class WasteControllerTest extends ControllerTest {
 
         Waste waste1 = saveWaste(member); // 예약완료
         reserveWaste(waste1.getId());
-        System.out.println();
 
         // expected
         mockMvc.perform(get("/waste-management/waste/{wasteIdx}",1)
@@ -73,4 +75,38 @@ public class WasteControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("waste/getDetail/200"));
     }
+
+    @Test
+    @DisplayName("수거자가 등록된 폐기물을 수거예약합니다.")
+    void matchCollector200() throws Exception {
+        // given
+        Member member = saveMemberInRepository();
+
+        Waste waste = saveWaste(member);
+        Collector collector = collectorService
+                .createCollector(new PostCollector("010-0000-0000","독산동 나와바리"));
+        MatchCollector matchCollector = MatchCollector.builder()
+                        .time("2023-04-12 12:00:00").build();
+
+        // expected
+        mockMvc.perform(patch("/collector-management/reserve/{wasteIdx}/{collectorIdx}",waste.getId(),collector.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(matchCollector)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("수거자가 등록된 폐기물을 수거합니다.")
+    void collected() throws Exception {
+        // given
+        Member member = saveMemberInRepository();
+        Waste waste = saveWaste(member);
+        Collector collector = collectorService
+                .createCollector(new PostCollector("010-0000-0000","독산동 나와바리"));
+
+        // expected
+        mockMvc.perform(patch("/collector-management/collect/{wasteIdx}/{collectorIdx}",waste.getId(),collector.getId()))
+                .andExpect(status().isOk());
+    }
+
 }

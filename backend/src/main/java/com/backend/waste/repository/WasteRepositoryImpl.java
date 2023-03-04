@@ -33,18 +33,9 @@ public class WasteRepositoryImpl implements WasteRepository {
         return wasteJpaRepository.findById(wasteIdx).orElseThrow(WasteNotFoundException::new);
     }
 
-    @Override
-    public Waste getByUnique(String unique) {
-        return wasteJpaRepository.findByUniqueStr(unique).orElseThrow(WasteNotFoundException::new);
-    }
 
     @Override
     public long count() {
         return wasteJpaRepository.count();
-    }
-
-    @Override
-    public boolean existsByUnique(String unique) {
-        return wasteJpaRepository.existsByUniqueStr(unique);
     }
 }
