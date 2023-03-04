@@ -10,13 +10,13 @@
   <img src = "https://img.shields.io/badge/-ReactNative-blue"/>
   <img src = "https://img.shields.io/badge/-Expo-white"/>
   <img src = "https://img.shields.io/badge/-Javascript-yellow"/></br>
-  BE
+  BE</br>
   <img src = "https://img.shields.io/badge/-SpringBoot-green"/>
   <img src = "https://img.shields.io/badge/-SpringDataJPA-orange"/>
   <img src = "https://img.shields.io/badge/-H2-blue"/>
   <img src = "https://img.shields.io/badge/-MySQL-lightgrey"/>
-  <img src = "https://img.shields.io/badge/-aws%EC2-blue"/>
-  <img src = "https://img.shields.io/badge/-aws%rds-9cf"/>
+  <img src = "https://img.shields.io/badge/-awsEC2-blue"/>
+  <img src = "https://img.shields.io/badge/-awsRDS-9cf"/>
   
   ## ML
 </div>
