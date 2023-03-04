@@ -18,7 +18,7 @@
   <img src = "https://img.shields.io/badge/-awsEC2-blue"/>
   <img src = "https://img.shields.io/badge/-awsRDS-9cf"/></br>
   ML</br>
-  <img src = "https://img.shields.io/badge/-pytorch-000008B"/>
+  <img src = "https://img.shields.io/badge/-pytorch-00498C"/>
   <img src = "https://img.shields.io/badge/-flask-00AAFF"/>
   <img src = "https://img.shields.io/badge/-ngrok-lightgrey"/>
 </div>
