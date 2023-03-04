@@ -31,8 +31,7 @@ public class Waste {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "waste")
-    private List<WasteImage> images = new ArrayList<>();
+    private String image;
 
     private int price;
     @Column(name = "waste_name")
@@ -52,18 +51,19 @@ public class Waste {
     private String uniqueStr;
 
     @Builder
-    public Waste(Member member, List<WasteImage> images, LocalDateTime localDateTime, boolean isCollected, String unique) {
+    public Waste(Member member, String image, LocalDateTime localDateTime, boolean isCollected, String unique) {
         this.member = member;
-        this.images = images;
+        this.image = image;
         this.enrolledDate = localDateTime;
         this.isCollected = isCollected;
         this.uniqueStr = unique;
     }
 
-    public static Waste createWaste(Member member) {
+    public static Waste createWaste(Member member, String image) {
         return Waste.builder()
                 .member(member)
                 .localDateTime(LocalDateTime.now())
+                .image(image)
                 .isCollected(false)
                 .build();
     }
