@@ -150,7 +150,7 @@ public class WasteService {
     @Transactional
     public PatchWaste requestToML(MultipartFile image) throws IOException {
 
-        String url = "https://8ae3-121-168-186-64.ngrok.io/submit";
+        String url = "https://ca27-121-166-156-193.ngrok.io/submit";
 
         RestTemplate restTemplate = new RestTemplate();
 
