@@ -1,2 +1,1 @@
-![cleanout-logo](https://user-images.githubusercontent.com/52804557/222876205-41922ab7-1556-4243-be09-1b553e63622a.png)
-
+<img width="582" alt="image" src="https://user-images.githubusercontent.com/52804557/222876234-009aa921-b7c7-4852-a3cc-f5741df9e8af.png">
