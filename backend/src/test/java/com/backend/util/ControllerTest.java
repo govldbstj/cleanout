@@ -66,6 +66,7 @@ public class ControllerTest {
 
     @Autowired
     protected CollectorService collectorService;
+
     @Autowired
     protected PasswordEncoder passwordEncoder;
 

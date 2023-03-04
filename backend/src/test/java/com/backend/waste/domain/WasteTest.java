@@ -37,10 +37,10 @@ public class WasteTest extends DomainTest {
         // given
         Waste waste = Waste.createWaste(getMember(),"WasteImage");
         PatchWaste patchWaste = new PatchWaste("냉장고-300L이상", 4000);
-
-        // when
         String wasteName = patchWaste.getWasteName();
         int price = patchWaste.getPrice();
+
+        // when
         waste.update(wasteName,price);
 
         // then
@@ -49,15 +49,15 @@ public class WasteTest extends DomainTest {
     }
 
     @Test
-    @DisplayName("수거자가 등록된 폐기물와 매칭됩니다.")
-    void matchWithCollectot(){
+    @DisplayName("수거자가 등록된 폐기물을 수거예약합니다.")
+    void reserveWaste(){
         // given
         Waste waste = getWaste();
         Collector collector = getCollector();
-
-        // when
         LocalDateTime timeToCollect = LocalDateTime
                 .parse("2023-03-15 12:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        // when
         waste.matchCollector(collector, timeToCollect);
 
         // then
