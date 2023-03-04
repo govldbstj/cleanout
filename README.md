@@ -1,3 +1,2 @@
-# Mississipi
-23 prometheus startup
-![image](https://user-images.githubusercontent.com/52804557/222876167-29863af7-0b4a-43cd-b88f-e4edf7e19203.png)
+![cleanout-logo](https://user-images.githubusercontent.com/52804557/222876205-41922ab7-1556-4243-be09-1b553e63622a.png)
+
