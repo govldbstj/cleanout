@@ -4,18 +4,14 @@ package com.backend.waste.service;
 import com.backend.member.domain.Member;
 import com.backend.member.repository.MemberRepository;
 import com.backend.waste.domain.Waste;
-import com.backend.waste.domain.WasteImage;
 import com.backend.waste.dto.request.PatchWaste;
 import com.backend.waste.dto.response.GetWasteBrief;
 import com.backend.waste.dto.response.GetWasteDetail;
-import com.backend.waste.exception.UniqueDuplicationException;
-import com.backend.waste.repository.ImageRepository;
 import com.backend.waste.repository.WasteRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -29,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.runtime.ObjectMethods;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +40,6 @@ public class WasteService {
 
     private final MemberRepository memberRepository;
     private final WasteRepository wasteRepository;
-    private final ImageRepository imageRepository;
 
 
     @Value("${spring.file.path}")
@@ -54,14 +48,12 @@ public class WasteService {
     @Transactional
     public Waste createWaste(Long memberIdx, MultipartFile image) throws IOException {
         Member member = memberRepository.getById(memberIdx);
-        Waste waste = Waste.createWaste(member);
 
         UUID uuid = UUID.randomUUID();
         String imageFileName = uuid + "_" + image.getOriginalFilename();
         Path imageFilePath = Paths.get(uploadFolder + "/" + imageFileName);
         Files.write(imageFilePath, image.getBytes());
-        WasteImage wasteImage = WasteImage.createImage(waste, imageFileName);
-        imageRepository.save(wasteImage);
+        Waste waste = Waste.createWaste(member, imageFileName);
 
         PatchWaste patchWaste = requestToML(image);
         waste.update(patchWaste.getWasteName(), patchWaste.getPrice());
@@ -120,15 +112,12 @@ public class WasteService {
         Member member = memberRepository.getById(userIdx);
         Waste waste = wasteRepository.getById(wasteIdx);
 
-        WasteImage image = imageRepository.getImageByWaste(waste);
-
         byte[] imageByteArray = null;
-        InputStream imageStream = new FileInputStream((uploadFolder + "/" + image.getImageName()));
+        InputStream imageStream = new FileInputStream((uploadFolder + "/" + waste.getImage()));
         imageByteArray = imageStream.readAllBytes();
         imageStream.close();
 
-        String imageName = waste.getImages().get(0).getImageName();
-
+        String imageName = waste.getImage();
         String fileExtension = imageName.substring(imageName.lastIndexOf(".") + 1).toUpperCase(Locale.ROOT);
 
         return new GetWasteDetail(
@@ -150,7 +139,7 @@ public class WasteService {
     @Transactional
     public PatchWaste requestToML(MultipartFile image) throws IOException {
 
-        String url = "https://ca27-121-166-156-193.ngrok.io/submit";
+        String url = "http://localhost:8080/waste-management/ML";
 
         RestTemplate restTemplate = new RestTemplate();
 
