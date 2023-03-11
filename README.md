@@ -1,5 +1,5 @@
 ![](resource/img.png)
-# Overview
+# Introduction
 클린아웃은 대형 폐기물을 쉽게 수거할 수 있는 서비스입니다.
 폐기할 가구와 전자기기 등 대형 쓰레기를 사진 찍으면 머신러닝을 통해 각 물품에 대한 부가 금액을 책정합니다.
 
@@ -19,7 +19,7 @@
 - [`이유환`](https://github.com/320Hwany) &nbsp; Backend • Server • DB 
 - [`정두원`](https://github.com/D-w-nJ) &nbsp; Backend • DB • Server 
 
-# Introduction
+# Overview
 ![](resource/page.png)
 
 # System architecture
