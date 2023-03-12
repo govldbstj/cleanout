@@ -7,7 +7,7 @@
 기존의 지자체에서 운영하는 쓰레기 수거 서비스를 대체할 수 있는 G2B(Government To Business)의 특성을 띠는 서비스입니다.
 
 # Members
-| 박원기 | 전민규  | 최윤서  | 이유환 | 정두원|                                                        
+| 박원기 | 전민규  | 최윤서  | 정유환 | 정두원|                                                        
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | <img src='https://avatars.githubusercontent.com/u/86551201?v=4' height=80 width=80px></img> | <img src='https://avatars.githubusercontent.com/u/43088187?v=4' height=80 width=80px></img> | <img src='https://avatars.githubusercontent.com/u/52804557?v=4' height=80 width=80px></img> | <img src='https://avatars.githubusercontent.com/u/84896838?v=4' height=80 width=80px></img> | <img src='https://avatars.githubusercontent.com/u/96522218?v=4' height=80 width=80px></img> | 
 | [![GitHub](https://badges.aleen42.com/src/github.svg)](https://github.com/kalelpark) | [![GitHub](https://badges.aleen42.com/src/github.svg)](https://github.com/Mango-Juice) |[![GitHub](https://badges.aleen42.com/src/github.svg)](https://github.com/govldbstj) | [![GitHub](https://badges.aleen42.com/src/github.svg)](https://github.com/320Hwany) | [![GitHub](https://badges.aleen42.com/src/github.svg)](https://github.com/D-w-nJ) |
@@ -16,7 +16,7 @@
 - [`박원기`](https://github.com/kalelpark) &nbsp; ML Server • DL 
 - [`전민규`](https://github.com/Mango-Juice) &nbsp; Frontend • UI/UX
 - [`최윤서`](https://github.com/govldbstj) &nbsp; Frontend  • PM
-- [`이유환`](https://github.com/320Hwany) &nbsp; Backend • Server • DB 
+- [`정유환`](https://github.com/320Hwany) &nbsp; Backend • Server • DB 
 - [`정두원`](https://github.com/D-w-nJ) &nbsp; Backend • DB • Server 
 
 # Overview
